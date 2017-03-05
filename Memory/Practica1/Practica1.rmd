@@ -1,0 +1,140 @@
+---
+title: 'Metaheurísticas - Práctica 1'
+author: "Juan Luis Suárez Díaz"
+date: "`r format(Sys.time(), '%d de %B de %Y')`"
+output:
+  pdf_document:
+    fig_caption: yes
+    highlight: haddock
+    includes:
+      in_header: mystyles.sty
+bibliography: references.bib
+toc: yes
+fontsize: 10pt
+geometry: a4paper, top=2.5cm, bottom=2.5cm, left=3cm, right=3cm
+lang: es-ES
+linestretch: 1
+csl: ieee.csl
+---
+<!--
+Highlights: default, tango, pygments, kate, monochrome, espresso, zenburn, haddock, null
+-->
+<!--
+
+mainfont: Arial
+monofont: Source Code Pro
+
+abstract: Resumen
+  
+(Cosas que puedo añadir a la cabecera)
+-->
+
+<!--
+
+Añadir imagenes:
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=10 cm]{./images/1_1.png}
+\caption{Instalación de phoronix suite.\label{fig:phinst}}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=10 cm]{./images/1_2.png}
+\caption{Lista de test disponibles.\label{fig:phtests}}
+\end{figure}
+
+-->
+
+# Ejercicio 1
+
+*Calcula una solución maximal del PVI:*
+
+\[\begin{cases}x' = x^2 \\ x(t_0)=x_0 \end{cases}\]
+
+## Solución
+
+Si $x_0 = 0$ podemos tomar la función constantemente 0 en todo $\mathbb{R}$, que es claramente solución maximal del PVI.
+
+Supongamos $x_0 \ne 0$. Llamamos $y = \frac{1+x_0t_0}{x_0}$ y consideramos los intervalos $I_{-}=]-\infty,y[, I_{+} = ]y,+\infty[$.
+
+Si $x_0 > 0$, definimos la función $\varphi:I_{-} \to \mathbb{R}$ dada por $\varphi(t) = \frac{x_0}{1+x_0t_0 - x_0t}$. $\varphi \in \mathcal{C}^1(I_{-})$ y claramente $(t,\varphi(t)) \in \mathbb{R}\times\mathbb{R}$, que es el dominio de definición de $f$. Además, $\varphi'(t) = \frac{x_0^2}{(1-x_0t+x_0t_0)^2}=\varphi(t)^2$, luego $\varphi$ es una solución de la ecuación. Se tiene también que $t_0 = \frac{1}{x_0}+t_0-\frac{1}{x_0}=y-\frac{1}{x_0} < y$, luego $t_0 \in I_{-}$, y finalmente $\varphi(t_0)=\frac{x_0}{1+x_0t_0-x_0t_0}=x_0$, luego $\varphi$ es solución del PVI y además no es prolongable a $y$, puesto que $\varphi$ diverge en $y$, luego es solución maximal.
+
+Si $x_0 < 0$, definimos la función $\varphi:I_{+} \to \mathbb{R}$ dada por $\varphi(t) = \frac{x_0}{1+x_0t_0 - x_0t}$. De nuevo, $\varphi \in \mathcal{C}^1(I_{+})$, $(t,\varphi(t)) \in \mathbb{R}\times\mathbb{R}$ y $\varphi'(t) = \frac{x_0^2}{(1-x_0t+x_0t_0)^2}=\varphi(t)^2$, luego $\varphi$ es solución de la ecuación. Además, $t_0 = \frac{1}{x_0}+t_0-\frac{1}{x_0}=y-\frac{1}{x_0} > y$, luego $t_0 \in I_{+}$ y finalmente $\varphi(t_0)=x_0$. De nuevo no es prolongable a $y$, luego $\varphi$ es solución maximal.
+
+
+# Ejercicio 2
+
+*Calcula una solución maximal del PVI:*
+
+\[\begin{cases}x' = x^n \\ x(0)=x_0 \end{cases}\]
+
+*donde $n \in \mathbb{N}, n \ge 2$ y $x_0 > 0$.*
+
+## Solución
+
+Tenemos una ecuación en variables separadas, en la que $f$ está definida en todo $\mathbb{R}\times \mathbb{R}^{+}$,  $f(t,x)=a(t)g(x)$ con $a(t)=1 \ \forall t \in \mathbb{R}, g(x)=x^n\ \forall x \in \mathbb{R}^+$ y $g(x_0)\ne 0$. Podemos definir $G:  \mathbb{R}^{+} \to \mathbb{R}$ por $G(x)=\int_{x_0}^{x}{\frac{1}{t^n}dt}=\frac{-1}{n-1}(x^{-n+1}-x_0^{-n+1})$, que es estrictamente monótona, por ser su derivada $1/x^n$ estrictamente decreciente, luego inyectiva, y su inversa es $G^{-1}:G(\mathbb{R}^+)\to \mathbb{R}^+$ dada por $G^{-1}(y) = (-y(n-1)+x_0^{-n+1})^{\frac{-1}{n-1}}$. Como la función $A(t)=t$ es una primitiva de $a(t)$ que se anula en $t_0 = 0$ definimos $\varphi:I=G(\mathbb{R^+})\to \mathbb{R^+}$ por $\varphi(t)=G^{-1}(A(t))=G^{-1}(t)=(-t(n-1)+x_0^{-n+1})^{\frac{-1}{n-1}}$. $\varphi$ está bien definida puesto que $A(I)=I$, y por construcción se tiene que $\varphi \in \mathcal{C}^1(I),\ t_0 = 0 = G(x_0) \in G(\mathbb{R}^+)=I,\ (t,\varphi(t))\in \mathbb{R}\times\mathbb{R}^+\ \forall t \in I$ y $\varphi(0)=G^{-1}(0)=x_0$. Además, $\varphi'(t)=g(G^{-1}(A(t)))a(t) = g(\varphi(t))a(t)=\varphi(t)^n$, luego $\varphi$ es solución del PVI.
+
+Determinamos $I$. $I = G(\mathbb{R}^+) = \frac{-1}{n-1}(\mathbb{R}^{+}-x_0^{-n+1}) = \frac{-1}{n-1}\mathbb{R}^+-\frac{x_0^{-n+1}}{-n+1} = \mathbb{R}^--\frac{x_0^{-n+1}}{-n+1}=\left]-\infty,-\frac{x_0^{-n+1}}{-n+1}\right[$. Finalmente, tenemos que $\varphi$ no es prolongable a $\frac{-x_0^{-n+1}}{-n+1}$ puesto que en dicho punto el denominador se anula y la función diverge, luego $\varphi$ es solución maximal del PVI.
+
+**Observación.** Todos los términos que dependen de $n$ en cualquier expresión de las anteriores están bien definidos puesto que $n \ge 2$.
+
+# Ejercicio 3
+
+*Calcula una solución maximal del PVI:*
+
+\[\begin{cases}x' = x \ln{x} \\ x(0)=x_0 \end{cases}\]
+
+*donde $x_0 > 0$.*
+
+## Solución
+
+Hacemos el cambio $x = e^u$. Entonces:
+
+\[e^uu = x \ln(x) = x' = u' e^u \Rightarrow u'=u \Rightarrow u(t)=Ae^t, A \in \mathbb{R} \Rightarrow x = \exp(Ae^t)=K^{e^t}, K > 0\]
+
+De $x_0 = x(0) = K$, obtenemos $K = x_0$. Definimos $\varphi:\mathbb{R}\to \mathbb{R}$ por $\varphi(t)=x_0^{e^t}$. $\varphi \in \mathcal{C}^1(\mathbb{R})$, $(t,\varphi(t)) \in \mathbb{R} \times \mathbb{R}^+$, donde está definida $f(t,x)=x \ln(x)$ y $\varphi'(t)=(\exp(\ln(x_0)e^t))'=\ln(x_0)e^t x_0^{e^t}\ln(x_0^{e^t})=\varphi(t)\ln(\varphi(t))$. Además, claramente $0 \in \mathbb{R}$ y $\varphi(0)=x_0$,luego $\varphi$ es una solución del PVI maximal, pues está definida en todo $\mathbb{R}$.  
+
+# Ejercicio 4
+
+*Calcula soluciones maximales de los siguientes PVI:*
+
+\[ a) \begin{cases} x' = \left(\frac{x}{t}\right)_+\ ,\ t > 0\\ \\ x(1)=0\end{cases},\ \ \ \ \ 
+   b) \begin{cases} x' = \left(\frac{x}{t}\right)_+\ ,\ t > 0\\ \\ x(1)=1\end{cases},\ \ \ \ \
+   c) \begin{cases} x' = \left(\frac{x}{t}\right)_+\ ,\  t > 0\\ \\ x(1)=-1\end{cases}\]
+   
+*donde $z_+ := \max\{z,0\}$*
+   
+## Solución
+
+$f(t,x)=(\frac{x}{t})_+$ está definida en $\mathbb{R}^+\times\mathbb{R}$ y es continua, pues los únicos puntos donde podría haber discontinuidad son los de la recta $x=0$, pero en este caso el límite siempre 0.
+
+a) Definimos la función $\varphi \equiv 0$ en $\mathbb{R}^+$. Es claramente solución del PVI y es maximal.
+
+b) Definimos la función $\varphi: \mathbb{R}^+ \to \mathbb{R}$ dada por $\varphi(t)=t$. En este caso se tiene $\left(\frac{\varphi(t)}{t}\right)_+ = \max\{1,0\}=1=\varphi'(t)\ \forall t \in \mathbb{R}^+$, $\varphi(1)=1$ y se verifican las demás condiciones claramente, luego $\varphi$ es solución maximal del PVI.
+
+c) Definimos la función $\varphi: \mathbb{R}^+ \to \mathbb{R}$ dada por $\varphi(t)=-1 \ \forall t \in \mathbb{R}^+$. En este caso, $\left(\frac{\varphi(t)}{t}\right)_+ = \max\{-1/t,0\}=0=\varphi'(t)\ \forall t \in \mathbb{R}^+$, $\varphi(1)=-1$ y de nuevo se verifican las demás condiciones, luego $\varphi$ es solución maximal del PVI.
+
+# Ejercicio 5
+
+*Calcula dos soluciones maximales (distintas) del PVI:*
+
+\[\begin{cases}x' = t\sqrt[3]{x} \\ x(1)=0 \end{cases}\]
+
+## SOlución
+
+Por un lado, es claro que la función constantemente 0 definida en $\mathbb{R}$ es una solución maximal del PVI.
+
+Por otro lado, integrando las variables separadas e imponiendo las condiciones iniciales obtenemos como candidata la función $t \mapsto \left(\frac{t^2-1}{3}\right)^{3/2}$, la cual nos permite definir la función $\varphi:\mathbb{R}\to \mathbb{R}$ dada por $\varphi(t)=\begin{cases}0 &, t \le 1 \\ \left(\frac{t^2-1}{3}\right)^{3/2} &, t > 1\end{cases}$. Se tiene que $\varphi'(t)=\begin{cases}0 &, t < 1 \\ t\left(\frac{t^2-1}{3}\right)^{1/2} &, t > 1\end{cases}$, que tiene a 0 como ambos límites laterales de las derivadas, luego $\varphi \in \mathcal{C}^1(\mathbb{R})$ y $\varphi'(t)=t\sqrt[3]{\varphi(t)}$, y claramente $(t,\varphi(t))\in\mathbb{R}\times\mathbb{R}$, $t_0 = 1 \in \mathbb{R}$ y $\varphi(1)=0$, luego $\varphi$ es otra solución maximal del PVI distinta de la solución 0.
+
+# Ejercicio 6
+
+*Estudia la unicidad de la solución del PVI:*
+
+\[\begin{cases}x' = -t\sqrt[3]{x} \\ x(0)=0 \end{cases}\]
+
+## Solución
+
+Tenemos $t_0 = 0$ y la función $h$ definida en $\mathbb{R}$ por $h(x)=-t\sqrt[3]{x}$, fijado $t \in \mathbb{R}$. Entonces, $h$ es creciente (resp. decreciente) si y solo si $t \le t_0$ (resp. $t \ge t_0$). Por tanto, $\forall t \ge t_0$ (resp. $t \le t_0$), aplicando el teorema de unicidad de Peano tenemos unicidad en el futuro (resp. en el pasado). De la unicidad en el futuro y en el pasado se deduce la unicidad global.
+
