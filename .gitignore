@@ -46,3 +46,7 @@ Network Trash Folder
 Temporary Items
 .apdisk
 Code/rubbish/
+*.stackdump
+Code/obj/
+Code/lib/
+Code/bin/
