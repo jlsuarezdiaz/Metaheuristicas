@@ -76,6 +76,8 @@ int main(int argc, char const *argv[])
     //Set random seed.
     SRandom::getInstance().setSeed(seed);
 
+    cout << "PROBLEMA " << problem.getFileName() << endl;
+
     if(algorithm == "RELIEF" || algorithm == "RELIEF+LS"){    
         relief.solve5x2(myPartition);
     
@@ -139,7 +141,7 @@ int main(int argc, char const *argv[])
     }
 
     else if(algorithm == "AGE-BLX"){
-        age.solve5x2(myPartition,APCGenetic::BLXCross03,30,0.7);
+        age.solve5x2(myPartition,APCGenetic::BLXCross03,30,1.0);
 
         cout << age.getAlgorithmName() << endl;
         for(int i = 0; i < 10; i++){
@@ -163,7 +165,7 @@ int main(int argc, char const *argv[])
 
         cout << am.getAlgorithmName() << endl;
         for(int i = 0; i < 10; i++){
-            cout << "PARTITION (" << i/2 << "," << i%2 << "):\tFITNESS = " << age.getFitnesses()[i] << "\tTRAIN FIT = " << age.getTrainFits()[i] << ";\tTIME = " << age.getTimes()[i] << endl; 
+            cout << "PARTITION (" << i/2 << "," << i%2 << "):\tFITNESS = " << am.getFitnesses()[i] << "\tTRAIN FIT = " << am.getTrainFits()[i] << ";\tTIME = " << am.getTimes()[i] << endl; 
         }
     }
 

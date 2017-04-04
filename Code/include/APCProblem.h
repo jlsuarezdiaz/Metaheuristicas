@@ -87,6 +87,10 @@ public:
         return classes;
     }
 
+    inline string getFileName(){
+        return file_name;
+    }
+
 
 };
 

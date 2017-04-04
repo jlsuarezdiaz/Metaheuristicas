@@ -38,7 +38,6 @@ void APCGenetic::generatePopulation(const APCPartition & p, int population_size)
     clearPopulation();
     
     this->population_size = population_size;
-
     const float a = 0.0, b = 1.0;
     float best_val = -1.0;
     population.reserve(population_size);
@@ -125,25 +124,25 @@ void APCGenetic::mutation(const APCPartition &p){
 void APCGenetic::nextGeneration(const APCPartition &p, crossOperator c){
        selection();
 
-       cout << timer.get_time() << " s (Selección)" << endl;
+       //cout << timer.get_time() << " s (Selección)" << endl;
 
        cross(c,p);
 
-       cout << timer.get_time() << " s (Cruce)" << endl;
+       //cout << timer.get_time() << " s (Cruce)" << endl;
 
        mutation(p);
 
-       cout << timer.get_time() << " s (Mutación)" << endl;
+       //cout << timer.get_time() << " s (Mutación)" << endl;
 
        replacement();
 
-       cout << timer.get_time() << " s (Reemplazo)" << endl;
+       //cout << timer.get_time() << " s (Reemplazo)" << endl;
 
        parents_population.clear();
        children_population.clear();
 
-       cout << "EVALS = " << num_evaluations << endl;
-       cout << "BEST = " << best_solution->val << endl;
+       //cout << "EVALS = " << num_evaluations << endl;
+       //cout << "BEST = " << best_solution->val << endl;
 }
 
 APCSolution * APCGenetic::solve(const APCPartition &p, crossOperator c, int population_size, float cross_prob, float mutation_prob, int max_evaluations){
@@ -158,7 +157,7 @@ APCSolution * APCGenetic::solve(const APCPartition &p, crossOperator c, int popu
 
     generatePopulation(p,population_size);
 
-    cout << timer.get_time() << " s (Generación Población inicial)" << endl;
+    //cout << timer.get_time() << " s (Generación Población inicial)" << endl;
 
     while(num_evaluations < max_evaluations){
         nextGeneration(p,c);
