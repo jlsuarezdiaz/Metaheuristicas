@@ -5,9 +5,9 @@ APCLocalSearch::APCLocalSearch(const APCProblem *p)
 {}
 
 void APCLocalSearch::clearSolutions(){
-    for(unsigned i = 0; i < solutions.size(); i++){
-        delete solutions[i];
-    }
+//    for(unsigned i = 0; i < solutions.size(); i++){
+//        delete solutions[i];
+//    }
     solutions.clear();
     times.clear();
     fitnesses.clear();
@@ -18,12 +18,11 @@ APCLocalSearch::~APCLocalSearch(){
     clearSolutions();
 }
 
-APCSolution * APCLocalSearch::solve(const APCPartition & train, int s_index, int max_neighbours, int max_evaluations, float sigma){
-    
+APCSolution * APCLocalSearch::solve(const APCPartition & train, APCSolution *s, int max_neighbours, int max_evaluations, float sigma){
     timer.start();
 
-    float * fit = &train_fits[s_index];
-    APCSolution * sol = solutions[s_index];
+    APCSolution *sol = s;//new APCSolution(*s); // De verdad quiero copiarla?
+    float fit = APC_1NN::fitness(train,*sol);
 
     int n_attr = problem->getNumNonClassAttributes();
     int neigh_stop = max_neighbours * n_attr;
@@ -36,14 +35,13 @@ APCSolution * APCLocalSearch::solve(const APCPartition & train, int s_index, int
         for(int i = 0; i < n_attr; i++){
             float wi = (*sol)[i]; //Para deshacer mutación sin copias.
             sol->move(i,sigma);
-            float newfit = APC_1NN(&train, sol).fitness();
+            float newfit = APC_1NN::fitness(train,*sol);
             num_evals++;
 
             //Si mejoramos, nos quedamos con la nueva.
-            if(newfit > *fit){
-                *fit = newfit;
+            if(newfit > fit){
+                fit = newfit;
                 improves ++;
-                //cout << *fit << endl;
             }
             //Si no, deshacemos e incrementamos no_improves para el criterio de parada.
             else{
@@ -58,27 +56,21 @@ APCSolution * APCLocalSearch::solve(const APCPartition & train, int s_index, int
     //cout << improves << endl;
 
     timer.stop();
-    times[s_index] = timer.get_time();
-    //cout << "Completado en " << times[s_index] << endl;
+    
+    solutions.push_back(sol);
+    times.push_back(timer.get_time());
+    train_fits.push_back(fit);
 
     return sol;
 }
 
-void APCLocalSearch::solve5x2(const APC5x2Partition & p, const vector<APCSolution*> & solutions, const vector<float>& fitnesses, int max_neighbours, int max_evaluations, float sigma ){
+void APCLocalSearch::solve5x2(const APC5x2Partition & p, vector<APCSolution*> & solutions, int max_neighbours, int max_evaluations, float sigma ){
     clearSolutions();
-    for(int i = 0; i < 10; i++){
-        this->solutions.push_back(new APCSolution(*solutions[i]));
-        this->train_fits.push_back(fitnesses[i]);
-        this->times.push_back(-1.0);
-    }
-
+    
     for(int i = 0; i < 5;i++){
         for(int j = 0; j < 2; j++){
-            int s_index = 2*i + j;
-            //cout << i << " " << j << " " << s_index << endl;
-            APCSolution *s = solve(p[i][j],s_index,max_neighbours,max_evaluations,sigma);
-            APC_1NN classifier(&p[i][(j+1)%2],s);
-            this->fitnesses.push_back(classifier.fitness());
+            APCSolution *s = solve(p[i][j],solutions[2*i+j],max_neighbours,max_evaluations,sigma);
+            this->fitnesses.push_back(APC_1NN::fitness(p[i][(j+1)%2],*s));
         }
     }
 }

@@ -17,7 +17,7 @@ APCSolution * APCRandom::solve(const APCPartition &p){
 
     times.push_back(timer.get_time());
 
-    train_fits.push_back(APC_1NN(&p,solution).fitness());
+    train_fits.push_back(APC_1NN::fitness(p,*solution));
     fitnesses.push_back(-1.0);
     return solution;
 }
@@ -28,8 +28,7 @@ void APCRandom::solve5x2(const APC5x2Partition & p5x2){
     for(int i = 0; i < 5; i++){
         for(int j = 0; j < 2; j++){
             APCSolution *s = solve(p5x2[i][j]);
-            APC_1NN classifier(&p5x2[i][(j+1)%2],s);
-            fitnesses[fitnesses.size()-1] = classifier.fitness();
+            fitnesses[fitnesses.size()-1] = APC_1NN::fitness(p5x2[i][(j+1)%2],*s);
         }
     }
 }

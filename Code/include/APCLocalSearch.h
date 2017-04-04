@@ -39,7 +39,12 @@ class APCLocalSearch{
 
     const string algorithm_name;
 
-    void clearSolutions();
+
+
+
+public:
+
+    APCLocalSearch(const APCProblem *p);
 
     /**
      * Generates a weights vector for the specified partition.
@@ -55,13 +60,7 @@ class APCLocalSearch{
      * @pos The fitness will be calculated over p_test and will be returned as the element s_index of getFitnessed()
      * @return Solution obtained.
      */
-    APCSolution * solve(const APCPartition & p_train, int s_index, int max_neighbours = 20, int max_evaluations = 15000, float sigma = 0.3);
-
-
-public:
-
-    APCLocalSearch(const APCProblem *p);
-
+    APCSolution * solve(const APCPartition & p_train, APCSolution *sol, int max_neighbours = 20, int max_evaluations = 15000, float sigma = 0.3);
 
     /**
      * Generates solutions for a 5x2 partition.
@@ -75,7 +74,7 @@ public:
      * @pos getTimes() will return a 10 elements vector with the partition times.
      * @pos getFitnesses() will return a 10 elements vector with the partition fitnesses.
      */
-    void solve5x2(const APC5x2Partition & partition, const vector<APCSolution*> & solutions, const vector<float>& fitnesses, int max_neighbours = 20, int max_evaluations = 15000, float sigma = 0.3);
+    void solve5x2(const APC5x2Partition & partition, vector<APCSolution*> & solutions, int max_neighbours = 20, int max_evaluations = 15000, float sigma = 0.3);
 
     inline vector <APCSolution *> getSolutions(){
         return solutions;
@@ -84,12 +83,11 @@ public:
     inline vector <double> getTimes(){
         return times;
     }
-
     inline vector <float> getFitnesses(){
         return fitnesses;
     }
 
-    inline vector <float> getTrainFits(){
+    inline const vector <float> & getTrainFits(){
         return train_fits;
     }
 
@@ -97,6 +95,8 @@ public:
         return algorithm_name;
     }
 
+    void clearSolutions();
+    
     ~APCLocalSearch();
 
 

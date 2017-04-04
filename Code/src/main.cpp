@@ -11,6 +11,7 @@
 #include "APCLocalSearch.h"
 #include "APCRandom.h"
 #include "APCGenetic.h"
+#include "APCMemetic.h"
 
 #include <iostream>
 #include <utility>
@@ -56,6 +57,7 @@ int main(int argc, char const *argv[])
     APCRandom apc_random(&problem);
     APCGeneticGenerational agg(&problem);
     APCGeneticStationary age(&problem);
+    APCMemetic am(&problem);
 
     //Parse args
     for(unsigned i = 0; i < input.size(); i++){
@@ -85,7 +87,8 @@ int main(int argc, char const *argv[])
         }
 
         if(algorithm == "RELIEF+LS"){
-            LS.solve5x2(myPartition,relief.getSolutions(), relief.getFitnesses());
+            vector<APCSolution *> relief_sols = relief.getSolutions();
+            LS.solve5x2(myPartition,relief_sols);
             cout << relief.getAlgorithmName() << "+" << LS.getAlgorithmName() << endl;
             for(int i = 0; i < 10; i++){
                 cout << "PARTITION (" << i/2 << "," << i%2 << "):\tFITNESS = " << LS.getFitnesses()[i] << "\tTRAIN FIT = " << LS.getTrainFits()[i] << ";\tTIME = " << LS.getTimes()[i] << endl;
@@ -105,7 +108,8 @@ int main(int argc, char const *argv[])
         }
 
         if(algorithm == "RANDOM+LS"){
-            LS.solve5x2(myPartition,apc_random.getSolutions(), apc_random.getFitnesses());
+            vector<APCSolution *> random_sols = apc_random.getSolutions();
+            LS.solve5x2(myPartition,random_sols);
             cout << apc_random.getAlgorithmName() << "+" << LS.getAlgorithmName() << endl;
             for(int i = 0; i < 10; i++){
                 cout << "PARTITION (" << i/2 << "," << i%2 << "):\tFITNESS = " << LS.getFitnesses()[i] << "\tTRAIN FIT = " << LS.getTrainFits()[i] << ";\tTIME = " << LS.getTimes()[i] << endl;
@@ -135,7 +139,7 @@ int main(int argc, char const *argv[])
     }
 
     else if(algorithm == "AGE-BLX"){
-        age.solve5x2(myPartition,APCGenetic::BLXCross03);
+        age.solve5x2(myPartition,APCGenetic::BLXCross03,30,0.7);
 
         cout << age.getAlgorithmName() << endl;
         for(int i = 0; i < 10; i++){
@@ -144,11 +148,22 @@ int main(int argc, char const *argv[])
     }
 
     else if(algorithm == "AGE-CA"){
-        age.solve5x2(myPartition,APCGenetic::arithmeticCross);
+        age.solve5x2(myPartition,APCGenetic::arithmeticCross,30,1.0);
 
         cout << age.getAlgorithmName() << endl;
         for(int i = 0; i < 10; i++){
             cout << "PARTITION (" << i/2 << "," << i%2 << "):\tFITNESS = " << age.getFitnesses()[i] << "\tTRAIN FIT = " << age.getTrainFits()[i] << ";\tTIME = " << age.getTimes()[i] << endl;
+        }
+    }
+
+    else if(algorithm == "AM-10-1.0"||algorithm == "AM-10-0.1"||algorithm == "AM-10-0.1mej"){
+        if(algorithm == "AM-10-1.0") am.solve5x2(myPartition,10,1.0,false);
+        else if(algorithm == "AM-10-0.1") am.solve5x2(myPartition,10,0.1,false);
+        else if(algorithm == "AM-10-0.1mej") am.solve5x2(myPartition,10,0.1,true);
+
+        cout << am.getAlgorithmName() << endl;
+        for(int i = 0; i < 10; i++){
+            cout << "PARTITION (" << i/2 << "," << i%2 << "):\tFITNESS = " << age.getFitnesses()[i] << "\tTRAIN FIT = " << age.getTrainFits()[i] << ";\tTIME = " << age.getTimes()[i] << endl; 
         }
     }
 

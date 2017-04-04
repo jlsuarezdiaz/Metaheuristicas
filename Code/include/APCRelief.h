@@ -45,20 +45,6 @@ private:
 
     void clearSolutions();
 
-    /**
-     * Generates a weights vector for the specified partition.
-     * @param p_train Partition where weights will be learnt.
-     * @param s_index Index of the solution in getSolutions()
-     * @param sigma Standard deviation.
-     * @param max_neighbours Stop criterion: if there is not improvement after max_neighboursxnum_attributes neighbours
-     * @param max_evaluations Max number of evaluations to make stop the algorithm.
-     * @pre There must exist solutions[s_index], fitnesses[s_index] and times[s_index]
-     * @pos The solution obtained will be returned as the element s_index of getSolutions()
-     * @pos The elapsed time will be returned as the element s_index of getTimes()
-     * @pos The fitness will be calculated over p_test and will be returned as the element s_index of getFitnessed()
-     * @return Solution obtained.
-     */
-    APCSolution * solve(const APCPartition & p_train, int s_index, int max_evaluations = 15000);
 
 
 public:

@@ -62,6 +62,7 @@ struct Individual{
 };
 
 struct IndividualComparator{
+    //typedef bool result_type;
     inline bool const operator()(Individual *i1, Individual *i2) const{
         return (*i1) < (*i2);
     }
@@ -131,15 +132,7 @@ protected:
 
     void clearSolutions();
 
-    /**
-     * Removes all the elements in the population.
-     */
-    void clearPopulation();
 
-    /**
-     * Generates a new population of solutions with weights uniformely distributed.
-     */
-    void generatePopulation(const APCPartition &p);
 
     /**
      * Selection operator. It will be implemented in APCGenetic subclasses.
@@ -163,23 +156,38 @@ protected:
      */
     virtual void replacement() = 0;
 
+
     /**
      * Generates a weights vector for the specified partition.
      * @param p_train Partition where weights will be learnt.
      * @param max_evaluations Max number of evaluations to make stop the algorithm.
      * @param cross Cross operator.
-     * @pre There must exist solutions[s_index], fitnesses[s_index] and times[s_index]
-     * @pos The solution obtained will be returned as the element s_index of getSolutions()
-     * @pos The elapsed time will be returned as the element s_index of getTimes()
-     * @pos The fitness will be calculated over p_test and will be returned as the element s_index of getFitnessed()
-     * @return Solution obtained.
+     
      */
-    APCSolution * solve(const APCPartition & p_train, crossOperator c, int max_evaluations = 15000);
+    APCSolution * solve(const APCPartition & p_train, crossOperator c, int population_size = 30, float cross_prob = 0.7, float mutation_prob = 0.001, int max_evaluations = 15000);
 
 
 public:
 
-    APCGenetic(const APCProblem *p, int population_size = 30, float cross_prob = 0.7, float mutation_prob = 0.001);
+    APCGenetic(const APCProblem *p);
+
+    /**
+     * Generates a new population of solutions with weights uniformely distributed.
+     */
+    void generatePopulation(const APCPartition &p, int population_size = 30);
+
+    /**
+     * Sets the population with the given parameters.
+     * @param p Training partition.
+     * @param population Pointer to the population to set.
+     * @param best Best individual of the population. If NULL, it will be checked.
+     */
+    void setInitialPopulation(const APCPartition &p, const vector<Individual*> & population);
+
+    /**
+     * Developes a new generation for the given population.
+     */
+    void nextGeneration(const APCPartition & p_train, crossOperator c);
 
     /**
      * Generates solutions for a 5x2 partition.
@@ -190,7 +198,7 @@ public:
      * @pos getTimes() will return a 10 elements vector with the partition times.
      * @pos getFitnesses() will return a 10 elements vector with the partition fitnesses.
      */
-    void solve5x2(const APC5x2Partition & partition, crossOperator c, int max_evaluations = 15000);
+    void solve5x2(const APC5x2Partition & partition, crossOperator c, int population_size = 30, float cross_prob = 0.7, float mutation_prob = 0.001, int max_evaluations = 15000);
 
     inline vector <APCSolution *> getSolutions(){
         return solutions;
@@ -212,7 +220,37 @@ public:
         return algorithm_name+"-"+selection_algorithm+"-"+cross_algorithm;
     }
 
+    inline vector<Individual*> & getPopulation(){
+        return population;
+    }
+
+    inline void resetEvaluations(){
+        num_evaluations = 0;
+    }
+
+    inline int getEvaluations(){
+        return num_evaluations;
+    }
+
+    void recalcBestSolution();
+
+    /**
+     * @brief Indicates to the algorithm which is the best solution in the population.
+     * @param best Pointer to the best solution.
+     * @pre The pointer must be pointing to the correct best solution.
+     */
+    inline void recalcBestSolution(Individual * best){
+        if(*best > *best_solution) best_solution = best;
+    }
+
     ~APCGenetic();
+
+    void setParameters(float cross_prob = 0.7, float mutation_prob = 0.001);
+    
+    /**
+     * Removes all the elements in the population.
+     */
+    void clearPopulation();
 
     /* CROSS OPERATORS */
 
@@ -240,8 +278,8 @@ public:
 class APCGeneticGenerational : public APCGenetic{
 public:
 
-    inline APCGeneticGenerational(const APCProblem *p, int population_size = 30, float cross_prob = 0.7, float mutation_prob = 0.001)
-        :APCGenetic(p,population_size,cross_prob,mutation_prob){
+    inline APCGeneticGenerational(const APCProblem *p)
+        :APCGenetic(p){
             this->selection_algorithm = "GENERATIONAL";
     }
 
@@ -260,8 +298,8 @@ public:
 
 class APCGeneticStationary : public APCGenetic{
 public:
-    inline APCGeneticStationary(const APCProblem *p, int population_size = 30, float cross_prob = 1.0, float mutation_prob = 0.001)
-        :APCGenetic(p,population_size,cross_prob,mutation_prob){
+    inline APCGeneticStationary(const APCProblem *p)
+        :APCGenetic(p){
             this->selection_algorithm = "STATIONARY";
     }
 
