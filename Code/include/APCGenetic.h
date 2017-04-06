@@ -61,10 +61,13 @@ struct Individual{
 
 };
 
+/**
+ * Comparator used for sorting individuals from bigger to lower fitness.
+ */
 struct IndividualComparator{
     //typedef bool result_type;
     inline bool const operator()(Individual *i1, Individual *i2) const{
-        return (*i1) < (*i2);
+        return (*i1) > (*i2);
     }
 };
 

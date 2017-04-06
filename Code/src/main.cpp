@@ -169,6 +169,19 @@ int main(int argc, char const *argv[])
         }
     }
 
+    else if(algorithm == "1NN"){
+        Timer timer;
+        for(int i = 0; i < 5; i++){
+            for(int j = 0; j < 2; j++){
+                APCSolution s1 = APCSolution::weight1Solution(&problem);
+                timer.start();
+                float fit1 = APC_1NN::fitness(myPartition[i][j],s1);
+                timer.stop();
+                cout << "PARTITION (" << i << "," << j << "):\tFITNESS = " << fit1 << ";\tTIME = " << timer.get_time() << endl; 
+            }
+        }
+    }
+
     else{
         cout << "ALGORITMO INVÁLIDO" << endl;
         printHelp();

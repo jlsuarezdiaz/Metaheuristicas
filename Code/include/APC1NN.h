@@ -12,6 +12,7 @@ class APC_1NN{
 private:
     //const APCPartition * p;
     //const APCSolution * w;
+    static float ** distances;
 
     /**
      * @brief Obtains the weight-pondered squared distance between two elements in the partition.
@@ -25,6 +26,11 @@ private:
     static float w_sqDistance(const APCPartition & p, const APCSolution & w, int i, int j);
 
     /**
+     * @brief Obtains an approximation for the squared distance that guarantees the
+     * correct result for 1NN classifier.
+     */
+    static float w_sqDistanceEff(const APCPartition & p, const APCSolution & w, int i, int j);
+    /**
      * @brief Classifies an element of the partition using the rest of the partition.
      * @param p Test partition.
      * @param w Solution to test.
@@ -32,8 +38,11 @@ private:
      * @return class predicted (according 1-NN for partition[i])
      */
     //bool classify(int i);
-     static bool classify(const APCPartition & p, const APCSolution & w, int i);
+    static bool classify(const APCPartition & p, const APCSolution & w, int i);
 
+    static void initializeDistances(const APCPartition &p, const APCSolution & w);
+
+    static void deleteDistances(const APCPartition &p);
 public:
 
     //inline APC_1NN(const APCPartition *p, const APCSolution *w)

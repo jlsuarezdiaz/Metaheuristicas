@@ -107,6 +107,12 @@ public:
     friend ostream & operator<<(ostream & out, const APCSolution &s);
 
     friend istream & operator>>(istream & in, APCSolution &s);
+
+    /**
+     * Generates a solution with weights 1 everywhere.
+     * Can be used to measure non-weighted classifiers.
+     */
+    static APCSolution weight1Solution(const APCProblem *problem);
     
 
 };

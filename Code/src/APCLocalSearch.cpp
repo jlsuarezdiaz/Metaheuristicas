@@ -22,6 +22,7 @@ APCSolution * APCLocalSearch::solve(const APCPartition & train, APCSolution *s, 
     timer.start();
 
     APCSolution *sol = s;//new APCSolution(*s); // De verdad quiero copiarla?
+
     float fit = APC_1NN::fitness(train,*sol);
 
     int n_attr = problem->getNumNonClassAttributes();
@@ -42,6 +43,7 @@ APCSolution * APCLocalSearch::solve(const APCPartition & train, APCSolution *s, 
             if(newfit > fit){
                 fit = newfit;
                 improves ++;
+                no_improves = 0;
             }
             //Si no, deshacemos e incrementamos no_improves para el criterio de parada.
             else{
@@ -51,9 +53,10 @@ APCSolution * APCLocalSearch::solve(const APCPartition & train, APCSolution *s, 
         }
     }
 
-    //cout << num_evals << endl;
-    //cout << no_improves << endl;
-    //cout << improves << endl;
+
+    //cout << "EVALS = " << num_evals << endl;
+    //cout << "NO IMPROVES = " << no_improves << endl;
+    //cout << "IMPROVES = " << improves << endl;
 
     timer.stop();
     

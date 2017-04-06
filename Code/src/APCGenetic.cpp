@@ -122,6 +122,7 @@ void APCGenetic::mutation(const APCPartition &p){
 }
 
 void APCGenetic::nextGeneration(const APCPartition &p, crossOperator c){
+
        selection();
 
        //cout << timer.get_time() << " s (Selección)" << endl;
@@ -140,6 +141,11 @@ void APCGenetic::nextGeneration(const APCPartition &p, crossOperator c){
 
        parents_population.clear();
        children_population.clear();
+
+       //cout << "\n\nNEW GEN:" << endl;
+       //for(unsigned i = 0; i < population.size(); i++){
+       //     cout << population[i]->val << endl;
+       //}
 
        //cout << "EVALS = " << num_evaluations << endl;
        //cout << "BEST = " << best_solution->val << endl;
@@ -161,15 +167,16 @@ APCSolution * APCGenetic::solve(const APCPartition &p, crossOperator c, int popu
 
     while(num_evaluations < max_evaluations){
         nextGeneration(p,c);
+        
     }
 
     for(int i = 0; i < population_size; i++){
-        if((*population[i]) > *best_solution)
+        if((*population[i]) > *best_solution){
             best_solution = population[i];
+        }
     }
 
     timer.stop();
-
     solutions.push_back(new APCSolution(*(best_solution->s)));
     times.push_back(timer.get_time());
     train_fits.push_back(best_solution->val);
@@ -323,22 +330,25 @@ void APCGeneticStationary::replacement(){
         //Nuevo segundo peor valor
         else if(population[i]->val < worst_val_2){
             worst_val_2 = population[i]->val;
-            worst_ind_2 = i;
+            worst_ind_2 = i; 
         }
 
     }
-
+        
     //Reemplazamos hijos según sea mejores o no que los dos peores de la población
     //Los dos son peores (no hay reemplazo)
     if(*children_population[best_child_index] < *population[worst_ind_1]){
         delete children_population[0];
         delete children_population[1];
     }
+
     //El mejor hijo es mejor que el peor, pero no que el segundo peor
     //o el mejor hijo es mejor que los dos peores, pero el peor hijo no es mejor que ninguno
     //(1 reemplazo)
     else if(*children_population[best_child_index] < *population[worst_ind_2] ||
-        *children_population[worst_child_index] < *population[worst_ind_2]){
+      *children_population[worst_child_index] < *population[worst_ind_2]){
+
+        if(best_solution==population[worst_ind_1]) best_solution = children_population[best_child_index];
         delete children_population[worst_child_index];
         delete population[worst_ind_1];
         population[worst_ind_1] = children_population[best_child_index];
