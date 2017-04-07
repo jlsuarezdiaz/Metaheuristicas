@@ -1,16 +1,7 @@
 #ifndef APC_GENETIC_H
 #define APC_GENETIC_H
 
-#include <string>
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
-#include "APCSolution.h"
-#include "APC1NN.h"
-#include "APC5x2Partition.h"
-#include "Timer.h"
-#include "Srandom.h"
+#include "APCAlgorithm.h"
 
 using namespace std;
 
@@ -73,10 +64,8 @@ struct IndividualComparator{
 
 typedef vector<Individual*> (*crossOperator) (const Individual & i1, const Individual & i2);
 
-class APCGenetic{
+class APCGenetic: public APCAlgorithm{
 protected:
-
-    const APCProblem *problem;
 
     vector<Individual*> population;
 
@@ -107,29 +96,7 @@ protected:
     vector<Individual*> children_population;
 
 
-    /**
-     * Vector with obtained solutions.
-     */
-    vector<APCSolution *> solutions;
-
-    /**
-     * Vector with obtained fitnesses.
-     */
-    vector<float> fitnesses;
-
-    vector<float> train_fits;
-
-    /**
-     * Vector with obtained times.
-     */
-    vector<double> times;
-
-    /**
-     * Class Timer.
-     */
-    Timer timer;
-
-    string algorithm_name;
+ 
     string cross_algorithm;
     string selection_algorithm;
 
@@ -203,21 +170,6 @@ public:
      */
     void solve5x2(const APC5x2Partition & partition, crossOperator c, int population_size = 30, float cross_prob = 0.7, float mutation_prob = 0.001, int max_evaluations = 15000);
 
-    inline vector <APCSolution *> getSolutions(){
-        return solutions;
-    }
-
-    inline vector <double> getTimes(){
-        return times;
-    }
-
-    inline vector <float> getFitnesses(){
-        return fitnesses;
-    }
-
-    inline vector <float> getTrainFits(){
-        return train_fits;
-    }
 
     inline string getAlgorithmName(){
         return algorithm_name+"-"+selection_algorithm+"-"+cross_algorithm;

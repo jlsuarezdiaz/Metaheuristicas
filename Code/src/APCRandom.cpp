@@ -1,7 +1,7 @@
 # include "APCRandom.h"
 
 APCRandom::APCRandom(const APCProblem *p)
-    :problem(p), solutions(),  algorithm_name("RANDOM")
+    :APCAlgorithm(p,"RANDOM")
 {}
 
 APCSolution * APCRandom::solve(const APCPartition &p){
@@ -33,15 +33,7 @@ void APCRandom::solve5x2(const APC5x2Partition & p5x2){
     }
 }
 
-void APCRandom::clearSolutions(){
-    for(unsigned i = 0; i < solutions.size(); i++){
-        delete solutions[i];
-    }
-    solutions.clear();
-    times.clear();
-    fitnesses.clear();
-    train_fits.clear();
-}
+
 
 APCRandom::~APCRandom(){
     clearSolutions();

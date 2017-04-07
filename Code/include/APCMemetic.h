@@ -4,44 +4,19 @@
 #include "APCLocalSearch.h"
 #include "APCGenetic.h"
 
-#include <algorithm>
 
 using namespace std;
 
-class APCMemetic{
+class APCMemetic: public APCAlgorithm{
 private:
 
     APCGeneticGenerational agg;
     APCLocalSearch ls;
 
-    const APCProblem *problem;
-
-    /**
-     * Vector with obtained solutions.
-     */
-    vector<APCSolution *> solutions;
-
-    /**
-     * Vector with obtained fitnesses.
-     */
-    vector<float> fitnesses;
-
-    vector<float> train_fits;
-
-    /**
-     * Vector with obtained times.
-     */
-    vector<double> times;
-
-    /**
-     * Class Timer.
-     */
-    Timer timer;
-
-    string algorithm_name;
+    
     string algorithm_model;
 
-    void clearSolutions();
+    
 
     /**
      * Generates a weights vector for the specified partition.
@@ -74,22 +49,6 @@ public:
      * @pos getFitnesses() will return a 10 elements vector with the partition fitnesses.
      */
     void solve5x2(const APC5x2Partition & partition, int ls_gens, float ls_prob , bool mej, crossOperator c = APCGenetic::BLXCross03, int population_size = 10, float cross_prob = 0.7, float mutation_prob = 0.001, int max_evaluations = 15000, int ls_neighbour_evals_rate = 2);
-
-    inline vector <APCSolution *> getSolutions(){
-        return solutions;
-    }
-
-    inline vector <double> getTimes(){
-        return times;
-    }
-
-    inline vector <float> getFitnesses(){
-        return fitnesses;
-    }
-
-    inline vector <float> getTrainFits(){
-        return train_fits;
-    }
 
     inline string getAlgorithmName(){
         return algorithm_name+"-"+algorithm_model;

@@ -20,6 +20,7 @@ APC5x2Partition::APC5x2Partition(const APCProblem *p){
             k = (k+1)%2;
         }
     }
+
     delete [] vn;
 }
 

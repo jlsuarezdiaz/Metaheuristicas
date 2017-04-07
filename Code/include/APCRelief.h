@@ -1,49 +1,17 @@
 #ifndef APC_RELIEF
 #define APC_RELIEF
 
-#include <string>
-#include <limits>
-#include <iostream>
-
-#include "APC1NN.h"
-#include "APC5x2Partition.h"
-#include "Timer.h"
+# include "APCAlgorithm.h"
 
 using namespace std;
 
-class APCRelief{
+class APCRelief: public APCAlgorithm{
 private:
-    const APCProblem *problem;
-
-    /**
-     * Vector with obtained solutions.
-     */
-    vector<APCSolution *> solutions;
-
-    /**
-     * Vector with obtained fitnesses.
-     */
-    vector<float> fitnesses;
-
-    vector<float> train_fits;
-
-    /**
-     * Vector with obtained times.
-     */
-    vector<double> times;
-
-    /**
-     * Class Timer.
-     */
-    Timer timer;
-
-    const string algorithm_name;
 
     int findNearestEnemy(const APCPartition & p, int index) const;
 
     int findNearestFriend(const APCPartition & p, int index) const;
 
-    void clearSolutions();
 
 
 
@@ -80,25 +48,6 @@ public:
      */
     void solve5x2(const APC5x2Partition & partition);
 
-    inline vector <APCSolution *> getSolutions(){
-        return solutions;
-    }
-
-    inline vector <double> getTimes(){
-        return times;
-    }
-
-    inline vector <float> getFitnesses(){
-        return fitnesses;
-    }
-
-    inline vector <float> getTrainFits(){
-        return train_fits;
-    }
-
-    inline const string & getAlgorithmName(){
-        return algorithm_name;
-    }
 
     ~APCRelief();
 

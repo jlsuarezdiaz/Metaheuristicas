@@ -1,9 +1,8 @@
 # include "APCGenetic.h"
 
 APCGenetic::APCGenetic(const APCProblem *p)
-:algorithm_name("GENETIC")
+:APCAlgorithm(p,"GENETIC")
 {
-    this->problem = p;
     this->population_size = 0;
     this->mutation_prob = 0.001;
     this->cross_prob = 0.7;
@@ -110,6 +109,7 @@ void APCGenetic::cross(crossOperator c, const APCPartition &p){
 void APCGenetic::mutation(const APCPartition &p){
     int n_muts = mutation_prob * population_size * problem->getNumNonClassAttributes();
     int r1, r2;
+    cout << n_muts << " MUTACIONES" << endl;
     for(int i = 0; i < n_muts; i++){
         //LOS PADRES TAMBIEN MUTAN (?)
         r1 = SRandom::getInstance().rand(0,children_population.size()-1);

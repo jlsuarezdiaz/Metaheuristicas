@@ -1,7 +1,7 @@
 #include "APCRelief.h"
 
 APCRelief::APCRelief(const APCProblem *p)
-    :problem(p), solutions(),  algorithm_name("RELIEF")
+    :APCAlgorithm(p,"RELIEF")
 {}
 
 int APCRelief::findNearestEnemy(const APCPartition & p, int index) const{
@@ -94,15 +94,7 @@ void APCRelief::solve5x2(const APC5x2Partition & p5x2){
     }
 }
 
-void APCRelief::clearSolutions(){
-    for(unsigned i = 0; i < solutions.size(); i++){
-        delete solutions[i];
-    }
-    solutions.clear();
-    times.clear();
-    fitnesses.clear();
-    train_fits.clear();
-}
+
 
 APCRelief::~APCRelief(){
     clearSolutions();

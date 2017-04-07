@@ -1,22 +1,24 @@
 # include "APCLocalSearch.h"
 
 APCLocalSearch::APCLocalSearch(const APCProblem *p)
-    :problem(p), solutions(),  algorithm_name("LOCAL SEARCH")
+    :APCAlgorithm(p,"LOCAL SEARCH")
 {}
 
+
+APCLocalSearch::~APCLocalSearch(){
+    clearSolutions();
+}
+
 void APCLocalSearch::clearSolutions(){
-//    for(unsigned i = 0; i < solutions.size(); i++){
-//        delete solutions[i];
-//    }
+    //    for(unsigned i = 0; i < solutions.size(); i++){
+    //        delete solutions[i];
+    //    }
     solutions.clear();
     times.clear();
     fitnesses.clear();
     train_fits.clear();
 }
 
-APCLocalSearch::~APCLocalSearch(){
-    clearSolutions();
-}
 
 APCSolution * APCLocalSearch::solve(const APCPartition & train, APCSolution *s, int max_neighbours, int max_evaluations, float sigma){
     timer.start();
