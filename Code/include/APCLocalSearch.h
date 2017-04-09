@@ -4,7 +4,13 @@
 #include "APCAlgorithm.h"
 
 class APCLocalSearch: public APCAlgorithm{
+private:
+    /**
+     *  Order of indexes where local search mutations will be applied.
+     */
+    int * permutation;
 
+    
 
 
 public:

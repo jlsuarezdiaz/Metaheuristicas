@@ -14,7 +14,7 @@
 #include "APC5x2Partition.h"
 #include "APCPartition.h"
 #include "Timer.h"
-#include "Srandom.h"
+#include "SRandom.h"
 
 using namespace std;
 

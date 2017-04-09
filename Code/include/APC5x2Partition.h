@@ -22,6 +22,8 @@ public:
         return partitions[npart];
     }
 
+    friend ostream & operator<<(ostream & out, const APC5x2Partition & p);
+
 };
 
 

@@ -80,7 +80,7 @@ protected:
     }
 
     /**
-      * Best solution for a generation (for elitism)
+      * Best solution for a generation (for elitism and returning)
       */
     Individual * best_solution;
 
@@ -94,6 +94,11 @@ protected:
     vector<Individual*> parents_population;
 
     vector<Individual*> children_population;
+
+    /**
+     * Number of the generation.
+     */
+    int generation;
 
 
  
@@ -111,14 +116,14 @@ protected:
 
 
     /**
-     * Cross mechanics.
+     * Cross mechanics. It will be implemented in APCGenetic subclasses.
      */
-    void cross(crossOperator c, const APCPartition &p);
+    virtual void cross(crossOperator c, const APCPartition &p) = 0;
 
     /**
-     * Mutation mechanics.
+     * Mutation mechanics. It will be implemented in APCGenetic subclasses.
      */
-    void mutation(const APCPartition &p);
+    virtual void mutation(const APCPartition &p) = 0;
 
     
     /**
@@ -202,6 +207,9 @@ public:
 
     void setParameters(float cross_prob = 0.7, float mutation_prob = 0.001);
     
+    inline int getGeneration(){
+        return generation;
+    }
     /**
      * Removes all the elements in the population.
      */
@@ -244,6 +252,16 @@ public:
     virtual void selection();
 
     /**
+     * Cross mechanics.
+     */
+    virtual void cross(crossOperator c, const APCPartition &p);
+
+    /**
+     * Mutation mechanics.
+     */
+    virtual void mutation(const APCPartition &p);
+
+    /**
      * Replacement operator.
      */
     virtual void replacement();   
@@ -262,6 +280,16 @@ public:
      * Selection operator.
      */
     virtual void selection();
+
+    /**
+     * Cross mechanics.
+     */
+    virtual void cross(crossOperator c, const APCPartition &p);
+
+    /**
+     * Mutation mechanics.
+     */
+    virtual void mutation(const APCPartition &p);
 
     /**
      * Replacement operator.

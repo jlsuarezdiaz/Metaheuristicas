@@ -8,6 +8,7 @@ APCGenetic::APCGenetic(const APCProblem *p)
     this->cross_prob = 0.7;
     best_solution = NULL;
     num_evaluations = 0;
+    generation = 0;
 
 }
 
@@ -30,6 +31,7 @@ void APCGenetic::clearPopulation(){
     population.clear();
     best_solution = NULL;
     population_size = 0;
+    generation = 0;
 
 }
 
@@ -56,6 +58,8 @@ void APCGenetic::generatePopulation(const APCPartition & p, int population_size)
         }
     
     }
+
+
 }
 
 void APCGenetic::setInitialPopulation(const APCPartition &p, const vector<Individual*> & initial_population){
@@ -76,50 +80,6 @@ void APCGenetic::setInitialPopulation(const APCPartition &p, const vector<Indivi
 
 }
 
-void APCGenetic::cross(crossOperator c, const APCPartition &p){
-    int n_cross = cross_prob * parents_population.size()/2;
-    children_population.resize(2*n_cross);
-    int last_child = 2*n_cross-1;
-    for(int i = 0; i < n_cross; i++){
-        int child_index1 = 2*i, child_index2 = 2*i+1;
-
-        vector<Individual*> children = c(*parents_population[child_index1],*parents_population[child_index2]);
-        //Revisar borrado de soluciones
-        
-        // Si el cruce solo generara un hijo, hacemos dos cruces distintos (con el consecutivo y con el inverso de posición)
-        if(children.size()==1){
-            children_population[child_index1] = children[0];
-            children_population[child_index2] = c(*parents_population[i],*parents_population[last_child-i])[0];
-            children_population[child_index1]->val = APC_1NN::fitness(p,*children_population[child_index1]->s);
-            children_population[child_index2]->val = APC_1NN::fitness(p,*children_population[child_index2]->s);
-            //!! Necesario computar vals, no puede hacerlo el operador de cruce (no tiene partición)
-        }
-        else{
-            //Reemplazar hijos
-            children_population[child_index1] = children[0];
-            children_population[child_index1]->val = APC_1NN::fitness(p,*children[0]->s);
-            children_population[child_index2] = children[1];
-            children_population[child_index2]->val = APC_1NN::fitness(p,*children[1]->s);
-        }
-    }
-
-    num_evaluations += n_cross*2;
-}
-
-void APCGenetic::mutation(const APCPartition &p){
-    int n_muts = mutation_prob * population_size * problem->getNumNonClassAttributes();
-    int r1, r2;
-    cout << n_muts << " MUTACIONES" << endl;
-    for(int i = 0; i < n_muts; i++){
-        //LOS PADRES TAMBIEN MUTAN (?)
-        r1 = SRandom::getInstance().rand(0,children_population.size()-1);
-        r2 = SRandom::getInstance().rand(0,problem->getNumNonClassAttributes()-1);
-
-        children_population[r1]->s->move(r2,0.3);
-        children_population[r1]->val = APC_1NN::fitness(p,*children_population[r1]->s);
-    }
-    num_evaluations+= n_muts;
-}
 
 void APCGenetic::nextGeneration(const APCPartition &p, crossOperator c){
 
@@ -142,6 +102,8 @@ void APCGenetic::nextGeneration(const APCPartition &p, crossOperator c){
        parents_population.clear();
        children_population.clear();
 
+       generation++;
+
        //cout << "\n\nNEW GEN:" << endl;
        //for(unsigned i = 0; i < population.size(); i++){
        //     cout << population[i]->val << endl;
@@ -150,6 +112,7 @@ void APCGenetic::nextGeneration(const APCPartition &p, crossOperator c){
        //cout << "EVALS = " << num_evaluations << endl;
        //cout << "BEST = " << best_solution->val << endl;
 }
+
 
 APCSolution * APCGenetic::solve(const APCPartition &p, crossOperator c, int population_size, float cross_prob, float mutation_prob, int max_evaluations){
     if(c == APCGenetic::BLXCross03) cross_algorithm = "BLX-0.3";
@@ -265,16 +228,65 @@ void APCGeneticGenerational::selection(){
         //cout << i << endl;
         int r1 = SRandom::getInstance().rand(0,population_size-1);
         int r2 = SRandom::getInstance().rand(0,population_size-1);
-        //cout << r1 << " " << r2 << population.size() << endl;
         parents_population.push_back(new Individual(*binary_tour(population[r1],population[r2])));
     }
+}
+
+void APCGeneticGenerational::cross(crossOperator c, const APCPartition &p){
+    int n_cross = ceil(cross_prob * parents_population.size()/2);
+    children_population.resize(population_size);
+    int last_child = 2*n_cross-1;
+    for(int i = 0; i < n_cross; i++){
+        int child_index1 = 2*i, child_index2 = 2*i+1;
+
+        vector<Individual*> children = c(*parents_population[child_index1],*parents_population[child_index2]);
+        //Revisar borrado de soluciones
+        
+        // Si el cruce solo generara un hijo, hacemos dos cruces distintos (con el consecutivo y con el inverso de posición)
+        if(children.size()==1){
+            children_population[child_index1] = children[0];
+            children_population[child_index2] = c(*parents_population[i],*parents_population[last_child-i])[0];
+            children_population[child_index1]->val = APC_1NN::fitness(p,*children_population[child_index1]->s);
+            children_population[child_index2]->val = APC_1NN::fitness(p,*children_population[child_index2]->s);
+            //!! Necesario computar vals, no puede hacerlo el operador de cruce (no tiene partición)
+        }
+        else{
+            //Reemplazar hijos
+            children_population[child_index1] = children[0];
+            children_population[child_index1]->val = APC_1NN::fitness(p,*children[0]->s);
+            children_population[child_index2] = children[1];
+            children_population[child_index2]->val = APC_1NN::fitness(p,*children[1]->s);
+        }
+    }
+
+    for(int i = last_child+1; i < population_size; i++){
+        children_population[i] = parents_population[i];
+    }
+
+    num_evaluations += n_cross*2;
+}
+
+void APCGeneticGenerational::mutation(const APCPartition &p){
+    float exp_mut  = mutation_prob*children_population.size()*problem->getNumNonClassAttributes();
+    int gen_muts = ceil(1.0/exp_mut);
+    int n_muts = (gen_muts!=0&&generation%gen_muts==0)?ceil(exp_mut):0;
+    int r1, r2;
+    //cout << n_muts << " MUTACIONES" << endl;
+    for(int i = 0; i < n_muts; i++){
+        r1 = SRandom::getInstance().rand(0,children_population.size()-1);
+        r2 = SRandom::getInstance().rand(0,problem->getNumNonClassAttributes()-1);
+
+        children_population[r1]->s->move(r2,0.3);
+        children_population[r1]->val = APC_1NN::fitness(p,*children_population[r1]->s);
+    }
+    num_evaluations+= n_muts;
 }
 
 void APCGeneticGenerational::replacement(){
     float worst_val = 101.0;
     float best_val = -1.0;
     int worst_ind = -1;
-    int child_size = children_population.size();
+    int child_size = 2*ceil(cross_prob * parents_population.size()/2);
     int best_ind = -1;
 
     for(int i = 0; i < population_size; i++){
@@ -283,11 +295,10 @@ void APCGeneticGenerational::replacement(){
 
         //Reemplazamos con hijo (o el seleccionado si no ha habido cruce)
         if(i < child_size){
+            //El hijo es distinto del padre (borramos el padre)
             delete parents_population[i];
-            population[i] = children_population[i];
         }
-        else
-            population[i] = parents_population[i];
+        population[i] = children_population[i];
         
         //Nos quedamos con la peor solución para el elitismo
         if(population[i]->val < worst_val){
@@ -301,17 +312,60 @@ void APCGeneticGenerational::replacement(){
     }
 
     delete population[worst_ind];
- 
     population[worst_ind] = best_solution;
+
     if(*population[best_ind] > *best_solution) best_solution = population[best_ind];
+    
 }
 
 void APCGeneticStationary::selection(){
-    for(int i = 0; i < 2; i++){
+    for(int i = 0; i < 4; i++){
         int r1 = SRandom::getInstance().rand(0,population_size-1);
         int r2 = SRandom::getInstance().rand(0,population_size-1);
-        parents_population.push_back(new Individual(*binary_tour(population[r1],population[r2])));
+        //parents_population.push_back(new Individual(*binary_tour(population[r1],population[r2])));
+        parents_population.push_back(binary_tour(population[r1],population[r2]));
     }
+}
+
+void APCGeneticStationary::cross(crossOperator c, const APCPartition &p){
+    children_population.resize(2);
+
+    vector<Individual*> children = c(*parents_population[0],*parents_population[1]);
+   
+        
+    // Si el cruce solo generara un hijo, hacemos dos cruces usando cuatro padres
+    if(children.size()==1){
+        children_population[0] = children[0];
+        children_population[0]->val = APC_1NN::fitness(p,*children_population[0]->s);
+        children_population[1] = c(*parents_population[2],*parents_population[3])[0];
+        children_population[1]->val = APC_1NN::fitness(p,*children_population[1]->s);
+        //!! Necesario computar vals, no puede hacerlo el operador de cruce (no tiene partición)
+    }
+    else{ //Si el cruce genera dos hijos usamos solo dos padres
+        //Reemplazar hijos
+        children_population[0] = children[0];
+        children_population[0]->val = APC_1NN::fitness(p,*children[0]->s);
+        children_population[1] = children[1];
+        children_population[1]->val = APC_1NN::fitness(p,*children[1]->s);
+    }
+
+    num_evaluations += 2;
+}
+
+void APCGeneticStationary::mutation(const APCPartition &p){
+    float exp_mut  = mutation_prob*children_population.size()*problem->getNumNonClassAttributes();
+    int gen_muts = ceil(1.0/exp_mut);
+    int n_muts = (gen_muts!=0&&generation%gen_muts==0)?ceil(exp_mut):0;
+    int r1, r2;
+    for(int i = 0; i < n_muts; i++){
+        //LOS PADRES TAMBIEN MUTAN (?)
+        r1 = SRandom::getInstance().rand(0,children_population.size()-1);
+        r2 = SRandom::getInstance().rand(0,problem->getNumNonClassAttributes()-1);
+
+        children_population[r1]->s->move(r2,0.3);
+        children_population[r1]->val = APC_1NN::fitness(p,*children_population[r1]->s);
+    }
+    num_evaluations+= n_muts;
 }
 
 void APCGeneticStationary::replacement(){

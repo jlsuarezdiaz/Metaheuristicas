@@ -23,8 +23,8 @@ EXECUTABLE=apc
 
 OBJECTS=$(OBJ)/main.o $(ALGORITHMS_OBJECTS) $(UTILITIES_OBJECTS)
 
-ALGORITHMS_OBJECTS=$(OBJ)/APCAlgorithm.o $(OBJ)/APCRelief.o  $(OBJ)/APC1NN.o $(OBJ)/APCLocalSearch.o $(OBJ)/APCRandom.o $(OBJ)/APCGenetic.o $(OBJ)/APCMemetic.o
-ALGORITHMS_INCLUDES=$(INCLUDE)/APCAlgorithm.h $(INCLUDE)/APCRelief.h $(INCLUDE)/APC1NN.h $(INCLUDE)/APCLocalSearch.h $(INCLUDE)/APCRandom.h $(INCLUDE)/APCGenetic.h $(INCLUDE)/APCMemetic.h
+ALGORITHMS_OBJECTS=$(OBJ)/APCAlgorithm.o $(OBJ)/APCRelief.o  $(OBJ)/APC1NN.o $(OBJ)/APC1NNEval.o $(OBJ)/APCLocalSearch.o $(OBJ)/APCRandom.o $(OBJ)/APCGenetic.o $(OBJ)/APCMemetic.o
+ALGORITHMS_INCLUDES=$(INCLUDE)/APCAlgorithm.h $(INCLUDE)/APCRelief.h $(INCLUDE)/APC1NN.h $(INCLUDE)/APC1NNEval.h $(INCLUDE)/APCLocalSearch.h $(INCLUDE)/APCRandom.h $(INCLUDE)/APCGenetic.h $(INCLUDE)/APCMemetic.h
 #ALGORITHMS_OBJECTS=$(OBJ)/TSPMejorInsercion.o $(OBJ)/TSPVecinoMasCercano.o $(OBJ)/TSPLocalSearch.o $(OBJ)/TSPILS.o $(OBJ)/TSPGRASP.o $(OBJ)/TSPSA.o $(OBJ)/TSPRandom.o $(OBJ)/TSPGenetico.o $(OBJ)/TSPACO.o $(OBJ)/TSPBranchAndBound.o $(OBJ)/TSPBacktracking.o
 #ALGORITHMS_INCLUDES=$(INCLUDE)/TSPMejorInsercion.h $(INCLUDE)/TSPVecinoMasCercano.h $(INCLUDE)/TSPLocalSearch.h $(INCLUDE)/TSPILS.h $(INCLUDE)/TSPGRASP.h $(INCLUDE)/TSPSA.h $(INCLUDE)/TSPRandom.h $(INCLUDE)/TSPGenetico.h $(INCLUDE)/TSPACO.h $(INCLUDE)/TSPBranchAndBound.h $(INCLUDE)/TSPBacktracking.h
 

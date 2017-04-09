@@ -4,7 +4,6 @@ APC5x2Partition::APC5x2Partition(const APCProblem *p){
     this->problem = p;
     int num_instances = problem->getNumInstances();
     int *vn = new int[num_instances];
-    vector<int> vpart[2];
 
     for(int i = 0; i < num_instances; i++){
         vn[i]=i;
@@ -24,4 +23,11 @@ APC5x2Partition::APC5x2Partition(const APCProblem *p){
     delete [] vn;
 }
 
-
+ostream & operator<<(ostream & out, const APC5x2Partition & p){
+    for(int i = 0; i < 5; i++){
+        for(int j = 0; j < 2; j++){
+            out << p.partitions[i][j] << "\n";
+        }
+    }
+    return out;
+}

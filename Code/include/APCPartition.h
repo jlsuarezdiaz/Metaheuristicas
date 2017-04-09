@@ -58,6 +58,8 @@ public:
 
     friend class APC5x2Partition;
 
+    friend ostream & operator<<(ostream & out, const APCPartition & p);
+
 };
 
 

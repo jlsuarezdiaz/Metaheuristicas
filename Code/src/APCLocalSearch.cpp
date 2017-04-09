@@ -2,11 +2,17 @@
 
 APCLocalSearch::APCLocalSearch(const APCProblem *p)
     :APCAlgorithm(p,"LOCAL SEARCH")
-{}
+{
+    this->permutation = new int[p->getNumNonClassAttributes()];
+    for(int i = 0; i < p->getNumNonClassAttributes(); i++){
+        permutation[i]=i;
+    }
+}
 
 
 APCLocalSearch::~APCLocalSearch(){
     clearSolutions();
+    delete [] permutation;
 }
 
 void APCLocalSearch::clearSolutions(){
@@ -35,9 +41,10 @@ APCSolution * APCLocalSearch::solve(const APCPartition & train, APCSolution *s, 
     int improves = 0;    //Para depurar
 
     while(num_evals < max_evaluations && no_improves < neigh_stop){
+        random_shuffle(permutation,permutation+problem->getNumNonClassAttributes());
         for(int i = 0; i < n_attr; i++){
-            float wi = (*sol)[i]; //Para deshacer mutación sin copias.
-            sol->move(i,sigma);
+            float wi = (*sol)[permutation[i]]; //Para deshacer mutación sin copias.
+            sol->move(permutation[i],sigma);
             float newfit = APC_1NN::fitness(train,*sol);
             num_evals++;
 
@@ -49,7 +56,7 @@ APCSolution * APCLocalSearch::solve(const APCPartition & train, APCSolution *s, 
             }
             //Si no, deshacemos e incrementamos no_improves para el criterio de parada.
             else{
-                (*sol)[i]=wi;
+                (*sol)[permutation[i]]=wi;
                 no_improves++;
             }
         }

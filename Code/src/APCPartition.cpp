@@ -15,3 +15,10 @@ vector <float> APCPartition::componentDistance(int i, int j) const{
     }
     return dist;
 }
+
+ostream & operator<<(ostream & out, const APCPartition & p){
+    for(int i = 0; i < p.size(); i++){
+        out << p.partition[i] << " ";
+    }
+    return out;
+}
