@@ -229,7 +229,7 @@ public:
      * @brief BLX-0.3 cross operator.
      * @param i1 First parent.
      * @param i2 Second parent.
-     * @return A vector with a child.
+     * @return A vector with the children.
      * Children are generated randomly in the interval [Cmin - l*0.3, Cmax + l*0.3]
      * Cmin = min{parent1[i],parent2[i]}, Cmax = max{parent1[i],parent2[i]}, l = Cmax-Cmin
      */

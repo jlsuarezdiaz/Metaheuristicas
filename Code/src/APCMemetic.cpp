@@ -74,9 +74,12 @@ APCSolution * APCMemetic::solve(const APCPartition & p_train, int ls_gens, float
     solutions.push_back(new APCSolution(*(best->s)));
     times.push_back(timer.get_time());
     train_fits.push_back(best->val);
+
+    cout << "NUM GENS = " << agg.getGeneration() << endl;
     //cout << "TIEMPO = " << timer.get_time() << endl;
 
     agg.clearPopulation();
+
 
     return solutions.back();
 }

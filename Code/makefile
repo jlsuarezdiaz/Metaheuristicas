@@ -68,6 +68,7 @@ $(OBJ)/main.o: $(SRC)/main.cpp $(INCLUDE)/APCProblem.h
 $(LIB)/libutilities.a: $(UTILITIES_OBJECTS)
 	@echo "Creando la biblioteca $@..."
 	$(AR) $(ARFLAGS) $@ $^
+
 #
 ##Creación del objeto APCProblem.o
 #$(OBJ)/APCProblem.o: $(SRC)/APCProblem.cpp $(INCLUDE)/APCProblem.h
@@ -86,7 +87,7 @@ $(LIB)/libutilities.a: $(UTILITIES_OBJECTS)
 #	@echo "Creando el modulo objeto $@..."
 #	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ $<
 
-$(OBJ)/Timer.o: $(SRC)/Timer.cpp $(INCLUDE)/Timer.h
+$(OBJ)/Timer.o: $(SRC)/Timer.cpp $(INCLUDE)/Timer.h $(INCLUDE)/OS_Timer.h
 	@echo "Creando el modulo objeto $@..."
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ $<
 
@@ -94,6 +95,11 @@ $(OBJ)/Timer.o: $(SRC)/Timer.cpp $(INCLUDE)/Timer.h
 $(LIB)/libalgorithms.a: $(ALGORITHMS_OBJECTS) 
 	@echo "Creando la biblioteca $@..."
 	$(AR) $(ARFLAGS) $@ $^
+
+$(LIB)/libarff.a:
+	@echo "Creando la biblioteca $@..."
+	cd src/arff && make
+	mv src/arff/libarff.a lib
 
 #$(OBJ)/APCRelief.o: $(SRC)/APCRelief.cpp $(INCLUDE)/APCRelief.h
 #	@echo "Creando el modulo objeto $@..."
@@ -223,6 +229,9 @@ $(OBJ)/%.o: $(SRC)/%.cpp $(INCLUDE)/%.h
 clean:
 	@echo "Borrando los ficheros .o del directorio $(OBJ)..."
 	rm $(OBJ)/*.o
+	rm $(LIB)/*.a
+	rm $(BIN)/*
+	cd src/arff && make clean
 
 # Regla que genera la documentación con doxygen:
 documentacion:

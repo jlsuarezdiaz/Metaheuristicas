@@ -1,11 +1,40 @@
 #ifndef TIMER_H
 #define TIMER_H
+    # include "OS_Timer.h"
 
-    # include <ctime>
     # include <iostream>
-    # include <stdlib.h>
-    //# include <chrono>
+
+
+#ifdef UNIX_TIMER
     # include <sys/time.h>
+    #define DEC_INI double inicio;
+    #define DEC_FIN double fin;
+    #define START struct timeval tp; gettimeofday(&tp,NULL); inicio = (double) tp.tv_sec +( double) tp.tv_usec / 1000000.0;
+    #define STOP  struct timeval tp; gettimeofday(&tp,NULL); fin = (double) tp.tv_sec +( double) tp.tv_usec / 1000000.0;
+    #define GET_TIME_RUNNING  struct timeval tp; gettimeofday(&tp,NULL); return (double) tp.tv_sec +( double) tp.tv_usec / 1000000.0 - inicio;
+    #define GET_TIME_STOPPED  return fin -inicio;
+#endif
+
+#ifdef USUAL_TIMER
+    # include <ctime>
+    # include <stdlib.h>
+    #define DEC_INI time_t inicio;
+    #define DEC_FIN time_t fin;
+    #define START inicio = clock();
+    #define STOP  fin = clock();
+    #define GET_TIME_RUNNING return (clock() - inicio)/ (double)CLOCKS_PER_SEC;
+    #define GET_TIME_STOPPED return (fin - inicio)/ (double)CLOCKS_PER_SEC;
+#endif
+
+#ifdef CPP11_TIMER
+    # include <chrono>
+    #define DEC_INI std::chrono::steady_clock::time_point inicio;
+    #define DEC_FIN std::chrono::steady_clock::time_point fin;
+    #define START inicio = std::chrono::steady_clock::now();
+    #define STOP  fin = std::chrono::steady_clock::now();
+    #define GET_TIME_RUNNING return (std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now()-inicio).count())/1000000000.0;
+    #define GET_TIME_STOPPED return (std::chrono::duration_cast<std::chrono::nanoseconds>(fin-inicio).count())/1000000000.0;
+#endif
     
     /**
     * @brief Clase que permite evaluar el tiempo que tarda en ejecutarse un algoritmo.
@@ -19,16 +48,12 @@
         /**
          * @brief Valor que guarda el instante inicial para poder medir el tiempo.
          */
-    	//time_t inicio;
-        //std::chrono::steady_clock::time_point inicio;
-        double inicio;
+    	DEC_INI
 
         /**
          * @brief Valor que guarda el instante final para el que se desea medir el tiempo.
          */
-    	//time_t fin;
-        // std::chrono::steady_clock::time_point fin;
-        double fin;
+        DEC_FIN
 
         /**
          * @brief Dato miembro que indica si el cronómetro está en marcha o no.

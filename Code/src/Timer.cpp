@@ -14,32 +14,25 @@ void Timer::start(){
 	if(!activado){
 		activado = true;
 	}
-	//inicio = clock();
-	//inicio = std::chrono::steady_clock::now();
-	struct timeval tp; gettimeofday(&tp,NULL); inicio = (double) tp.tv_sec +( double) tp.tv_usec / 1000000.0;
+	START
 }
 
 //Método para detener el cronómetro.
 void Timer::stop(){
 	if(activado){
 		activado = false;
-		//fin = clock();
-		//fin = std::chrono::steady_clock::now();
-		struct timeval tp; gettimeofday(&tp,NULL); fin = (double) tp.tv_sec +( double) tp.tv_usec / 1000000.0;
+		STOP
 	}
 }
 
 //Método que devuelve el tiempo transcurrido en segundos.
 double Timer::get_time() const{
 	if(activado){
-		//return (clock() - inicio)/ (double)CLOCKS_PER_SEC;
-		//return (std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now()-inicio).count());
-		struct timeval tp; gettimeofday(&tp,NULL); return (double) tp.tv_sec +( double) tp.tv_usec / 1000000.0 - inicio;
+		GET_TIME_RUNNING
 	}
 	else{
-		//return (fin - inicio)/ (double)CLOCKS_PER_SEC;
-		//return (std::chrono::duration_cast<std::chrono::seconds>(fin-inicio).count());
-		return fin -inicio;
+		GET_TIME_STOPPED
+		
 	}
 }
 

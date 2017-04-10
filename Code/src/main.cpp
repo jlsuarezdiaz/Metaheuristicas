@@ -83,6 +83,24 @@ void printOutput5x2(APCAlgorithm & a, const string & table_format, ostream & fou
 
 int main(int argc, char const *argv[])
 {
+//    Timer t;
+//    srand(time(NULL));
+//    float val[1000];
+//    string problem_nam(argv[1]);
+//    APCProblem proble(problem_nam);
+//    APC5x2Partition myPartitio(&proble);
+//    APCSolution s = APCSolution::weight1Solution(&proble);
+//    t.start();
+//    for(int i = 0; i < 1000; i++){
+//        s[i%s.size()]= ((float) rand() / (RAND_MAX));
+//        val[i] = APC_1NN::fitness(myPartitio[0][0],s);
+//    }
+//    t.stop();
+//    cout << val[0] << " " << val[999] << endl;
+//    cout << t.get_time()/1000 << endl;
+//    exit(0);
+
+
     vector <pair<char,string>> input = parseInput(argc,argv);
 
     //Data

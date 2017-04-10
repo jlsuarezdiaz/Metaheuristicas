@@ -1,12 +1,9 @@
 ---
-title: 'Metaheurísticas - Práctica 1'
-subtitle: 'Técnicas de Búsqueda basadas en Poblaciones para el Problema del Aprendizaje de Pesos en Características'
-author: "Juan Luis Suárez Díaz"
-date: "`r format(Sys.time(), '%d de %B de %Y')`"
 output:
   pdf_document:
     template: mytemplate.tex
     fig_caption: yes
+    citation_package: natbib
     highlight: haddock
     includes:
       in_header: mystyles.sty
@@ -16,13 +13,14 @@ fontsize: 10pt
 geometry: a4paper, top=2.5cm, bottom=2.5cm, left=3cm, right=3cm
 lang: spanish
 linestretch: 1
-csl: ieee.csl
+
+
 ---
 <!--
 Highlights: default, tango, pygments, kate, monochrome, espresso, zenburn, haddock, null
 -->
 <!--
-
+csl: ieee.csl
 mainfont: Arial
 monofont: Source Code Pro
 
@@ -49,10 +47,82 @@ Añadir imagenes:
 
 -->
 
+\begin{titlepage}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+
+\center % Center everything on the page
+ 
+%----------------------------------------------------------------------------------------
+%	HEADING SECTIONS
+%----------------------------------------------------------------------------------------
+
+\textsc{\LARGE METAHEURíSTICAS }\\[0.3cm] % Name of your university/college
+\textsc{\LARGE Práctica 1 }\\[0.3cm]
+\textsc{\Large Universidad de Granada }\\[0.3cm]
+\textsc{\Large CURSO 2016/2017}\\[0.5cm] % Major heading such as course name
+ % Minor heading such as course title
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\HRule \\[0.4cm]
+{ \huge \bfseries Técnicas de Búsqueda Basadas en Poblaciones para el Aprendizaje de Pesos en Características }\\[0.03cm] % Title of your document
+\HRule \\[1.5cm]
+
+ 
+%----------------------------------------------------------------------------------------
+%	AUTHOR SECTION
+%----------------------------------------------------------------------------------------
+
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Contenido}\\
+Búsqueda Local \\Algoritmos Genéticos\\Algoritmos Meméticos
+\end{flushleft}
+\end{minipage}
+~
+\begin{minipage}{0.4\textwidth}
+\begin{flushright} \large
+\emph{Autor:} \\
+Juan Luis Suárez Díaz\\77148642-H\\\url{jlsuarezdiaz@correo.ugr.es}\\GRUPO 2 (VIERNES)\\Cuarto Curso del DGIIM
+\end{flushright}
+\end{minipage}\\[1cm]
+
+% If you don't want a supervisor, uncomment the two lines below and remove the section above
+%\Large \emph{Author:}\\
+%John \textsc{Smith}\\[3cm] % Your name
+
+%----------------------------------------------------------------------------------------
+%	DATE SECTION
+%----------------------------------------------------------------------------------------
+
+{\large \today}\\[1cm] % Date, change the \today to a set date if you want to be precise
+
+%----------------------------------------------------------------------------------------
+%	LOGO SECTION
+%----------------------------------------------------------------------------------------
+
+
+%\includegraphics{logo.png}\\[1cm] % Include a department/university logo - this will require the graphicx package
+
+ 
+%----------------------------------------------------------------------------------------
+
+\vfill % Fill the rest of the page with whitespace
+
+\end{titlepage}
+
 \clearpage
 
 \tableofcontents
 
+\clearpage
+
 # Sección 1
 
 # Sección 2
+
+
+Hola

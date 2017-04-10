@@ -105,7 +105,7 @@ ArffToken ArffLexer::next_token() {
     else if(icompare(str, "@data")) {
         token = DATA_TOKEN;
     }
-    else if(icompare(str, "numeric")) {
+    else if(icompare(str, "numeric")||icompare(str,"real")) {
         token = NUMERIC_TOKEN;
     }
     else if(icompare(str, "string")) {
