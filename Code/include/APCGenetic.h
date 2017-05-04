@@ -5,10 +5,15 @@
 
 using namespace std;
 
-
+/**
+ * Struct individual.
+ * It represens an individual of the population of a genetic algorithm.
+ */
 struct Individual{
     APCSolution *s;
     float val;
+
+    inline Individual():s(NULL),val(-1.0){}
 
     inline Individual(APCSolution *s):s(s),val(-1.0){}
 
@@ -62,19 +67,37 @@ struct IndividualComparator{
     }
 };
 
+/**
+ * Cross operator type.
+ */
 typedef vector<Individual*> (*crossOperator) (const Individual & i1, const Individual & i2);
 
+/**
+ * Class APCGenetic.
+ * Abstract class which includes functionalities for different genetic algorithms for APC.
+ */
 class APCGenetic: public APCAlgorithm{
 protected:
 
+    /**
+     * Population.
+     */
     vector<Individual*> population;
 
+    /**
+     * Population size.
+     */
     int population_size;
 
+    /**
+     * Probabilites.
+     */
     float mutation_prob;
-
     float cross_prob;
 
+    /**
+     * Binary tour function. It picks the best of the two individuals given in the parameters.
+     */
     inline static Individual * binary_tour(Individual * i1, Individual * i2){
         return (*i1 > *i2)?i1:i2;
     }
@@ -96,15 +119,24 @@ protected:
     vector<Individual*> children_population;
 
     /**
+     * Auxiliar vector to count mutations (for reducing evaluations)
+     */
+    bool * mutations;
+
+    /**
      * Number of the generation.
      */
     int generation;
 
-
- 
+    /**
+     * Algorithm metadata.
+     */
     string cross_algorithm;
     string selection_algorithm;
 
+    /**
+     * Erases stored solutions.
+     */
     void clearSolutions();
 
 
@@ -144,6 +176,9 @@ protected:
 
 public:
 
+    /**
+     * Constructor.
+     */
     APCGenetic(const APCProblem *p);
 
     /**
@@ -166,32 +201,46 @@ public:
 
     /**
      * Generates solutions for a 5x2 partition.
-     * @param Partition 5x2 partition to evaluate.
-     * @param cross Cross operator.
-     * @param max_evaluations Max number of evaluations to make stop the algorithm.
+     * @param partition 5x2 partition to evaluate.
      * @pos getSolutions() will return a 10 elements vector with the solutions.
      * @pos getTimes() will return a 10 elements vector with the partition times.
      * @pos getFitnesses() will return a 10 elements vector with the partition fitnesses.
+     * @pos getTrainFits() will return a 10 elements vector eith the training fitnesses.
      */
     void solve5x2(const APC5x2Partition & partition, crossOperator c, int population_size = 30, float cross_prob = 0.7, float mutation_prob = 0.001, int max_evaluations = 15000);
 
-
+    /**
+     * Obtains the algorithm name.
+     */
     inline string getAlgorithmName(){
         return algorithm_name+"-"+selection_algorithm+"-"+cross_algorithm;
     }
 
+    /**
+     * Obtains the population. Any modification od the elements in the returned vector
+     * will affect the population if the algorithm is run again.
+     */
     inline vector<Individual*> & getPopulation(){
         return population;
     }
 
+    /**
+     * Resets target function evaluations count.
+     */
     inline void resetEvaluations(){
         num_evaluations = 0;
     }
 
+    /**
+     * Obtains target function evaluations count.
+     */
     inline int getEvaluations(){
         return num_evaluations;
     }
 
+    /**
+     * Tells the algorithm to recalc the best solution (for extern modifications in memetic algorithms).
+     */
     void recalcBestSolution();
 
     /**
@@ -203,10 +252,19 @@ public:
         if(*best > *best_solution) best_solution = best;
     }
 
+    /**
+     * Destructor.
+     */
     ~APCGenetic();
 
+    /**
+     * Stablish algorithm probabilities.
+     */
     void setParameters(float cross_prob = 0.7, float mutation_prob = 0.001);
     
+    /**
+     * Obtains the number of the reached generation.
+     */
     inline int getGeneration(){
         return generation;
     }
@@ -237,10 +295,15 @@ public:
     static vector<Individual*> BLXCross03(const Individual &i1, const Individual &i2);
 };
 
-
+/**
+ * Class APCGeneticGenerational.
+ * A class to manage Genetic Generational Algorithms.
+ */
 class APCGeneticGenerational : public APCGenetic{
 public:
-
+    /**
+     * Constructor.
+     */
     inline APCGeneticGenerational(const APCProblem *p)
         :APCGenetic(p){
             this->selection_algorithm = "GENERATIONAL";
@@ -269,8 +332,15 @@ public:
 
 };
 
+/**
+ * Class APCGeneticGenerational.
+ * A class to manage Genetic Stationary Algorithms.
+ */
 class APCGeneticStationary : public APCGenetic{
 public:
+    /**
+     * Constructor.
+     */
     inline APCGeneticStationary(const APCProblem *p)
         :APCGenetic(p){
             this->selection_algorithm = "STATIONARY";

@@ -16,12 +16,26 @@ APCSolution * APCMemetic::solve(const APCPartition & p_train, int ls_gens, float
     agg.setParameters(cross_prob,mutation_prob);
     agg.resetEvaluations();
 
+    //!!!
+    //cout << population_size << endl;
+    //vector<Individual*> expe;
+    //expe.resize(6);
+    //static int ixx = 0;
+    //ixx++;
+    //ofstream fout[6];
+    //for(int i = 0; i < 6; i++){
+    //    fout[i].open(("./sol/experiments/AM_evol3_"+std::to_string(ixx)+"_"+std::to_string(i)+".sol").c_str());
+    //    expe[i] = agg.getPopulation()[i];
+    //}
+    //!!!
+
     int num_ls_inds = ls_prob * population_size; //Número de individuos a los que se aplicará la LS
     int neighbour_evals = ls_neighbour_evals_rate*problem->getNumNonClassAttributes();
     float best_val;
-    Individual * best;
+    Individual * best = NULL;
 
     while(num_evaluations < max_evaluations){
+
         for(int i = 0; i < ls_gens; i++){
             agg.nextGeneration(p_train,c);
         }
@@ -42,7 +56,6 @@ APCSolution * APCMemetic::solve(const APCPartition & p_train, int ls_gens, float
                 random_shuffle(solutions.begin(),solutions.end());
             }
         }
-
         //cout << "SELECCION PARA LS: " << timer.get_time() << endl;
 
         best_val = -1.0;
@@ -56,6 +69,7 @@ APCSolution * APCMemetic::solve(const APCPartition & p_train, int ls_gens, float
                 best = solutions[i];
             }
         }
+
 
         //cout << "LS: " << timer.get_time() << endl;
 
@@ -75,7 +89,7 @@ APCSolution * APCMemetic::solve(const APCPartition & p_train, int ls_gens, float
     times.push_back(timer.get_time());
     train_fits.push_back(best->val);
 
-    cout << "NUM GENS = " << agg.getGeneration() << endl;
+    //cout << "NUM GENS = " << agg.getGeneration() << endl;
     //cout << "TIEMPO = " << timer.get_time() << endl;
 
     agg.clearPopulation();

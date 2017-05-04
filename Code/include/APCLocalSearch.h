@@ -25,10 +25,10 @@ public:
      * @param sigma Standard deviation.
      * @param max_neighbours Stop criterion: if there is not improvement after max_neighboursxnum_attributes neighbours
      * @param max_evaluations Max number of evaluations to make stop the algorithm.
-     * @pre There must exist solutions[s_index], fitnesses[s_index] and times[s_index]
-     * @pos The solution obtained will be returned as the element s_index of getSolutions()
-     * @pos The elapsed time will be returned as the element s_index of getTimes()
-     * @pos The fitness will be calculated over p_test and will be returned as the element s_index of getFitnessed()
+     * @pos The solution obtained will be returned as the last element of getSolutions()
+     * @pos The elapsed time will be returned as the last element of getTimes()
+     * @pos The fitness will be returned as the last element of getFitnesses()
+     * @pos The train fitness will be returned as the last element of getTrainFits()
      * @return Solution obtained.
      */
     APCSolution * solve(const APCPartition & p_train, APCSolution *sol, int max_neighbours = 20, int max_evaluations = 15000, float sigma = 0.3);
@@ -44,12 +44,18 @@ public:
      * @pos getSolutions() will return a 10 elements vector with the solutions.
      * @pos getTimes() will return a 10 elements vector with the partition times.
      * @pos getFitnesses() will return a 10 elements vector with the partition fitnesses.
+     * @pos getTrainFits() will return a 10 elements vector eith the training fitnesses.
      */
     void solve5x2(const APC5x2Partition & partition, vector<APCSolution*> & solutions, int max_neighbours = 20, int max_evaluations = 15000, float sigma = 0.3);
 
+    /**
+     * Erases stored solutions.
+     */
     void clearSolutions();
     
-
+    /**
+     * Destructor.
+     */
     ~APCLocalSearch();
 
 

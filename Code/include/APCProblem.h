@@ -26,6 +26,9 @@ private:
      */
     string file_name;
 
+    /**
+     * Relation name.
+     */
     string relation;
 
     /** 
@@ -33,6 +36,9 @@ private:
      */
     int num_attributes;
 
+    /**
+     * Number of instances.
+     */
     int num_instances;
 
     /**
@@ -40,6 +46,9 @@ private:
      */
     float ** attributes;
 
+    /**
+     * Array with the classes.
+     */
     bool * classes;
 
     /**
@@ -47,6 +56,9 @@ private:
      */
     void readFileData();
 
+    /**
+     * Normalizes the problem data to [0,1] (by attributes).
+     */
     void normalize();
 
 public:
@@ -67,26 +79,44 @@ public:
      */
     APCProblem(const APCProblem & other);
 
+    /**
+     * @brief Obtains the number of attributes in the problem.
+     */
     inline int getNumAttributes() const{
         return num_attributes;
     }
 
+    /**
+     * Obtains the nomber of attributes, excluding class attribute.
+     */
     inline int getNumNonClassAttributes() const{
         return num_attributes-1;
     }
 
+    /**
+     * Obtains the number of instances in the problem.
+     */
     inline int getNumInstances() const{
         return num_instances;
     }
 
+    /**
+     * Obtains the attributes matrix.
+     */
     inline float** const getAttributes() const{
         return attributes;
     }
 
+    /**
+     * Obtains the classes array.
+     */
     inline const bool * getClasses() const{
         return classes;
     }
 
+    /**
+     * Obtains the file_name.
+     */
     inline string getFileName(){
         return file_name;
     }

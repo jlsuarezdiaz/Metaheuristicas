@@ -5,7 +5,7 @@
 CXX=g++
 CC=$(CXX)
 CPPFLAGS=-c -std=c++11 -g -O2 -Wfatal-errors -Wall
-CXXFLAGS=-I$(INCLUDE) -I$(INCLUDE)/arff
+CXXFLAGS=-I$(INCLUDE) -I$(SRC)/arff/src
 LDFLAGS=-L$(LIB)
 LOADLIBS=-lutilities -lalgorithms -lutilities -larff
 ARFLAGS=rvs
@@ -28,8 +28,8 @@ ALGORITHMS_INCLUDES=$(INCLUDE)/APCAlgorithm.h $(INCLUDE)/APCRelief.h $(INCLUDE)/
 #ALGORITHMS_OBJECTS=$(OBJ)/TSPMejorInsercion.o $(OBJ)/TSPVecinoMasCercano.o $(OBJ)/TSPLocalSearch.o $(OBJ)/TSPILS.o $(OBJ)/TSPGRASP.o $(OBJ)/TSPSA.o $(OBJ)/TSPRandom.o $(OBJ)/TSPGenetico.o $(OBJ)/TSPACO.o $(OBJ)/TSPBranchAndBound.o $(OBJ)/TSPBacktracking.o
 #ALGORITHMS_INCLUDES=$(INCLUDE)/TSPMejorInsercion.h $(INCLUDE)/TSPVecinoMasCercano.h $(INCLUDE)/TSPLocalSearch.h $(INCLUDE)/TSPILS.h $(INCLUDE)/TSPGRASP.h $(INCLUDE)/TSPSA.h $(INCLUDE)/TSPRandom.h $(INCLUDE)/TSPGenetico.h $(INCLUDE)/TSPACO.h $(INCLUDE)/TSPBranchAndBound.h $(INCLUDE)/TSPBacktracking.h
 
-UTILITIES_OBJECTS=$(OBJ)/APCProblem.o $(OBJ)/APCSolution.o $(OBJ)/APCPartition.o $(OBJ)/APC5x2Partition.o $(OBJ)/Timer.o $(OBJ)/SRandom.o
-UTILITIES_INCLUDES=$(INCLUDE)/APCProblem.h $(INCLUDE)/APCSolution.h $(INCLUDE)/APCPartition.h $(INCLUDE)/APC5x2Partition.h $(INCLUDE)/Timer.h $(INCLUDE)/SRandom.h
+UTILITIES_OBJECTS=$(OBJ)/APCProblem.o $(OBJ)/APCSolution.o $(OBJ)/APCPartition.o $(OBJ)/APC5x2Partition.o $(OBJ)/APC5FoldPartition.o $(OBJ)/Timer.o $(OBJ)/SRandom.o
+UTILITIES_INCLUDES=$(INCLUDE)/APCProblem.h $(INCLUDE)/APCSolution.h $(INCLUDE)/APCPartition.h $(INCLUDE)/APC5x2Partition.h $(INCLUDE)/APC5FoldPartition.h $(INCLUDE)/Timer.h $(INCLUDE)/SRandom.h
 #UTILITIES_OBJECTS=$(OBJ)/TSPPunto.o $(OBJ)/TSPProblema.o $(OBJ)/TSPSolucion.o $(OBJ)/TSPColeccionSoluciones.o $(OBJ)/Cronometro.o   $(OBJ)/TSPPlot.o $(OBJ)/Menu.o $(OBJ)/ioTSP.o
 #UTILITIES_INCLUDES=$(INCLUDE)/TSPPunto.h $(INCLUDE)/TSPProblema.h $(INCLUDE)/TSPSolucion.h $(INCLUDE)/TSPColeccionSoluciones.h $(INCLUDE)/Cronometro.h $(INCLUDE)/TSPPlot.h $(INCLUDE)/Menu.h $(INCLUDE)/ioTSP.h
 

@@ -10,11 +10,20 @@
 using namespace std;
 
 
-
+/**
+ * Class APCSolution.
+ * A class to store a solution of the APCProblem.
+ */
 class APCSolution{
 private:
+    /**
+     * Weights vector.
+     */
     float * weights;
 
+    /**
+     * Associated problem.
+     */
     const APCProblem *problem;
 
 public:
@@ -37,22 +46,37 @@ public:
      */
     void setProblem(const APCProblem *p);
 
+    /**
+     * Obtains the i-th weight in the solution (l-value).
+     */
     inline float & operator[](unsigned i){
         return weights[i];
     }
 
+    /**
+     * Obtains the i-th weight in the solution (r-value).
+     */
     inline const float & operator[](unsigned i) const{
         return weights[i];
     }
 
+    /**
+     ^Obtains the weights array.
+     */
     inline const float * getWeights() const{
         return weights;
     }
 
+    /**
+     * Obtains solutoin size.
+     */
     inline const int size() const{
         return problem->getNumNonClassAttributes();
     }
 
+    /**
+     * Obtains the associated problem.
+     */
     inline const APCProblem * getProblem(){
         return problem;
     }
@@ -97,6 +121,19 @@ public:
     }
 
     /**
+     * Substracts to the solution the weights given by the iterator.
+     * @param begin Iterator to float.
+     * @pre begin should support access to as many positions as the size of weights.
+     */
+    template <class RandomAccessIterator>
+    APCSolution & operator-= (RandomAccessIterator begin){
+        for(int i = 0; i < problem->getNumNonClassAttributes(); i++){
+            weights[i]-=*(begin+i);
+        }
+        return *this;
+    }
+
+    /**
      * Moves the solution in a neighbourhood by normal mutation.
      * @param i Index to move.
      * @param sigma Standard Deviation. The parameter will be moved an amount
@@ -104,8 +141,14 @@ public:
      */
     void move(int i, float sigma);
 
+    /**
+     * Output operator.
+     */
     friend ostream & operator<<(ostream & out, const APCSolution &s);
 
+    /**
+     * Input operator.
+     */
     friend istream & operator>>(istream & in, APCSolution &s);
 
     /**

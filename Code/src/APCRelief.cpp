@@ -57,7 +57,7 @@ APCSolution * APCRelief::solve(const APCPartition &p){
         //}
 
         (*solution) += p.componentDistance(i,en_i).begin();
-        (*solution) += p.componentDistance(i,fr_i).begin();
+        (*solution) -= p.componentDistance(i,fr_i).begin();
 
         //cout << endl << endl;
         //for(int j = 0; j < solution->size(); j++){

@@ -1,0 +1,3 @@
+SEED-360257  sonar    sonar    sonar    wdbc     wdbc     wdbc     spambase-460  spambase-460  spambase-460
+ALGORITHMS   FITNESS  TRAIN    TIME     FITNESS  TRAIN    TIME     FITNESS       TRAIN         TIME
+AGE-BLX      82.2115  90.7692  22.6908  95.3957  97.8209  93.4887  82.7826       92.5217       105.5825

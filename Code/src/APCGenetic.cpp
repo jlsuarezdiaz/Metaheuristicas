@@ -1,5 +1,6 @@
 # include "APCGenetic.h"
 
+
 APCGenetic::APCGenetic(const APCProblem *p)
 :APCAlgorithm(p,"GENETIC")
 {
@@ -9,6 +10,7 @@ APCGenetic::APCGenetic(const APCProblem *p)
     best_solution = NULL;
     num_evaluations = 0;
     generation = 0;
+    mutations = NULL;
 
 }
 
@@ -32,6 +34,8 @@ void APCGenetic::clearPopulation(){
     best_solution = NULL;
     population_size = 0;
     generation = 0;
+    if(mutations != NULL) delete [] mutations;
+    mutations = NULL;
 
 }
 
@@ -42,8 +46,10 @@ void APCGenetic::generatePopulation(const APCPartition & p, int population_size)
     const float a = 0.0, b = 1.0;
     float best_val = -1.0;
     population.reserve(population_size);
+    mutations = new bool[population_size];
 
     for(int i = 0; i < population_size; i++){
+        mutations[i] = false;
         APCSolution * s = new APCSolution(problem);
         for(int j = 0; j < s->size(); j++){
             (*s)[j] = SRandom::getInstance().getRealUniformDistributionElement(a,b);
@@ -65,10 +71,13 @@ void APCGenetic::generatePopulation(const APCPartition & p, int population_size)
 void APCGenetic::setInitialPopulation(const APCPartition &p, const vector<Individual*> & initial_population){
     clearPopulation();
     this->population_size = initial_population.size();
+    mutations = new bool[population_size];
 
     float best_val = -1.0;
 
     for(int i = 0; i < population_size; i++){
+        mutations[i] = false;
+
         population.push_back(initial_population[i]);
         //Recalcular mejor solución
         if(population[i]->val > best_val){
@@ -82,6 +91,10 @@ void APCGenetic::setInitialPopulation(const APCPartition &p, const vector<Indivi
 
 
 void APCGenetic::nextGeneration(const APCPartition &p, crossOperator c){
+       //cout << "\n\nOLD GEN:" << endl;
+       //for(unsigned i = 0; i < population.size(); i++){
+       //     cout << population[i]->val << endl;
+       //}cout << endl << endl;
 
        selection();
 
@@ -104,10 +117,7 @@ void APCGenetic::nextGeneration(const APCPartition &p, crossOperator c){
 
        generation++;
 
-       //cout << "\n\nNEW GEN:" << endl;
-       //for(unsigned i = 0; i < population.size(); i++){
-       //     cout << population[i]->val << endl;
-       //}
+       
 
        //cout << "EVALS = " << num_evaluations << endl;
        //cout << "BEST = " << best_solution->val << endl;
@@ -119,7 +129,7 @@ APCSolution * APCGenetic::solve(const APCPartition &p, crossOperator c, int popu
     if(c == APCGenetic::arithmeticCross) cross_algorithm = "ARITHMETIC";
     setParameters(cross_prob,mutation_prob);
     resetEvaluations();
-
+    //ixx++; //!!!!
     this->population_size = population_size;
 
     timer.start();
@@ -201,20 +211,17 @@ vector<Individual*> APCGenetic::BLXCross03(const Individual &i1, const Individua
     s1->setProblem(i1.s->getProblem());      
     s2->setProblem(i2.s->getProblem()); 
 
-    float cmin = 1.1, cmax = -0.1;
-    for(int i = 0; i < s1->size(); i++){
-        if((*i1.s)[i] < cmin) cmin = (*i1.s)[i];
-        if((*i1.s)[i] > cmax) cmax = (*i1.s)[i];
-        if((*i2.s)[i] < cmin) cmin = (*i2.s)[i];
-        if((*i2.s)[i] > cmax) cmax = (*i2.s)[i];
-    }
-    const float lim_inf = 0.0, lim_sup = 1.0;
-    float l = cmax - cmin, alpha = 0.3;
-    float min_int = max(cmin - l *alpha,lim_inf), max_int = min(cmax + l*alpha,lim_sup);
 
+    const float lim_inf = 0.0, lim_sup = 1.0;
+    const float alpha = 0.3;
+    
     for(int i = 0; i < s1->size(); i++){
-        (*s1)[i] = SRandom::getInstance().getRealUniformDistributionElement(min_int,max_int);
-        (*s2)[i] = SRandom::getInstance().getRealUniformDistributionElement(min_int,max_int);
+        float cmax = max((*i1.s)[i],(*i2.s)[i]);
+        float cmin = min((*i1.s)[i],(*i2.s)[i]);
+        float l  = cmax - cmin;
+        float min_int = cmin - l*alpha, max_int = cmax + l*alpha;
+        (*s1)[i] = min(lim_sup,max(lim_inf,SRandom::getInstance().getRealUniformDistributionElement(min_int,max_int)));
+        (*s2)[i] = min(lim_sup,max(lim_inf,SRandom::getInstance().getRealUniformDistributionElement(min_int,max_int)));
     }
 
     vector<Individual*> v;
@@ -228,6 +235,7 @@ void APCGeneticGenerational::selection(){
         //cout << i << endl;
         int r1 = SRandom::getInstance().rand(0,population_size-1);
         int r2 = SRandom::getInstance().rand(0,population_size-1);
+        if(r1==r2) r2 = (r2+1) % population_size;
         parents_population.push_back(new Individual(*binary_tour(population[r1],population[r2])));
     }
 }
@@ -246,16 +254,11 @@ void APCGeneticGenerational::cross(crossOperator c, const APCPartition &p){
         if(children.size()==1){
             children_population[child_index1] = children[0];
             children_population[child_index2] = c(*parents_population[i],*parents_population[last_child-i])[0];
-            children_population[child_index1]->val = APC_1NN::fitness(p,*children_population[child_index1]->s);
-            children_population[child_index2]->val = APC_1NN::fitness(p,*children_population[child_index2]->s);
-            //!! Necesario computar vals, no puede hacerlo el operador de cruce (no tiene partición)
         }
         else{
             //Reemplazar hijos
             children_population[child_index1] = children[0];
-            children_population[child_index1]->val = APC_1NN::fitness(p,*children[0]->s);
             children_population[child_index2] = children[1];
-            children_population[child_index2]->val = APC_1NN::fitness(p,*children[1]->s);
         }
     }
 
@@ -263,7 +266,6 @@ void APCGeneticGenerational::cross(crossOperator c, const APCPartition &p){
         children_population[i] = parents_population[i];
     }
 
-    num_evaluations += n_cross*2;
 }
 
 void APCGeneticGenerational::mutation(const APCPartition &p){
@@ -271,15 +273,27 @@ void APCGeneticGenerational::mutation(const APCPartition &p){
     int gen_muts = ceil(1.0/exp_mut);
     int n_muts = (gen_muts!=0&&generation%gen_muts==0)?ceil(exp_mut):0;
     int r1, r2;
-    //cout << n_muts << " MUTACIONES" << endl;
+
+
     for(int i = 0; i < n_muts; i++){
         r1 = SRandom::getInstance().rand(0,children_population.size()-1);
         r2 = SRandom::getInstance().rand(0,problem->getNumNonClassAttributes()-1);
 
         children_population[r1]->s->move(r2,0.3);
         children_population[r1]->val = APC_1NN::fitness(p,*children_population[r1]->s);
+        mutations[r1] = true;
+
     }
+
     num_evaluations+= n_muts;
+    //Cómputo de evaluaciones de la generación completa (hacerlo mejor si hubiera tiempo)
+    int child_size = 2*ceil(cross_prob * parents_population.size()/2);
+    for(int i = 0; i < child_size; i++){
+        if(!mutations[i]){
+            children_population[i]->val = APC_1NN::fitness(p,*children_population[i]->s);
+            num_evaluations++;
+        }
+    }
 }
 
 void APCGeneticGenerational::replacement(){
@@ -290,6 +304,7 @@ void APCGeneticGenerational::replacement(){
     int best_ind = -1;
 
     for(int i = 0; i < population_size; i++){
+        mutations[i] = false;
         //Eliminamos población para reemplazar
         if(population[i] != best_solution) delete population[i];
 
@@ -315,13 +330,19 @@ void APCGeneticGenerational::replacement(){
     population[worst_ind] = best_solution;
 
     if(*population[best_ind] > *best_solution) best_solution = population[best_ind];
-    
+    //cout << best_solution->val << endl;
+    ////!!!!
+    //string str = "./sol/experiments/AGGCA_prueba2.sol";
+    //static ofstream fout(str);
+    //fout << generation << " " << *(best_solution->s) << " " << best_solution->val << "\n";
+    //}
 }
 
 void APCGeneticStationary::selection(){
     for(int i = 0; i < 4; i++){
         int r1 = SRandom::getInstance().rand(0,population_size-1);
         int r2 = SRandom::getInstance().rand(0,population_size-1);
+        if(r1==r2) r2 = (r2 + 1) % population_size;
         //parents_population.push_back(new Individual(*binary_tour(population[r1],population[r2])));
         parents_population.push_back(binary_tour(population[r1],population[r2]));
     }
@@ -336,20 +357,20 @@ void APCGeneticStationary::cross(crossOperator c, const APCPartition &p){
     // Si el cruce solo generara un hijo, hacemos dos cruces usando cuatro padres
     if(children.size()==1){
         children_population[0] = children[0];
-        children_population[0]->val = APC_1NN::fitness(p,*children_population[0]->s);
+        //children_population[0]->val = APC_1NN::fitness(p,*children_population[0]->s);
         children_population[1] = c(*parents_population[2],*parents_population[3])[0];
-        children_population[1]->val = APC_1NN::fitness(p,*children_population[1]->s);
+        //children_population[1]->val = APC_1NN::fitness(p,*children_population[1]->s);
         //!! Necesario computar vals, no puede hacerlo el operador de cruce (no tiene partición)
     }
     else{ //Si el cruce genera dos hijos usamos solo dos padres
         //Reemplazar hijos
         children_population[0] = children[0];
-        children_population[0]->val = APC_1NN::fitness(p,*children[0]->s);
+        //children_population[0]->val = APC_1NN::fitness(p,*children[0]->s);
         children_population[1] = children[1];
-        children_population[1]->val = APC_1NN::fitness(p,*children[1]->s);
+        //children_population[1]->val = APC_1NN::fitness(p,*children[1]->s);
     }
 
-    num_evaluations += 2;
+    //num_evaluations += 2;
 }
 
 void APCGeneticStationary::mutation(const APCPartition &p){
@@ -363,9 +384,14 @@ void APCGeneticStationary::mutation(const APCPartition &p){
         r2 = SRandom::getInstance().rand(0,problem->getNumNonClassAttributes()-1);
 
         children_population[r1]->s->move(r2,0.3);
-        children_population[r1]->val = APC_1NN::fitness(p,*children_population[r1]->s);
+        //children_population[r1]->val = APC_1NN::fitness(p,*children_population[r1]->s);
     }
-    num_evaluations+= n_muts;
+    //num_evaluations+= n_muts;
+
+    //Cómputo de los nuevos fitness (son solo 2 siempre) (hacer mejor si hubiera tiempo)
+    children_population[0]->val = APC_1NN::fitness(p,*children_population[0]->s);
+    children_population[1]->val = APC_1NN::fitness(p,*children_population[1]->s);
+    num_evaluations+=2;
 }
 
 void APCGeneticStationary::replacement(){
@@ -400,7 +426,7 @@ void APCGeneticStationary::replacement(){
     //o el mejor hijo es mejor que los dos peores, pero el peor hijo no es mejor que ninguno
     //(1 reemplazo)
     else if(*children_population[best_child_index] < *population[worst_ind_2] ||
-      *children_population[worst_child_index] < *population[worst_ind_2]){
+      *children_population[worst_child_index] < *population[worst_ind_1]){
 
         if(best_solution==population[worst_ind_1]) best_solution = children_population[best_child_index];
         delete children_population[worst_child_index];
@@ -417,4 +443,12 @@ void APCGeneticStationary::replacement(){
         population[worst_ind_2] = children_population[worst_child_index];
         if(*children_population[best_child_index] > *best_solution) best_solution = children_population[best_child_index];
     }
+
+
+    //static ofstream fout("./sol/experiments/pruebas_AGE.sol");
+    //fout << generation << " ";
+    //for(int i = 0; i < 6; i++){
+    //    fout << population[i]->val << " ";
+    //}
+    //fout << "\n";
 }

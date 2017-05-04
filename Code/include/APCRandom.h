@@ -23,10 +23,11 @@ public:
 
     /**
      * Generates solutions for a 5x2 partition.
-     * @param Partition 5x2 partition to evaluate.
+     * @param partition 5x2 partition to evaluate.
      * @pos getSolutions() will return a 10 elements vector with the solutions.
      * @pos getTimes() will return a 10 elements vector with the partition times.
      * @pos getFitnesses() will return a 10 elements vector with the partition fitnesses.
+     * @pos getTrainFits() will return a 10 elements vector eith the training fitnesses.
      */
     void solve5x2(const APC5x2Partition & partition);
 

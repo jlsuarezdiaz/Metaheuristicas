@@ -26,10 +26,11 @@ private:
     static float w_sqDistance(const APCPartition & p, const APCSolution & w, int i, int j);
 
     /**
-     * @brief Obtains an approximation for the squared distance that guarantees the
+     * @brief Calculates efficiently squared distance.
      * correct result for 1NN classifier.
      */
     static float w_sqDistanceEff(const APCPartition & p, const APCSolution & w, int i, int j);
+
     /**
      * @brief Classifies an element of the partition using the rest of the partition.
      * @param p Test partition.
@@ -40,8 +41,14 @@ private:
     //bool classify(int i);
     static bool classify(const APCPartition & p, const APCSolution & w, int i);
 
+    /**
+     * Initializes a matrix distance for efficient calculation.
+     */
     static void initializeDistances(const APCPartition &p, const APCSolution & w);
 
+    /**
+     * Deletes the distances matrix.
+     */
     static void deleteDistances(const APCPartition &p);
 public:
 

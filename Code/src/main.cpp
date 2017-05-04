@@ -11,6 +11,7 @@
 #include "APCRelief.h"
 #include "SRandom.h"
 #include "APC5x2Partition.h"
+#include "APC5FoldPartition.h"
 #include "APCLocalSearch.h"
 #include "APCRandom.h"
 #include "APCGenetic.h"
@@ -26,7 +27,7 @@ void printHelp(){
          << "apc [problem file] [options]" << endl
          << "OPTIONS:" << endl
          << "-a <algorithm>: Specifies the algorithm to use in the program (necessary). Allowed algorithms are:" << endl
-         << "\t1NN: Evaluates 1NN classifier over a 1.0-weighted solution." << endl
+         << "\t1NN: Evaluates 1NN classifier over a 1.0-weighted solution (unless -w is specified)" << endl
          << "\tRANDOM: Generates random solutions uniformely distributed in [0,1]." << endl
          << "\tRELIEF: Obtains a solution using the greedy algorithm RELIEF." << endl    
          << "\tRANDOM+LS: Improves a random solution with local search." << endl
@@ -45,8 +46,9 @@ void printHelp(){
          << "\tt: A file with times data will be created." << endl
          << "\ti: A file with training fitnesses data will be created." << endl
          << "\ts: A file with solutions will be created." << endl
-         << "-s <seed>: Specifies a seed for random numbers generation." << endl
+         << "-s <seed>: Specifies a seed for random numbers generation. Without this option, seed will obtained using current time." << endl
          << "-t <string>: With this option, a table will be written in a file, with the data specified in the given string. Characters allowed are the same in -p, except for 's' and 'p'" << endl
+         << "-w <file>: It only will be considered when algorithm is 1NN. specifies a file where a solution is stored, and tests it with the classifier."
          << endl << "EXAMPLE OF USE: apc ./data/sonar.arff -a RELIEF -s 3 -o ./sol/relief_sonar -t fti -p ftisp";
     exit(0);
 }
@@ -110,6 +112,7 @@ int main(int argc, char const *argv[])
     string table_format = "";
     string output_name = "";
     string data_prints = "";
+    string sol_file = "";
 
     APCProblem problem(problem_name);
 
@@ -138,6 +141,9 @@ int main(int argc, char const *argv[])
                 break;
             case 'p':
                 data_prints = input[i].second;
+                break;
+            case 'w':
+                sol_file = input[i].second;
                 break;
             default:
                 printHelp();
@@ -201,8 +207,12 @@ int main(int argc, char const *argv[])
     //Set random seed.
     SRandom::getInstance().setSeed(seed);
 
+
     //Create partitions
     APC5x2Partition myPartition(&problem);
+    APC5FoldPartition myPartition5f(&problem);
+    cout << myPartition5f << endl;
+    exit(0);
 
     //Output partition
     if(output_parts != "") fout_parts << myPartition;
@@ -295,7 +305,16 @@ int main(int argc, char const *argv[])
     }
 
     else if(algorithm == "1NN"){
-        nn1.solve5x2(myPartition);
+        if(sol_file == ""){
+            APCSolution s1 = APCSolution::weight1Solution(&problem);
+            nn1.solve5x2(myPartition,s1);
+        }
+        else{
+            ifstream s_in(sol_file.c_str());
+            APCSolution s_test(&problem);
+            s_in >> s_test;
+            nn1.solve5x2(myPartition,s_test);
+        }
 
         cout << nn1.getAlgorithmName() << endl;
         printOutput5x2(nn1, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);

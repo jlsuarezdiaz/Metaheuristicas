@@ -22,3 +22,12 @@ ostream & operator<<(ostream & out, const APCPartition & p){
     }
     return out;
 }
+
+//istream& operator>>(istream & in, APCPartition & p){
+//    while(!in.eof()){
+//        int ind;
+//        in >> ind;
+//        p.partition.push_back(ind);
+//    }
+//    return in;
+//}

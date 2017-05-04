@@ -1,5 +1,7 @@
 # include "APCLocalSearch.h"
 
+//const APCPartition * p_test; //!!!
+
 APCLocalSearch::APCLocalSearch(const APCProblem *p)
     :APCAlgorithm(p,"LOCAL SEARCH")
 {
@@ -40,6 +42,8 @@ APCSolution * APCLocalSearch::solve(const APCPartition & train, APCSolution *s, 
     int no_improves = 0;
     int improves = 0;    //Para depurar
 
+
+    //cout << num_evals << " " << fit << " " << APC_1NN::fitness(*p_test,*sol) << endl; //!!!
     while(num_evals < max_evaluations && no_improves < neigh_stop){
         random_shuffle(permutation,permutation+problem->getNumNonClassAttributes());
         for(int i = 0; i < n_attr; i++){
@@ -59,9 +63,9 @@ APCSolution * APCLocalSearch::solve(const APCPartition & train, APCSolution *s, 
                 (*sol)[permutation[i]]=wi;
                 no_improves++;
             }
+            //cout << num_evals << " " << fit << " " << APC_1NN::fitness(*p_test,*sol) << endl; //!!!
         }
     }
-
 
     //cout << "EVALS = " << num_evals << endl;
     //cout << "NO IMPROVES = " << no_improves << endl;
@@ -81,6 +85,7 @@ void APCLocalSearch::solve5x2(const APC5x2Partition & p, vector<APCSolution*> & 
     
     for(int i = 0; i < 5;i++){
         for(int j = 0; j < 2; j++){
+            //p_test = &p[i][(j+1)%2];  //!!!
             APCSolution *s = solve(p[i][j],solutions[2*i+j],max_neighbours,max_evaluations,sigma);
             this->fitnesses.push_back(APC_1NN::fitness(p[i][(j+1)%2],*s));
         }
