@@ -49,6 +49,18 @@ public:
     void solve5x2(const APC5x2Partition & partition, vector<APCSolution*> & solutions, int max_neighbours = 20, int max_evaluations = 15000, float sigma = 0.3);
 
     /**
+     * Generates solutions for a 5 fold partition.
+     * @param partition 5Fold partition to evaluate.
+     * @pos getSolutions() will return a 10 elements vector with the solutions.
+     * @pos getTimes() will return a 10 elements vector with the partition times.
+     * @pos getFitnesses() will return a 10 elements vector with the partition fitnesses.
+     * @pos getTrainFits() will return a 10 elements vector with the training fitnesses.
+     * @pos getClassRates() will return a 10 elements vector with the classification rates.
+     * @pos getRedRates() will return a 10 elements vector with the reduction rates.
+     */
+    void solve5Fold(const APC5FoldPartition & partition, vector<APCSolution*> & solutions, int max_neighbours = 20, int max_evaluations = 15000, float sigma = 0.3);
+    
+    /**
      * Erases stored solutions.
      */
     void clearSolutions();

@@ -49,6 +49,17 @@ public:
      */
     void solve5x2(const APC5x2Partition & partition);
 
+    /**
+     * Generates solutions for a 5 fold partition.
+     * @param partition 5Fold partition to evaluate.
+     * @pos getSolutions() will return a 10 elements vector with the solutions.
+     * @pos getTimes() will return a 10 elements vector with the partition times.
+     * @pos getFitnesses() will return a 10 elements vector with the partition fitnesses.
+     * @pos getTrainFits() will return a 10 elements vector with the training fitnesses.
+     * @pos getClassRates() will return a 10 elements vector with the classification rates.
+     * @pos getRedRates() will return a 10 elements vector with the reduction rates.
+     */
+    void solve5Fold(const APC5FoldPartition & partition);
 
     ~APCRelief();
 

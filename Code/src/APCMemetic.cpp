@@ -110,6 +110,18 @@ void APCMemetic::solve5x2(const APC5x2Partition & p, int ls_gens, float ls_prob 
     }
 }
 
+void APCMemetic::solve5Fold(const APC5FoldPartition & p, int ls_gens, float ls_prob , bool mej, crossOperator c, int population_size, float cross_prob, float mutation_prob, int max_evaluations, int ls_neighbour_evals_rate){
+    clearSolutions();
+
+    for(int i = 0; i < 5; i++){
+        APCSolution *s = solve(p[i][0],ls_gens,ls_prob,mej,c,population_size,cross_prob,mutation_prob,max_evaluations,ls_neighbour_evals_rate); //Resolvemos train
+        vector<float> cr_fits = APCTargetCR::fitness(p[i][1],*s); //Evaluamos test
+        class_rates.push_back(cr_fits[0]);
+        red_rates.push_back(cr_fits[1]);
+        fitnesses.push_back(cr_fits[2]); 
+    }
+}
+
 APCMemetic::~APCMemetic(){
     clearSolutions();
 }

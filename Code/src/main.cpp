@@ -83,6 +83,24 @@ void printOutput5x2(APCAlgorithm & a, const string & table_format, ostream & fou
     if(output_sols != "") a.writeSolutions(fout_sols);
 }
 
+void printOutput5Fold(APCAlgorithm & a, const string & table_format, ostream & fout_table,
+        const string & output_fits, ostream & fout_fits,
+        const string & output_trains, ostream & fout_trains,
+        const string & output_times, ostream & fout_times,
+        const string & output_sols, ostream & fout_sols){
+
+    for(int i = 0; i < 5; i++){
+        cout << "PARTITION " << i << ":\tFITNESS = " << a.getFitness(i) << ";\tCLASS_RATE = " << a.getClassRate(i) << ";\tRED_RATE = " << a.getRedRate() << ";\tTRAIN FIT = " << a.getTrainFit(i) << ";\tTIME = " << a.getTime(i) << endl;
+    }
+
+    //if(table_format != "") a.writeTable5x2(fout_table, table_format);
+    if(output_fits != "") a.writeFitnesses(fout_fits);
+    if(output_trains != "") a.writeTrainFits(fout_trains);
+    if(output_times != "") a.writeTimes(fout_times);
+    if(output_sols != "") a.writeSolutions(fout_sols);
+
+}
+
 int main(int argc, char const *argv[])
 {
 //    Timer t;
@@ -209,19 +227,17 @@ int main(int argc, char const *argv[])
 
 
     //Create partitions
-    APC5x2Partition myPartition(&problem);
-    APC5FoldPartition myPartition5f(&problem);
-    cout << myPartition5f << endl;
-    exit(0);
+    APC5x2Partition myPartition5x2(&problem);
+    APC5FoldPartition myPartition5F(&problem);
 
     //Output partition
-    if(output_parts != "") fout_parts << myPartition;
+    if(output_parts != "") fout_parts << myPartition5x2;
 
 
     cout << "PROBLEMA " << problem.getFileName() << endl;
 
     if(algorithm == "RELIEF" || algorithm == "RELIEF+LS"){    
-        relief.solve5x2(myPartition);
+        relief.solve5x2(myPartition5x2);
     
         if(algorithm == "RELIEF"){
             cout << relief.getAlgorithmName() << endl;
@@ -231,7 +247,7 @@ int main(int argc, char const *argv[])
 
         if(algorithm == "RELIEF+LS"){
             vector<APCSolution *> relief_sols = relief.getSolutions();
-            LS.solve5x2(myPartition,relief_sols);
+            LS.solve5x2(myPartition5x2,relief_sols);
             cout << relief.getAlgorithmName() << "+" << LS.getAlgorithmName() << endl;
             printOutput5x2(LS, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
 
@@ -240,7 +256,7 @@ int main(int argc, char const *argv[])
     } 
 
     else if(algorithm == "RANDOM" || algorithm == "RANDOM+LS"){
-        apc_random.solve5x2(myPartition);
+        apc_random.solve5x2(myPartition5x2);
 
         if(algorithm == "RANDOM"){
             cout << apc_random.getAlgorithmName() << endl;
@@ -250,7 +266,7 @@ int main(int argc, char const *argv[])
 
         if(algorithm == "RANDOM+LS"){
             vector<APCSolution *> random_sols = apc_random.getSolutions();
-            LS.solve5x2(myPartition,random_sols);
+            LS.solve5x2(myPartition5x2,random_sols);
             cout << apc_random.getAlgorithmName() << "+" << LS.getAlgorithmName() << endl;
             printOutput5x2(LS, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
            
@@ -259,45 +275,45 @@ int main(int argc, char const *argv[])
 
     else if(algorithm == "AGG-BLX"){
         //ofstream fout("./sol/sols_agg.sol");
-        agg.solve5x2(myPartition,APCGenetic::BLXCross03);
+        agg.solve5x2(myPartition5x2,APCGenetic::BLXCross03);
 
         cout << agg.getAlgorithmName() << endl;
-        cout << "REACHED GENERATION " << agg.getGeneration() << endl;
+        //cout << "REACHED GENERATION " << agg.getGeneration() << endl;
         printOutput5x2(agg, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
        
     }
 
     else if(algorithm == "AGG-CA"){
-        agg.solve5x2(myPartition,APCGenetic::arithmeticCross);
+        agg.solve5x2(myPartition5x2,APCGenetic::arithmeticCross);
 
         cout << agg.getAlgorithmName() << endl;
-        cout << "REACHED GENERATION " << agg.getGeneration() << endl;
+        //cout << "REACHED GENERATION " << agg.getGeneration() << endl;
         printOutput5x2(agg, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
         
     }
 
     else if(algorithm == "AGE-BLX"){
-        age.solve5x2(myPartition,APCGenetic::BLXCross03,30,1.0);
+        age.solve5x2(myPartition5x2,APCGenetic::BLXCross03,30,1.0);
 
         cout << age.getAlgorithmName() << endl;
-        cout << "REACHED GENERATION " << age.getGeneration() << endl;
+        //cout << "REACHED GENERATION " << age.getGeneration() << endl;
         printOutput5x2(age, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
         
     }
 
     else if(algorithm == "AGE-CA"){
-        age.solve5x2(myPartition,APCGenetic::arithmeticCross,30,1.0);
+        age.solve5x2(myPartition5x2,APCGenetic::arithmeticCross,30,1.0);
 
         cout << age.getAlgorithmName() << endl;
-        cout << "REACHED GENERATION " << age.getGeneration() << endl;
+        //cout << "REACHED GENERATION " << age.getGeneration() << endl;
         printOutput5x2(age, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
         
     }
 
     else if(algorithm == "AM-10-1.0"||algorithm == "AM-10-0.1"||algorithm == "AM-10-0.1mej"){
-        if(algorithm == "AM-10-1.0") am.solve5x2(myPartition,10,1.0,false);
-        else if(algorithm == "AM-10-0.1") am.solve5x2(myPartition,10,0.1,false);
-        else if(algorithm == "AM-10-0.1mej") am.solve5x2(myPartition,10,0.1,true);
+        if(algorithm == "AM-10-1.0") am.solve5x2(myPartition5x2,10,1.0,false);
+        else if(algorithm == "AM-10-0.1") am.solve5x2(myPartition5x2,10,0.1,false);
+        else if(algorithm == "AM-10-0.1mej") am.solve5x2(myPartition5x2,10,0.1,true);
 
         cout << am.getAlgorithmName() << endl;
         printOutput5x2(am, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
@@ -307,13 +323,13 @@ int main(int argc, char const *argv[])
     else if(algorithm == "1NN"){
         if(sol_file == ""){
             APCSolution s1 = APCSolution::weight1Solution(&problem);
-            nn1.solve5x2(myPartition,s1);
+            nn1.solve5x2(myPartition5x2,s1);
         }
         else{
             ifstream s_in(sol_file.c_str());
             APCSolution s_test(&problem);
             s_in >> s_test;
-            nn1.solve5x2(myPartition,s_test);
+            nn1.solve5x2(myPartition5x2,s_test);
         }
 
         cout << nn1.getAlgorithmName() << endl;

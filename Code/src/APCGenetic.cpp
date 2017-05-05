@@ -171,6 +171,18 @@ void APCGenetic::solve5x2(const APC5x2Partition & p, crossOperator c, int popula
     }
 }
 
+void APCGenetic::solve5Fold(const APC5FoldPartition & p, crossOperator c, int population_size, float cross_prob, float mutation_prob, int max_evaluations){
+    clearSolutions();
+
+    for(int i = 0; i < 5; i++){
+        APCSolution *s = solve(p[i][0],c,population_size,cross_prob,mutation_prob,max_evaluations); //Resolvemos train
+        vector<float> cr_fits = APCTargetCR::fitness(p[i][1],*s); //Evaluamos test
+        class_rates.push_back(cr_fits[0]);
+        red_rates.push_back(cr_fits[1]);
+        fitnesses.push_back(cr_fits[2]); 
+    }
+}
+
 APCGenetic::~APCGenetic(){
     clearSolutions();
     clearPopulation();

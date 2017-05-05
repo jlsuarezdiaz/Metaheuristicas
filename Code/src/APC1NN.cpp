@@ -15,8 +15,8 @@ float APC_1NN::w_sqDistanceEff(const APCPartition & p, const APCSolution & w, in
     return distances[max(i,j)][min(i,j)];
 }
 
-float APC_1NN::fitness(const APCPartition & p, const APCSolution & w){
-    initializeDistances(p,w);
+float APC_1NN::fitness(const APCPartition & p, const APCSolution & w, const float red_ceil){
+    initializeDistances(p,w,red_ceil);
     int success = 0;
     for(int i = 0; i < p.size(); i++){
         bool class_i = classify(p,w,i);
@@ -30,7 +30,7 @@ float APC_1NN::fitness(const APCPartition & p, const APCSolution & w){
 
 bool APC_1NN::classify(const APCPartition & p, const APCSolution & w,int i){
     bool c_min = (i==0)?p.getClass(1):p.getClass(0); //Supongo que al menos hay dos datos xD
-    float d_min = (i==0)?w_sqDistance(p,w,i,1):w_sqDistance(p,w,i,0);
+    float d_min = (i==0)?w_sqDistanceEff(p,w,i,1):w_sqDistanceEff(p,w,i,0);
     float d = 0.0;
 
     //Recorremos los datos
@@ -46,14 +46,14 @@ bool APC_1NN::classify(const APCPartition & p, const APCSolution & w,int i){
     return c_min;
 }
 
-void APC_1NN::initializeDistances(const APCPartition & p, const APCSolution & w){
+void APC_1NN::initializeDistances(const APCPartition & p, const APCSolution & w, const float red_ceil){
     distances = new float*[p.size()];
     for(int i = 0; i < p.size(); i++){
         distances[i] = new float[i];
         for(int j = 0; j < i; j++){
             distances[i][j] = 0.0;
             for(int k = 0; k < w.size(); k++){
-                distances[i][j] += w[k]*(p[i][k]-p[j][k])*(p[i][k]-p[j][k]);
+                if(w[k] >= red_ceil) distances[i][j] += w[k]*(p[i][k]-p[j][k])*(p[i][k]-p[j][k]);
             }
         }
     }

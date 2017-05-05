@@ -11,7 +11,9 @@
 
 #include "APCSolution.h"
 #include "APC1NN.h"
+#include "APCTarget_CR.h"
 #include "APC5x2Partition.h"
+#include "APC5FoldPartition.h"
 #include "APCPartition.h"
 #include "Timer.h"
 #include "SRandom.h"
@@ -46,6 +48,16 @@ protected:
      * Vector with obtained times.
      */
     vector<double> times;
+
+    /**
+     * Vector with reduction rates (for Target_CR)
+     */
+    vector <float> red_rates;
+
+    /**
+     * Vector with classification rates (for Target_CR)
+     */
+    vector <float> class_rates;
 
     /**
      * Class Timer.
@@ -99,6 +111,20 @@ public:
     }
 
     /**
+     * Obtains a vector with the classification rates associated to each solution.
+     */
+    inline vector <float> getClassRates(){
+        return class_rates;
+    }
+
+    /**
+     * Obtains a vector with the reduction rates associated to each solution.
+     */
+    inline vector <float> getRedRates(){
+        return red_rates;
+    }
+
+    /**
      * Gets the algorithm name.
      */
     inline string getAlgorithmName(){
@@ -134,6 +160,20 @@ public:
     }
 
     /**
+     * Obtains the classification rate in getClassRates() given by the index.
+     */
+    inline float getClassRate(int i){
+        return class_rates[i];
+    }
+
+    /**
+     * Obtains the reduction rate in getRedRates() given by the index.
+     */
+    inline float getRedRate(int i){
+        return red_rates[i];
+    }
+
+    /**
      * Obtains the last solution in getSolutions().
      */
     inline APCSolution * getLastSolution(){
@@ -159,6 +199,20 @@ public:
      */
     inline float getLastTrainFit(){
         return train_fits.back();
+    }
+
+    /**
+     * Obtains the last classification rate fitness in getClassRates().
+     */
+    inline float getLastClassRate(){
+        return class_rates.back();
+    }
+
+    /**
+     * Obtains the last reduction rate fitness in getRedRates().
+     */
+    inline float getLastRedRate(){
+        return red_rates.back();
     }
 
     /**

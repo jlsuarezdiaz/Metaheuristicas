@@ -44,7 +44,7 @@ private:
     /**
      * Initializes a matrix distance for efficient calculation.
      */
-    static void initializeDistances(const APCPartition &p, const APCSolution & w);
+    static void initializeDistances(const APCPartition &p, const APCSolution & w, const float red_ceil);
 
     /**
      * Deletes the distances matrix.
@@ -58,9 +58,10 @@ public:
      * @brief Obtains the fitness for a solution in the given test partition.
      * @param p Test partition.
      * @param w Solution to test.
+     * @param red_ceil reduction ceiling. If a weight is lower than the given rate, it will not be considered.
      * @return Fitness.
      */
-    static float fitness(const APCPartition & p, const APCSolution & w);
+    static float fitness(const APCPartition & p, const APCSolution & w, const float red_ceil = 0.0);
 
 };
 
