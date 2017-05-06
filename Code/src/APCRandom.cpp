@@ -4,7 +4,7 @@ APCRandom::APCRandom(const APCProblem *p)
     :APCAlgorithm(p,"RANDOM")
 {}
 
-APCSolution * APCRandom::solve(const APCPartition &p){
+APCSolution * APCRandom::solve(const APCPartition &p, targetFunction fitness){
     APCSolution *solution = new APCSolution(problem);
     solutions.push_back(solution);
 
@@ -17,7 +17,7 @@ APCSolution * APCRandom::solve(const APCPartition &p){
 
     times.push_back(timer.get_time());
 
-    train_fits.push_back(APC_1NN::fitness(p,*solution));
+    train_fits.push_back(fitness(p,*solution));
     return solution;
 }
 
@@ -26,7 +26,7 @@ void APCRandom::solve5x2(const APC5x2Partition & p5x2){
 
     for(int i = 0; i < 5; i++){
         for(int j = 0; j < 2; j++){
-            APCSolution *s = solve(p5x2[i][j]);
+            APCSolution *s = solve(p5x2[i][j],target1NN);
             fitnesses.push_back(APC_1NN::fitness(p5x2[i][(j+1)%2],*s));
         }
     }
@@ -36,7 +36,7 @@ void APCRandom::solve5Fold(const APC5FoldPartition & p){
     clearSolutions();
 
     for(int i = 0; i < 5; i++){
-        APCSolution *s = solve(p[i][0]); //Resolvemos train
+        APCSolution *s = solve(p[i][0],target1NNred); //Resolvemos train
         vector<float> cr_fits = APCTargetCR::fitness(p[i][1],*s); //Evaluamos test
         class_rates.push_back(cr_fits[0]);
         red_rates.push_back(cr_fits[1]);

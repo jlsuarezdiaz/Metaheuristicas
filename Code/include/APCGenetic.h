@@ -150,12 +150,12 @@ protected:
     /**
      * Cross mechanics. It will be implemented in APCGenetic subclasses.
      */
-    virtual void cross(crossOperator c, const APCPartition &p) = 0;
+    virtual void cross(crossOperator c, const APCPartition &p, targetFunction f) = 0;
 
     /**
      * Mutation mechanics. It will be implemented in APCGenetic subclasses.
      */
-    virtual void mutation(const APCPartition &p) = 0;
+    virtual void mutation(const APCPartition &p, targetFunction f) = 0;
 
     
     /**
@@ -171,7 +171,7 @@ protected:
      * @param cross Cross operator.
      
      */
-    APCSolution * solve(const APCPartition & p_train, crossOperator c, int population_size = 30, float cross_prob = 0.7, float mutation_prob = 0.001, int max_evaluations = 15000);
+    APCSolution * solve(const APCPartition & p_train, targetFunction f, crossOperator c, int population_size = 30, float cross_prob = 0.7, float mutation_prob = 0.001, int max_evaluations = 15000);
 
 
 public:
@@ -184,7 +184,7 @@ public:
     /**
      * Generates a new population of solutions with weights uniformely distributed.
      */
-    void generatePopulation(const APCPartition &p, int population_size = 30);
+    void generatePopulation(const APCPartition &p, targetFunction f, int population_size = 30);
 
     /**
      * Sets the population with the given parameters.
@@ -197,7 +197,7 @@ public:
     /**
      * Developes a new generation for the given population.
      */
-    void nextGeneration(const APCPartition & p_train, crossOperator c);
+    void nextGeneration(const APCPartition & p_train, crossOperator c, targetFunction f);
 
     /**
      * Generates solutions for a 5x2 partition.
@@ -329,12 +329,12 @@ public:
     /**
      * Cross mechanics.
      */
-    virtual void cross(crossOperator c, const APCPartition &p);
+    virtual void cross(crossOperator c, const APCPartition &p, targetFunction f);
 
     /**
      * Mutation mechanics.
      */
-    virtual void mutation(const APCPartition &p);
+    virtual void mutation(const APCPartition &p, targetFunction f);
 
     /**
      * Replacement operator.
@@ -366,12 +366,12 @@ public:
     /**
      * Cross mechanics.
      */
-    virtual void cross(crossOperator c, const APCPartition &p);
+    virtual void cross(crossOperator c, const APCPartition &p, targetFunction f);
 
     /**
      * Mutation mechanics.
      */
-    virtual void mutation(const APCPartition &p);
+    virtual void mutation(const APCPartition &p, targetFunction f);
 
     /**
      * Replacement operator.

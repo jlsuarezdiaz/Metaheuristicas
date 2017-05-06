@@ -90,7 +90,7 @@ void printOutput5Fold(APCAlgorithm & a, const string & table_format, ostream & f
         const string & output_sols, ostream & fout_sols){
 
     for(int i = 0; i < 5; i++){
-        cout << "PARTITION " << i << ":\tFITNESS = " << a.getFitness(i) << ";\tCLASS_RATE = " << a.getClassRate(i) << ";\tRED_RATE = " << a.getRedRate() << ";\tTRAIN FIT = " << a.getTrainFit(i) << ";\tTIME = " << a.getTime(i) << endl;
+        cout << "PARTITION " << i << ":\tFITNESS = " << a.getFitness(i) << ";\tCLASS_RATE = " << a.getClassRate(i) << ";\tRED_RATE = " << a.getRedRate(i) << ";\tTRAIN FIT = " << a.getTrainFit(i) << ";\tTIME = " << a.getTime(i) << endl;
     }
 
     //if(table_format != "") a.writeTable5x2(fout_table, table_format);
@@ -131,6 +131,7 @@ int main(int argc, char const *argv[])
     string output_name = "";
     string data_prints = "";
     string sol_file = "";
+    string mode = "5FOLD";
 
     APCProblem problem(problem_name);
 
@@ -163,9 +164,17 @@ int main(int argc, char const *argv[])
             case 'w':
                 sol_file = input[i].second;
                 break;
+            case 'm':
+                mode = input[i].second;
+                break;
             default:
                 printHelp();
         }
+    }
+
+    if(mode != "5x2" && mode != "5FOLD"){
+        cout << "INVALID MODE" << endl;
+        printHelp();
     }
 
     //Output variables.
@@ -236,21 +245,42 @@ int main(int argc, char const *argv[])
 
     cout << "PROBLEMA " << problem.getFileName() << endl;
 
-    if(algorithm == "RELIEF" || algorithm == "RELIEF+LS"){    
-        relief.solve5x2(myPartition5x2);
-    
-        if(algorithm == "RELIEF"){
-            cout << relief.getAlgorithmName() << endl;
-            printOutput5x2(relief, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
-            
+    if(algorithm == "RELIEF" || algorithm == "RELIEF+LS"){
+
+        if(mode == "5x2"){   
+            relief.solve5x2(myPartition5x2);
+        
+            if(algorithm == "RELIEF"){
+                cout << relief.getAlgorithmName() << endl;
+                printOutput5x2(relief, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
+                
+            }
+
+            if(algorithm == "RELIEF+LS"){
+                vector<APCSolution *> relief_sols = relief.getSolutions();
+                LS.solve5x2(myPartition5x2,relief_sols);
+                cout << relief.getAlgorithmName() << "+" << LS.getAlgorithmName() << endl;
+                printOutput5x2(LS, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
+
+            }
         }
 
-        if(algorithm == "RELIEF+LS"){
-            vector<APCSolution *> relief_sols = relief.getSolutions();
-            LS.solve5x2(myPartition5x2,relief_sols);
-            cout << relief.getAlgorithmName() << "+" << LS.getAlgorithmName() << endl;
-            printOutput5x2(LS, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
+        else if(mode == "5FOLD"){
+            relief.solve5Fold(myPartition5F);
+        
+            if(algorithm == "RELIEF"){
+                cout << relief.getAlgorithmName() << endl;
+                printOutput5Fold(relief, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
+                
+            }
 
+            if(algorithm == "RELIEF+LS"){
+                vector<APCSolution *> relief_sols = relief.getSolutions();
+                LS.solve5Fold(myPartition5F,relief_sols);
+                cout << relief.getAlgorithmName() << "+" << LS.getAlgorithmName() << endl;
+                printOutput5Fold(LS, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
+
+            }
         }
 
     } 

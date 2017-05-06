@@ -20,6 +20,21 @@
 
 using namespace std;
 
+/**
+ * Target function type.
+ */
+typedef float (*targetFunction) (const APCPartition & p, const APCSolution & w);
+
+/**
+ * Target functions.
+ */
+inline float target1NN(const APCPartition & p, const APCSolution & w){
+    return APC_1NN::fitness(p,w);
+}
+
+inline float target1NNred(const APCPartition & p, const APCSolution & w){
+    return APCTargetCR::fitness(p,w)[2];
+}
 
 /**
  * @brief Abstract class with attributes to be used with any 

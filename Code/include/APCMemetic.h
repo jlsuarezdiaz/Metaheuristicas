@@ -37,7 +37,7 @@ private:
      * @param max_evaluations Max number of evaluations to make stop the algorithm.
      * @param ls_neighbour_evals_rate LS evaluation rate. 2*ls_neighbours_eval_rate neighbours will be generated in each LS perform.
      */
-    APCSolution * solve(const APCPartition & p_train, int ls_gens, float ls_prob , bool mej,crossOperator c = APCGenetic::BLXCross03, int population_size = 10, float cross_prob = 0.7, float mutation_prob = 0.001, int max_evaluations = 15000, int ls_neighbour_evals_rate = 2);
+    APCSolution * solve(const APCPartition & p_train, targetFunction f, int ls_gens, float ls_prob , bool mej,crossOperator c = APCGenetic::BLXCross03, int population_size = 10, float cross_prob = 0.7, float mutation_prob = 0.001, int max_evaluations = 15000, int ls_neighbour_evals_rate = 2);
 
 
 public:

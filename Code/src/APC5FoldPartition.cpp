@@ -37,6 +37,8 @@ APC5FoldPartition::APC5FoldPartition(const APCProblem *p){
 
     //Creamos las particiones train y test que se utilizarán
     for(int i = 0; i < 5; i++){
+        partitions[i][0] = APCPartition(p);
+        partitions[i][1] = APCPartition(p);
         for(int j = 0; j < 5; j++){
             //Si i==j a la partición test, else al train
             int r = (i==j)?1:0;

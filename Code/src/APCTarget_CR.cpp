@@ -5,7 +5,7 @@ float APCTargetCR::reduction_rate(const APCSolution & w, const float red_ceil){
     for(int i = 0; i < w.size(); i++){
         if(w[i] < red_ceil) num_reds++;
     }
-    return (float) num_reds / w.size();
+    return (float) 100.0 * num_reds / w.size();
 }
 
 float APCTargetCR::classification_rate(const APCPartition & p, const APCSolution & w, const float red_ceil){

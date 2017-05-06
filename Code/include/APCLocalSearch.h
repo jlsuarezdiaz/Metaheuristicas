@@ -31,7 +31,7 @@ public:
      * @pos The train fitness will be returned as the last element of getTrainFits()
      * @return Solution obtained.
      */
-    APCSolution * solve(const APCPartition & p_train, APCSolution *sol, int max_neighbours = 20, int max_evaluations = 15000, float sigma = 0.3);
+    APCSolution * solve(const APCPartition & p_train, APCSolution *sol, targetFunction f, int max_neighbours = 20, int max_evaluations = 15000, float sigma = 0.3);
 
     /**
      * Generates solutions for a 5x2 partition.

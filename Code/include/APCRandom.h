@@ -19,7 +19,7 @@ public:
      * @pos No fitness is calculated. The stored fitness in getFitnesses() will be -1.0
      * @return Solution obtained.
      */
-    APCSolution * solve(const APCPartition & p);
+    APCSolution * solve(const APCPartition & p, targetFunction f);
 
     /**
      * Generates solutions for a 5x2 partition.
