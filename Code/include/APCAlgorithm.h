@@ -251,6 +251,16 @@ public:
     void writeTimes(ostream & out);
 
     /**
+     * Writes the stored classification rates in the output stream.
+     */
+    void writeClassRates(ostream & out);
+
+    /**
+     * Writes the stored reduction rates in the output stream.
+     */
+    void writeRedRates(ostream & out);
+
+    /**
      * Writes a table for a 5x2 partition in the output stream.
      * @param out Output stream.
      * @param cols String with the columns in the table. Each char represents a kind of data.
@@ -259,6 +269,16 @@ public:
      * @pre There must be stored the 10 solutions of a 5x2 partition.
      */
     void writeTable5x2(ostream & out, string cols = "fti", bool stats =  true);
+
+    /**
+     * Writes a table for a 5-FOLD partition in the output stream.
+     * @param out Output stream.
+     * @param cols String with the columns in the table. Each char represents a kind of data.
+     * Allowed chars are 'f' (fitness), 't' (times), 'i' (training fits), 'c' (classification rates), 'r' (reduction rates).
+     * @param stats Indicates if mean and stdev are calculated.
+     * @pre There must be stored the 10 solutions of a 5x2 partition.
+     */
+    void writeTable5Fold(ostream & out, string cols = "fti", bool stats =  true);
 
     //~APCAlgorithm();
 

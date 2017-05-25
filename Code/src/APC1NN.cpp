@@ -16,10 +16,11 @@ float APC_1NN::w_sqDistanceEff(const APCPartition & p, const APCSolution & w, in
 }
 
 float APC_1NN::fitness(const APCPartition & p, const APCSolution & w, const float red_ceil){
-    initializeDistances(p,w,red_ceil);
+    APCSolution ww = w.reduced(red_ceil);
+    initializeDistances(p,ww,red_ceil);
     int success = 0;
     for(int i = 0; i < p.size(); i++){
-        bool class_i = classify(p,w,i);
+        bool class_i = classify(p,ww,i);
         if(class_i == p.getClass(i)){
             success++;
         }
@@ -53,7 +54,7 @@ void APC_1NN::initializeDistances(const APCPartition & p, const APCSolution & w,
         for(int j = 0; j < i; j++){
             distances[i][j] = 0.0;
             for(int k = 0; k < w.size(); k++){
-                if(w[k] >= red_ceil) distances[i][j] += w[k]*(p[i][k]-p[j][k])*(p[i][k]-p[j][k]);
+                distances[i][j] += w[k]*(p[i][k]-p[j][k])*(p[i][k]-p[j][k]);
             }
         }
     }
@@ -64,5 +65,40 @@ void APC_1NN::deleteDistances(const APCPartition & p){
         delete [] distances[i];
     }
     delete [] distances;
+}
+
+float APC_1NN::testFitness(const APCPartition & test, const APCPartition & train, const APCSolution & w, const float red_ceil){
+    int success = 0;
+    for(int i = 0; i < test.size(); i++){
+        bool class_i = classifyTest(test,train,w,i,red_ceil);
+        if(class_i == test.getClass(i)){
+            success++;
+        }
+    }
+    return (100.0 * success) / test.size();
+}
+
+bool APC_1NN::classifyTest(const APCPartition & test, const APCPartition & train, const APCSolution & w, int i, const float red_ceil){
+    bool c_min = train.getClass(0); //Supongo que al menos hay dos datos xD
+    float d_min = w_sqDistanceTrainTest(train,test,w,0,i,red_ceil);
+    float d = 0.0;
+
+    //Recorremos los datos
+    for(int k = 1; k < train.size(); k++){
+        d = w_sqDistanceTrainTest(test,train,w,k,i,red_ceil);      //Calculo distancia
+        if(d < d_min){              //Si es más cercano, me quedo con su clase.
+            c_min = train.getClass(k);
+            d_min = d;
+        }
+    }
+    return c_min;
+}
+
+float APC_1NN::w_sqDistanceTrainTest(const APCPartition & test, const APCPartition & train, const APCSolution & w, int i_train, int i_test, const float red_ceil){
+    float sqDist = 0.0;
+    for(int k = 0; k < w.size(); k++){
+        if(w[k] >= red_ceil) sqDist += w[k]*(test[i_test][k]-train[i_train][k])*(test[i_test][k]-train[i_train][k]);
+    }
+    return sqDist;
 }
 

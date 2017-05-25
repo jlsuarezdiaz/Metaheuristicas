@@ -22,6 +22,7 @@ private:
      */
     static float classification_rate(const APCPartition & p, const APCSolution & w, const float red_ceil = 0.1);
 
+    static float test_classification_rate(const APCPartition & test, const APCPartition & train, const APCSolution & w, const float red_ceil);
 public:
     /**
      * Obtains the fitness for a solution in the given partition, using reduction and classification rates.
@@ -33,6 +34,8 @@ public:
      */
     static vector<float> fitness(const APCPartition & p, const APCSolution & w, const float alpha = 0.5, const float red_ceil = 0.1);
 
+
+    static vector<float> testFitness(const APCPartition & test, const APCPartition & train, const APCSolution & w, const float alpha = 0.5, const float red_ceil = 0.1);
 };
 
 #endif

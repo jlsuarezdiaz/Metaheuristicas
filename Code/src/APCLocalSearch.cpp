@@ -87,7 +87,7 @@ void APCLocalSearch::solve5x2(const APC5x2Partition & p, vector<APCSolution*> & 
         for(int j = 0; j < 2; j++){
             //p_test = &p[i][(j+1)%2];  //!!!
             APCSolution *s = solve(p[i][j],solutions[2*i+j],target1NN,max_neighbours,max_evaluations,sigma);
-            this->fitnesses.push_back(APC_1NN::fitness(p[i][(j+1)%2],*s));
+            this->fitnesses.push_back(APC_1NN::testFitness(p[i][(j+1)%2],p[i][j],*s));
         }
     }
 }
@@ -97,7 +97,7 @@ void APCLocalSearch::solve5Fold(const APC5FoldPartition & p, vector<APCSolution*
 
     for(int i = 0; i < 5; i++){
         APCSolution *s = solve(p[i][0],solutions[i],target1NNred,max_neighbours,max_evaluations,sigma); //Resolvemos train
-        vector<float> cr_fits = APCTargetCR::fitness(p[i][1],*s); //Evaluamos test
+        vector<float> cr_fits = APCTargetCR::testFitness(p[i][1],p[i][0],*s); //Evaluamos test
         class_rates.push_back(cr_fits[0]);
         red_rates.push_back(cr_fits[1]);
         fitnesses.push_back(cr_fits[2]); 

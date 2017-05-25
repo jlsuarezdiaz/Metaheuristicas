@@ -17,6 +17,9 @@
 #include "APCGenetic.h"
 #include "APCMemetic.h"
 #include "APC1NNEval.h"
+#include "APCSimulatedAnnealing.h"
+#include "APCILS.h"
+#include "APCDifferentialEvolution.h"
 
 
 
@@ -93,7 +96,7 @@ void printOutput5Fold(APCAlgorithm & a, const string & table_format, ostream & f
         cout << "PARTITION " << i << ":\tFITNESS = " << a.getFitness(i) << ";\tCLASS_RATE = " << a.getClassRate(i) << ";\tRED_RATE = " << a.getRedRate(i) << ";\tTRAIN FIT = " << a.getTrainFit(i) << ";\tTIME = " << a.getTime(i) << endl;
     }
 
-    //if(table_format != "") a.writeTable5x2(fout_table, table_format);
+    if(table_format != "") a.writeTable5Fold(fout_table, table_format);
     if(output_fits != "") a.writeFitnesses(fout_fits);
     if(output_trains != "") a.writeTrainFits(fout_trains);
     if(output_times != "") a.writeTimes(fout_times);
@@ -142,6 +145,9 @@ int main(int argc, char const *argv[])
     APCGeneticStationary age(&problem);
     APCMemetic am(&problem);
     APC_1NN_Eval nn1(&problem);
+    APCSimulatedAnnealing sa(&problem);
+    APCILS ils(&problem);
+    APCDifferentialEvolution de(&problem);
 
     //Parse args
     for(unsigned i = 0; i < input.size(); i++){
@@ -286,68 +292,198 @@ int main(int argc, char const *argv[])
     } 
 
     else if(algorithm == "RANDOM" || algorithm == "RANDOM+LS"){
-        apc_random.solve5x2(myPartition5x2);
 
-        if(algorithm == "RANDOM"){
-            cout << apc_random.getAlgorithmName() << endl;
-            printOutput5x2(apc_random, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
-           
+        if(mode == "5x2"){
+            apc_random.solve5x2(myPartition5x2);
+
+            if(algorithm == "RANDOM"){
+                cout << apc_random.getAlgorithmName() << endl;
+                printOutput5x2(apc_random, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
+               
+            }
+
+            if(algorithm == "RANDOM+LS"){
+                vector<APCSolution *> random_sols = apc_random.getSolutions();
+                LS.solve5x2(myPartition5x2,random_sols);
+                cout << apc_random.getAlgorithmName() << "+" << LS.getAlgorithmName() << endl;
+                printOutput5x2(LS, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
+               
+            }
         }
 
-        if(algorithm == "RANDOM+LS"){
-            vector<APCSolution *> random_sols = apc_random.getSolutions();
-            LS.solve5x2(myPartition5x2,random_sols);
-            cout << apc_random.getAlgorithmName() << "+" << LS.getAlgorithmName() << endl;
-            printOutput5x2(LS, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
-           
+        else if(mode == "5FOLD"){
+            apc_random.solve5Fold(myPartition5F);
+
+            if(algorithm == "RANDOM"){
+                cout << apc_random.getAlgorithmName() << endl;
+                printOutput5Fold(apc_random, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
+               
+            }
+
+            if(algorithm == "RANDOM+LS"){
+                vector<APCSolution *> random_sols = apc_random.getSolutions();
+                LS.solve5Fold(myPartition5F,random_sols);
+                cout << apc_random.getAlgorithmName() << "+" << LS.getAlgorithmName() << endl;
+                printOutput5Fold(LS, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
+               
+            }
         }
     }
 
     else if(algorithm == "AGG-BLX"){
-        //ofstream fout("./sol/sols_agg.sol");
-        agg.solve5x2(myPartition5x2,APCGenetic::BLXCross03);
 
-        cout << agg.getAlgorithmName() << endl;
-        //cout << "REACHED GENERATION " << agg.getGeneration() << endl;
-        printOutput5x2(agg, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
-       
+        if(mode == "5x2"){
+            agg.solve5x2(myPartition5x2,APCGenetic::BLXCross03);
+    
+            cout << agg.getAlgorithmName() << endl;
+            printOutput5x2(agg, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
+        }
+
+        else if(mode == "5FOLD"){
+            agg.solve5Fold(myPartition5F,APCGenetic::BLXCross03);
+    
+            cout << agg.getAlgorithmName() << endl;
+            printOutput5Fold(agg, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
+        }
+
     }
 
     else if(algorithm == "AGG-CA"){
-        agg.solve5x2(myPartition5x2,APCGenetic::arithmeticCross);
 
-        cout << agg.getAlgorithmName() << endl;
-        //cout << "REACHED GENERATION " << agg.getGeneration() << endl;
-        printOutput5x2(agg, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
-        
+        if(mode == "5x2"){
+            agg.solve5x2(myPartition5x2,APCGenetic::arithmeticCross);
+
+            cout << agg.getAlgorithmName() << endl;
+            //cout << "REACHED GENERATION " << agg.getGeneration() << endl;
+            printOutput5x2(agg, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
+       
+        }
+
+        else if(mode == "5FOLD"){
+            agg.solve5Fold(myPartition5F,APCGenetic::arithmeticCross);
+
+            cout << agg.getAlgorithmName() << endl;
+            //cout << "REACHED GENERATION " << agg.getGeneration() << endl;
+            printOutput5Fold(agg, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
+       
+        }
+         
     }
 
     else if(algorithm == "AGE-BLX"){
-        age.solve5x2(myPartition5x2,APCGenetic::BLXCross03,30,1.0);
 
-        cout << age.getAlgorithmName() << endl;
-        //cout << "REACHED GENERATION " << age.getGeneration() << endl;
-        printOutput5x2(age, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
+        if(mode == "5x2"){
+            age.solve5x2(myPartition5x2,APCGenetic::BLXCross03,30,1.0);
+    
+            cout << age.getAlgorithmName() << endl;
+            //cout << "REACHED GENERATION " << age.getGeneration() << endl;
+            printOutput5x2(age, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
+        }
+
+        else if(mode == "5FOLD"){
+            age.solve5Fold(myPartition5F,APCGenetic::BLXCross03,30,1.0);
+    
+            cout << age.getAlgorithmName() << endl;
+            //cout << "REACHED GENERATION " << age.getGeneration() << endl;
+            printOutput5Fold(age, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
         
+        }
     }
 
     else if(algorithm == "AGE-CA"){
-        age.solve5x2(myPartition5x2,APCGenetic::arithmeticCross,30,1.0);
 
-        cout << age.getAlgorithmName() << endl;
-        //cout << "REACHED GENERATION " << age.getGeneration() << endl;
-        printOutput5x2(age, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
-        
+        if(mode == "5x2"){
+            age.solve5x2(myPartition5x2,APCGenetic::arithmeticCross,30,1.0);
+
+            cout << age.getAlgorithmName() << endl;
+            //cout << "REACHED GENERATION " << age.getGeneration() << endl;
+            printOutput5x2(age, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
+        }
+
+        else if(mode == "5FOLD"){
+            age.solve5Fold(myPartition5F,APCGenetic::arithmeticCross,30,1.0);
+
+            cout << age.getAlgorithmName() << endl;
+            //cout << "REACHED GENERATION " << age.getGeneration() << endl;
+            printOutput5Fold(age, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
+       
+        }
     }
 
     else if(algorithm == "AM-10-1.0"||algorithm == "AM-10-0.1"||algorithm == "AM-10-0.1mej"){
-        if(algorithm == "AM-10-1.0") am.solve5x2(myPartition5x2,10,1.0,false);
-        else if(algorithm == "AM-10-0.1") am.solve5x2(myPartition5x2,10,0.1,false);
-        else if(algorithm == "AM-10-0.1mej") am.solve5x2(myPartition5x2,10,0.1,true);
-
-        cout << am.getAlgorithmName() << endl;
-        printOutput5x2(am, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
         
+        if(mode == "5x2"){
+            if(algorithm == "AM-10-1.0") am.solve5x2(myPartition5x2,10,1.0,false);
+            else if(algorithm == "AM-10-0.1") am.solve5x2(myPartition5x2,10,0.1,false);
+            else if(algorithm == "AM-10-0.1mej") am.solve5x2(myPartition5x2,10,0.1,true);
+
+            cout << am.getAlgorithmName() << endl;
+            printOutput5x2(am, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
+        }
+
+        else if(mode == "5FOLD"){
+            if(algorithm == "AM-10-1.0") am.solve5Fold(myPartition5F,10,1.0,false);
+            else if(algorithm == "AM-10-0.1") am.solve5Fold(myPartition5F,10,0.1,false);
+            else if(algorithm == "AM-10-0.1mej") am.solve5Fold(myPartition5F,10,0.1,true);
+
+            cout << am.getAlgorithmName() << endl;
+            printOutput5Fold(am, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
+        
+        }
+    }
+
+    else if(algorithm == "SA"){
+        int n_attr = problem.getNumNonClassAttributes();
+        if(mode=="5x2"){
+            sa.solve5x2(myPartition5x2,10*n_attr,n_attr);
+
+            cout << sa.getAlgorithmName() << endl;
+            printOutput5x2(sa, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
+
+        }
+
+        else if(mode=="5FOLD"){
+            sa.solve5Fold(myPartition5F,10*n_attr,n_attr);
+
+            cout << sa.getAlgorithmName() << endl;
+            printOutput5Fold(sa, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
+        }
+    }
+
+    else if(algorithm == "ILS"){
+        int n_attr = problem.getNumNonClassAttributes();
+        if(mode=="5x2"){
+            ils.solve5x2(myPartition5x2,0.1*n_attr);
+
+            cout << ils.getAlgorithmName() << endl;
+            printOutput5x2(ils, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
+        }
+
+        else if(mode=="5FOLD"){
+            ils.solve5Fold(myPartition5F,0.1*n_attr);
+
+            cout << ils.getAlgorithmName() << endl;
+            printOutput5Fold(ils, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
+        }
+    }
+
+    else if(algorithm == "DE-RAND"||algorithm == "DE-CURRENTTOBEST"){
+        if(mode == "5x2"){
+            if(algorithm == "DE-RAND") de.solve5x2(myPartition5x2,APCDifferentialEvolution::DERand);
+            else if(algorithm == "DE-CURRENTTOBEST") de.solve5x2(myPartition5x2,APCDifferentialEvolution::DECurrentToBest);
+
+            cout << de.getAlgorithmName() << endl;
+            printOutput5x2(de, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
+        }
+
+        else if(mode == "5FOLD"){
+            if(algorithm == "DE-RAND") de.solve5Fold(myPartition5F,APCDifferentialEvolution::DERand);
+            else if(algorithm == "DE-CURRENTTOBEST") de.solve5Fold(myPartition5F,APCDifferentialEvolution::DECurrentToBest);
+
+            cout << de.getAlgorithmName() << endl;
+            printOutput5Fold(de, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
+        
+        }
     }
 
     else if(algorithm == "1NN"){

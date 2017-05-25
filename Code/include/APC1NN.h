@@ -50,6 +50,12 @@ private:
      * Deletes the distances matrix.
      */
     static void deleteDistances(const APCPartition &p);
+
+
+    static bool classifyTest(const APCPartition & test, const APCPartition & train, const APCSolution & w, int i, const float red_ceil);
+
+    static float w_sqDistanceTrainTest(const APCPartition & test, const APCPartition & train, const APCSolution & w, int i_train, int i_test, const float red_ceil);
+
 public:
 
     //inline APC_1NN(const APCPartition *p, const APCSolution *w)
@@ -63,6 +69,8 @@ public:
      */
     static float fitness(const APCPartition & p, const APCSolution & w, const float red_ceil = 0.0);
 
+
+    static float testFitness(const APCPartition & test, const APCPartition & train, const APCSolution & w, const float red_ceil = 0.0);
 };
 
 #endif

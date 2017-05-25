@@ -79,3 +79,20 @@ APCSolution APCSolution::weight1Solution(const APCProblem *problem){
     }
     return w;
 }
+
+APCSolution APCSolution::randomSolution(const APCProblem *problem){
+    APCSolution w(problem);
+    const float a = 0.0, b = 1.0;
+    for(int i = 0; i < w.size(); i++){
+        w[i] = SRandom::getInstance().getRealUniformDistributionElement(a,b);
+    }
+    return w;
+}
+
+APCSolution APCSolution::reduced(const float red_ceil) const{
+    APCSolution s(*this);
+    for(int i = 0; i < s.size(); i++){
+        if(s[i] < red_ceil) s[i]=0;
+    }
+    return s;
+}

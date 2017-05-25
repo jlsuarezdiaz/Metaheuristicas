@@ -88,7 +88,7 @@ void APCRelief::solve5x2(const APC5x2Partition & p5x2){
     for(int i = 0; i < 5; i++){
         for(int j = 0; j < 2; j++){
             APCSolution *s = solve(p5x2[i][j], target1NN);
-            fitnesses.push_back(APC_1NN::fitness(p5x2[i][(j+1)%2],*s));
+            fitnesses.push_back(APC_1NN::testFitness(p5x2[i][(j+1)%2],p5x2[i][j],*s));
         }
     }
 }
@@ -98,7 +98,7 @@ void APCRelief::solve5Fold(const APC5FoldPartition & p){
 
     for(int i = 0; i < 5; i++){
         APCSolution *s = solve(p[i][0],target1NNred); //Resolvemos train
-        vector<float> cr_fits = APCTargetCR::fitness(p[i][1],*s); //Evaluamos test
+        vector<float> cr_fits = APCTargetCR::testFitness(p[i][1],p[i][0],*s); //Evaluamos test
         class_rates.push_back(cr_fits[0]);
         red_rates.push_back(cr_fits[1]);
         fitnesses.push_back(cr_fits[2]); 

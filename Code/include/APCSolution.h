@@ -156,7 +156,15 @@ public:
      * Can be used to measure non-weighted classifiers.
      */
     static APCSolution weight1Solution(const APCProblem *problem);
-    
 
+    /**
+     * Generates a random solution.
+     */
+    static APCSolution randomSolution(const APCProblem * problem);
+    
+    /**
+     * Obtains a copy of the solution with all weights under red_ceil reduced to 0.
+     */
+    APCSolution reduced(const float red_ceil) const;
 };
 #endif

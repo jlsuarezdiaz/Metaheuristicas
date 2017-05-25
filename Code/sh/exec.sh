@@ -5,12 +5,12 @@ SOLS_PATH=$1
 
 PROBLEM_ADDRESS=./data/
 PROBLEM_EXT=.arff
-PROBLEMS=(sonar  wdbc spambase-460)
+PROBLEMS=(sonar) #(sonar  wdbc spambase-460)
 
 ALGORITHMS=(1NN RANDOM RELIEF RELIEF+LS RANDOM+LS AGG-BLX AGG-CA AGE-BLX AGE-CA AM-10-1.0 AM-10-0.1 AM-10-0.1mej)
-SEEDS=(3141592 77148642)
+SEEDS=(28) #(3141592 77148642)
 
-OTHER_OPTIONS="-t fit -p sp" #Other program options (Independent of seed, problem and algorithm)
+OTHER_OPTIONS="" #-t fit -p sp" #Other program options (Independent of seed, problem and algorithm)
 
 echo "COMIENZO DE LAS EJECUCIONES: $(date)"
 
