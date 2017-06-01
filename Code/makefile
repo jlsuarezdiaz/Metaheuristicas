@@ -17,6 +17,8 @@ LIB=./lib
 OBJ=./obj
 SRC=./src
 DOC=./doc
+SOL=./sol
+SATA=./data
 
 # Módulos, Códigos Fuente y Ejecutable
 EXECUTABLE=apc
@@ -224,6 +226,9 @@ $(OBJ)/%.o: $(SRC)/%.cpp $(INCLUDE)/%.h
 #	$(AR) $(ARFLAGS) $@ $^
 #
 
+# Regla para comprimir el contenido del directorio de soluciones
+compress:
+	zip -urm ./sol/sols.zip ./$(SOL)/*
 
 # Regla para borrar los ficheros objeto.
 clean:

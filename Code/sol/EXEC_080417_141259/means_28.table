@@ -1,6 +1,0 @@
-SEED-28     sonar    sonar    sonar    wdbc     wdbc      wdbc     spambase-460  spambase-460  spambase-460
-ALGORITHMS  FITNESS  TIME     TRAIN    FITNESS  TIME      TRAIN    FITNESS       TIME          TRAIN
-AGG-BLX     82.2115  24.7229  90.8654  94.8326  101.1560  97.1177  83.3478       106.9043      89.6087
-AGG-CA      82.4038  22.8241  89.3269  95.1144  93.4602   96.9423  82.6522       104.5295      90.8261
-AGE-BLX     81.8269  22.5840  90.6731  94.9031  93.2935   97.1880  83.1739       104.4437      89.0000
-AGE-CA      83.9423  23.6234  88.5577  95.1144  102.5001  96.8718  83.2609       111.5964      90.9565

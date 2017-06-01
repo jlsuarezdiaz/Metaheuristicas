@@ -39,7 +39,7 @@ void APCDifferentialEvolution::nextGeneration(const APCPartition & p, targetFunc
     children_population.clear();
     generation++;
 
-    cout << num_evaluations << " " << best_solution->val << endl;
+    //cout << num_evaluations << " " << best_solution->val << endl;
 }
 
 void APCDifferentialEvolution::selection(){
@@ -61,11 +61,13 @@ void APCDifferentialEvolution::cross(differentialCross c, const APCPartition & p
     children_population.resize(population_size);
     for(int i = 0; i < population_size; i++){
         children_population[i] = c(parents_population[3*i],parents_population[3*i+1],parents_population[3*i+2],population[i],best_solution,cr,f);
-        cout << best_solution->s << " 5 " << children_population[i]->s << endl;
-        cout << best_solution->val << endl;
+        //cout << best_solution->s << " 5 " << children_population[i]->s << endl;
+        //cout << best_solution << endl;
+        //cout << best_solution->val << endl;
         children_population[i]->val = fitness(p,*children_population[i]->s);
-        cout << best_solution->s << " 6 " << children_population[i]->s << endl;
-        cout << best_solution->val << endl;
+        //cout << best_solution->s << " 6 " << children_population[i]->s << endl;
+        //cout << best_solution->val << endl;
+        //cout << best_solution << endl;
         num_evaluations++;
     }
 }
@@ -77,7 +79,9 @@ void APCDifferentialEvolution::replacement(){
         }
         else{
             if(*children_population[i] > *best_solution){
-                best_solution = children_population[i];
+                //Deberia funcionar sin copiar, pero da un error, averiguar por qué si hay tiempo.
+                //delete best_solution;
+                best_solution = new Individual(new APCSolution(*children_population[i]->s),children_population[i]->val);
             }
             delete population[i];
             population[i] = children_population[i];
@@ -117,7 +121,7 @@ Individual * APCDifferentialEvolution::DECurrentToBest(const Individual * i1, co
     
     for(int k = 0; k < s->size(); k++){
         if(SRandom::getInstance().getRealUniformDistributionElement(lim_inf,lim_sup) < cr){
-            cout << x->s << " " << best->s << " " << i1->s << " " << i2->s << " " << endl;
+            //cout << x->s << " " << best->s << " " << i1->s << " " << i2->s << " " << endl;
             (*s)[k] = (*x->s)[k] + f*((*best->s)[k]-(*x->s)[k]) + f*((*i1->s)[k]-(*i2->s)[k]);
             if((*s)[k] < 0.0) (*s)[k]=0.0;
             if((*s)[k] > 1.0) (*s)[k]=1.0;

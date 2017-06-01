@@ -278,7 +278,7 @@ public:
      * @param stats Indicates if mean and stdev are calculated.
      * @pre There must be stored the 10 solutions of a 5x2 partition.
      */
-    void writeTable5Fold(ostream & out, string cols = "fti", bool stats =  true);
+    void writeTable5Fold(ostream & out, string cols = "fcrti", bool stats =  true);
 
     //~APCAlgorithm();
 

@@ -44,7 +44,7 @@ APCSolution * APCILS::solve(const APCPartition & p, targetFunction fitness, int 
             delete s_;
         }
 
-        cout << i << " " << best_cost << endl;
+        //cout << i << " " << best_cost << endl;
         
     }
        

@@ -6,8 +6,8 @@ PROBLEM_ADDRESS=./data/
 PROBLEM_EXT=.arff
 PROBLEMS=(sonar) #(sonar  wdbc spambase-460)
 
-ALGORITHMS=(1NN RANDOM RELIEF RELIEF+LS RANDOM+LS AGG-BLX AGG-CA AGE-BLX AGE-CA AM-10-1.0 AM-10-0.1 AM-10-0.1mej)
-SEEDS=(28) #(3141592 77148642)
+ALGORITHMS=(RANDOM+LS AGG-BLX AM-10-0.1mej SA ILS DE-RAND DE-CURRENTTOBEST) #(1NN RANDOM RELIEF RELIEF+LS RANDOM+LS AGG-BLX AGG-CA AGE-BLX AGE-CA AM-10-1.0 AM-10-0.1 AM-10-0.1mej)
+SEEDS=(3141592) #(3141592 77148642)
 
 echo "CALCULO DE PROMEDIOS: $(date)"
 
@@ -20,14 +20,16 @@ do
 
     for prob in ${PROBLEMS[@]}
     do
-        LINE="$LINE$prob\t$prob\t$prob\t"
+        #LINE="$LINE$prob\t$prob\t$prob\t"
+        LINE="$LINE$prob\t$prob\t$prob\t$prob\t$prob\t"
     done
     echo -e $LINE  >> $AVG_FILE
 
     LINE="ALGORITHMS"
     for prob in ${PROBLEMS[@]}
     do
-        LINE="$LINE\tFITNESS\tTRAIN\t\tTIME"
+        #LINE="$LINE\tFITNESS\tTRAIN\t\tTIME"
+        LINE="$LINE\tFITNESS\tCLASS_RATE\tRED_RATE\tTIME\tTRAIN"
     done
     echo -e $LINE >> $AVG_FILE
 
@@ -36,7 +38,8 @@ do
         LINE="$alg\t\t\t\t"
         for prob in ${PROBLEMS[@]}
         do
-            MEANS=$(tail -2 $SOLS_PATH/$prob\_$alg\_$seed.table | head -1 | cut -f 4-)
+            #MEANS=$(tail -2 $SOLS_PATH/$prob\_$alg\_$seed.table | head -1 | cut -f 4-)
+            MEANS=$(tail -2 $SOLS_PATH/$prob\_$alg\_$seed.table | head -1 | cut -f 2-)
             LINE=$LINE$MEANS
             
         done
