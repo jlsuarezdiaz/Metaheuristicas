@@ -3,7 +3,10 @@
 APCILS::APCILS(const APCProblem *p)
     :APCAlgorithm(p,"ILS"), ls(p)
 {
-
+    this->permutation = new int[p->getNumNonClassAttributes()];
+    for(int i = 0; i < p->getNumNonClassAttributes(); i++){
+        permutation[i]=i;
+    }
 }
 
 
@@ -20,10 +23,16 @@ APCSolution * APCILS::solve(const APCPartition & p, targetFunction fitness, int 
     APCSolution *best_solution = new APCSolution(*s);
     fit = best_cost = fitness(p,*best_solution);
 
+    int rnd_i = 0;
+    int p_size = problem->getNumNonClassAttributes();
+
     for(int i = 1; i < num_its; i++){
         APCSolution *s_ = new APCSolution(*s);
         for(int i = 0; i < num_mutations; i++){
-            int rnd = SRandom::getInstance().rand(0,s_->size()-1);
+            if(rnd_i==0) random_shuffle(permutation,permutation+p_size);
+            int rnd = permutation[rnd_i];//SRandom::getInstance().rand(0,s->size()-1);
+            rnd_i = (rnd_i+1)%p_size;
+            //int rnd = SRandom::getInstance().rand(0,s_->size()-1);
             s_->move(rnd,sigma_mutation);
         }
 

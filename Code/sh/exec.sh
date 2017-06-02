@@ -5,12 +5,25 @@ SOLS_PATH=$1
 
 PROBLEM_ADDRESS=./data/
 PROBLEM_EXT=.arff
-PROBLEMS=(sonar) #(sonar  wdbc spambase-460)
 
-ALGORITHMS=(RANDOM+LS AGG-BLX AM-10-0.1mej SA ILS DE-RAND DE-CURRENTTOBEST) #(1NN RANDOM RELIEF RELIEF+LS RANDOM+LS AGG-BLX AGG-CA AGE-BLX AGE-CA AM-10-1.0 AM-10-0.1 AM-10-0.1mej)
-SEEDS=(3141592) #(3141592 77148642)
+PROBLEMS=(sonar  wdbc spambase-460) # Todos los problemas
+#PROBLEMS=(sonar) # Solo sonar
 
-OTHER_OPTIONS="-t fcrti -p sp" #-t fit -p sp" #Other program options (Independent of seed, problem and algorithm)
+# Todos los algoritmos
+#ALGORITHMS=(1NN RANDOM RELIEF RELIEF+LS RANDOM+LS AGG-BLX AGG-CA AGE-BLX AGE-CA AM-10-1.0 AM-10-0.1 AM-10-0.1mej SA ILS DE-RAND DE-CURRENTTOBEST)
+# Todos los algoritmos P1
+#ALGORITHMS=(1NN RANDOM RELIEF RELIEF+LS RANDOM+LS AGG-BLX AGG-CA AGE-BLX AGE-CA AM-10-1.0 AM-10-0.1 AM-10-0.1mej)
+# Todos los algoritmos P2
+ALGORITHMS=(1NN RELIEF RANDOM+LS AGG-BLX AM-10-0.1mej SA ILS DE-RAND DE-CURRENTTOBEST) 
+# Algoritmos nuevos P2
+#ALGORITHMS=(SA ILS DE-RAND DE-CURRENTTOBEST)
+
+SEEDS=(3141592) 
+#SEEDS=(3141592 77148642)
+
+# Other program options (Independent of seed, problem and algorithm)
+OTHER_OPTIONS="-t fcrti -p sp" # 5-FOLD
+#OTHER_OPTIONS="-t fit -p sp"   #5x2
 
 echo "COMIENZO DE LAS EJECUCIONES: $(date)"
 

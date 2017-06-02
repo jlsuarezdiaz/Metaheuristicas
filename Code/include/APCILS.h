@@ -8,6 +8,8 @@ class APCILS: public APCAlgorithm{
 private:
     APCLocalSearch ls;
 
+    int * permutation;
+
 public:
     APCILS(const APCProblem * problem);
 
@@ -43,6 +45,9 @@ public:
      */
     void solve5Fold(const APC5FoldPartition & partition, int num_mutations, float sigma_mutation = 0.4, int max_evals_ls = 1000, float sigma_ls = 0.3, int num_its = 15, APCSolution *s0 = NULL );
 
+    inline ~APCILS(){
+        delete [] permutation;
+    }
 };
 
 

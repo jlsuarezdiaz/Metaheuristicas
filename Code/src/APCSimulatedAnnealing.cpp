@@ -5,7 +5,12 @@ const float APCSimulatedAnnealing::K = 1.0;
 
 APCSimulatedAnnealing::APCSimulatedAnnealing(const APCProblem *p)
     :APCAlgorithm(p,"SA")
-{}
+{
+    this->permutation = new int[p->getNumNonClassAttributes()];
+    for(int i = 0; i < p->getNumNonClassAttributes(); i++){
+        permutation[i]=i;
+    }
+}
 
 void APCSimulatedAnnealing::initialize(const APCPartition &p, targetFunction fitness, int max_neighbours, int max_success, int max_evals, float phi, float mu, float Tf, APCSolution *& initial_solution){
     if(initial_solution == NULL) initial_solution = new APCSolution(APCSolution::randomSolution(problem));
@@ -37,6 +42,9 @@ APCSolution * APCSimulatedAnnealing::solve(const APCPartition & p, targetFunctio
 
     int num_evals = 0;
 
+    int rnd_i = 0;
+    int p_size = problem->getNumNonClassAttributes();
+
 
 
     do{
@@ -46,16 +54,17 @@ APCSolution * APCSimulatedAnnealing::solve(const APCPartition & p, targetFunctio
         int num_acc_mej = 0;
 
 
-
         num_neighbours = 0;
         num_success = 0;
 
 
         while(num_neighbours < max_neighbours && num_success < max_success){
+            if(rnd_i==0) random_shuffle(permutation,permutation+p_size);
+            int r1 = permutation[rnd_i];//SRandom::getInstance().rand(0,s->size()-1);
+            rnd_i = (rnd_i+1)%p_size;
 
-            int r1 = SRandom::getInstance().rand(0,s->size()-1);
             float wi = (*s)[r1]; //Para deshacer mutación sin copias.
-            //Generamos vecino
+            //Generamos vecino  
             s->move(r1,0.3);
             //cout << "TIEMPO MUT = " << timer.get_time() << endl;
             float newfit = fitness(p,*s);

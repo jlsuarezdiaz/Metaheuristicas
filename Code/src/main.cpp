@@ -489,22 +489,24 @@ int main(int argc, char const *argv[])
     else if(algorithm == "1NN"){
         if(sol_file == ""){
             APCSolution s1 = APCSolution::weight1Solution(&problem);
-            nn1.solve5x2(myPartition5x2,s1);
+            if(mode == "5x2") nn1.solve5x2(myPartition5x2,s1);
+            else if(mode == "5FOLD") nn1.solve5Fold(myPartition5F,s1);
         }
         else{
             ifstream s_in(sol_file.c_str());
             APCSolution s_test(&problem);
             s_in >> s_test;
-            nn1.solve5x2(myPartition5x2,s_test);
+            if(mode == "5x2") nn1.solve5x2(myPartition5x2,s_test);
+            else if(mode == "5FOLD") nn1.solve5Fold(myPartition5F,s_test);
         }
 
         cout << nn1.getAlgorithmName() << endl;
-        printOutput5x2(nn1, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
-        
+        if(mode == "5x2") printOutput5x2(nn1, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
+        else if(mode == "5FOLD") printOutput5Fold(nn1,table_format,fout_table,output_fits,fout_fits,output_trains,fout_trains,output_times, fout_times, output_sols, fout_sols); 
     }
 
     else{
-        cout << "ALGORITMO INVÁLIDO" << endl;
+        cout << "INVALID ALGORITHM" << endl;
         printHelp();
     }
 

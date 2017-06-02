@@ -55,6 +55,8 @@ private:
      */
     static const float K;
 
+    int * permutation;
+
 public:
     APCSimulatedAnnealing(const APCProblem * problem);
 
@@ -90,6 +92,10 @@ public:
      */
     void solve5Fold(const APC5FoldPartition & partition, int max_neighbours, int max_success, int max_evals = 15000, float phi = 0.3, float mu = 0.3, float Tf = 1e-3, APCSolution *s0 = NULL );
 
+
+    inline ~APCSimulatedAnnealing(){
+        delete [] permutation;
+    }
 };
 
 
