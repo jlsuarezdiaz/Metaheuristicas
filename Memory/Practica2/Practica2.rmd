@@ -783,19 +783,6 @@ Para cada problema y cada algoritmo se han tomado los siguientes datos: fitness 
 \caption{Resultados de la ejecución del clasificador 1NN con pesos 1.\label{fig:1NN}}
 \end{figure}
 
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=15 cm]{./images/RANDOM.png}
-\caption{Resultados de la ejecución del clasificador 1NN con soluciones aleatorias.\label{fig:RANDOM}}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=15 cm]{./images/RANDOM+LS.png}
-\caption{Resultados de la ejecución de la búsqueda local partiendo de soluciones aleatorias.\label{fig:RANDOMLS}}
-\end{figure}
-
 \begin{figure}[H]
 \centering
 \includegraphics[width=15 cm]{./images/RELIEF.png}
@@ -804,44 +791,15 @@ Para cada problema y cada algoritmo se han tomado los siguientes datos: fitness 
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=15 cm]{./images/RELIEF+LS.png}
-\caption{Resultados de la ejecución de la búsqueda local partiendo de soluciones RELIEF.\label{fig:RELIEFLS}}
+\includegraphics[width=15 cm]{./images/RANDOM+LS.png}
+\caption{Resultados de la ejecución de la búsqueda local partiendo de soluciones aleatorias.\label{fig:RANDOMLS}}
 \end{figure}
+
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=15 cm]{./images/AGG-BLX.png}
 \caption{Resultados de la ejecución del algoritmo AGG-BLX.\label{fig:AGGBLX}}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=15 cm]{./images/AGG-CA.png}
-\caption{Resultados de la ejecución del algoritmo AGG-CA.\label{fig:AGGCA}}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=15 cm]{./images/AGE-BLX.png}
-\caption{Resultados de la ejecución del algoritmo AGE-BLX.\label{fig:AGEBLX}}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=15 cm]{./images/AGE-CA.png}
-\caption{Resultados de la ejecución del algoritmo AGE-CA.\label{fig:AGECA}}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=15 cm]{./images/AM-10-1.png}
-\caption{Resultados de la ejecución del algoritmo AM-10-1.0.\label{fig:AM101}}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=15 cm]{./images/AM-10-01.png}
-\caption{Resultados de la ejecución del algoritmo AM-10-0.1.\label{fig:AM1001}}
 \end{figure}
 
 \begin{figure}[H]
@@ -852,7 +810,33 @@ Para cada problema y cada algoritmo se han tomado los siguientes datos: fitness 
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=15 cm]{./images/global_table.png}
+\includegraphics[width=15 cm]{./images/SA.png}
+\caption{Resultados de la ejecución del algoritmo Enfriamiento Simulado.\label{fig:AGGCA}}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=15 cm]{./images/ILS.png}
+\caption{Resultados de la ejecución del algoritmo Búsqueda Local Reiterada.\label{fig:AGEBLX}}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=15 cm]{./images/DE-RAND.png}
+\caption{Resultados de la ejecución del algoritmo DE-RAND.\label{fig:AGECA}}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=15 cm]{./images/DE-CURRENTTOBEST.png}
+\caption{Resultados de la ejecución del algoritmo DE-CURRENTTOBEST.\label{fig:AM101}}
+\end{figure}
+
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=15 cm]{./images/global.png}
 \caption{Resultados medios y comparación conjunta de todos los algoritmos.\label{fig:allalgs}}
 \end{figure}
 
