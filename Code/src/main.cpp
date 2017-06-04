@@ -42,6 +42,13 @@ void printHelp(){
          << "\tAM-10-1.0: Memetic algorithm that applies local search to every individual each 10 generations." << endl
          << "\tAM-10-0.1: Memetic algorithm that applies local search to 10% of population each 10 generations." << endl
          << "\tAM-10-0.1mej: Memetic algorithm that applies local search to the best 10% of the population each 10 generations." << endl
+         << "\tSA: Obtains a solution using Simulated Annealing with Cauchy cooling scheme." << endl
+         << "\tILS: Obtains a solution using Iterated Local Search." << endl
+         << "\tDE-RAND: Obtains solutions using a Differential Evolution algoritm with the cross operator 'rand'." << endl
+         << "\tDE-CURRENTTOBEST: Obtains solutions using a Differential Evolution algorithm with the cross operator 'current-to-best'." << endl
+         << "-m <mode>: Fitness evaluation mode. Default is 5-Fold. Allowed modes are:" << endl
+         << "\t5x2: Evaluates 1NN classifier with a 5x2 Cross Validation." << endl
+         << "\t5FOLD: Evaluates the mean of reduction rate and 1NN classification rate with a 5-Fold Cross Validation." << endl
          << "-o <output_name>: Specifies the name that output files will have. Extensions will be added by the program. Needed for -t and -p options." << endl
          << "-p <string>: Specifies which data will be printed in files. These kinds of data will be specified in a string, with these characters allowed:" << endl
          << "\tf: A file with fitnesses data will be created." << endl

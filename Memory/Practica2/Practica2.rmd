@@ -141,7 +141,7 @@ Las soluciones con las que trabajaremos serán vectores reales de pesos, de tama
 
 ## Función objetivo
 
-Para evaluar el rendimiento del clasificador 1NN con un algoritmo determinado, utilizaremos la técnica de validación cruzada 5x2. Para ello, haremos 5 particiones distintas de los datos a la mitad, y para cada partición, aprenderemos el vector de pesos con una mitad y lo evaluaremos con la otra. El valor de rendimiento promedio será la media de estas 10 evaluaciones.
+Para evaluar el rendimiento del clasificador 1NN con un algoritmo determinado, utilizaremos la técnica de validación cruzada 5-Fold. Para ello, haremos 5 particiones distintas de los datos, y para cada partición, aprenderemos el vector de pesos con el contenido de su partición y lo evaluaremos con las restantes. El valor de rendimiento promedio será la media de estas 5 evaluaciones.
 
 <!--
 \begin{algorithm}
@@ -166,20 +166,19 @@ $\text{   }$
 ~~~ruby
 
 for i from 1 to 5
-    solucion1 = algoritmo(particion[i][1])
-    fitness1[i] = f_objetivo(particion[i][2], solucion)
+    solucion = algoritmo(particion[i])
+    fitness[i] = f_objetivo(datos-particion[i], solucion)
     
-    solucion2 = algoritmo(particion[i][2])
-    fitness2[i] = f_objetivo(particion[i][1], solucion)
 end
 
-return media(union(fitness1, fitness2))
+return media(fitness)
 ~~~
 
 $\text{   }$
 
+Para evaluar una solución sobre la partición de entrenamiento, seguiremos dos criterios: por un lado, obtendremos el porcentaje de los datos que quedan bien clasificados al evaluarlo sobre el resto de la partición. Por otro lado, se considerará que una solución es mejor cuanto mayor número de características haya conseguido eliminar, entendiendo por eliminable a cada característica para la que el peso obtenido sea cercano a cero (concretamente, menor que 0.1). Ambos criterios ponderarán en la misma medida dentro de la función objetivo. Como consecuencia del criterio de reducción, al calcular la distancia en el criterio de clasificación tampoco se tendrán en cuenta los atributos con pesos menores que 0.1.
 
-La evaluación de una solución sobre una partición de entrenamiento, se realizará aplicando el clasificador sobre cada dato de la partición y viendo si la clase obtenida por el clasificador coincide con la clase del dato. Para evitar que el vecino más cercano proporcionado por el clasificador sea el mismo dato, el dato a clasificar se aparta de la muestra, siguiendo el procedimiento *Leave One Out*. El porcentaje de aciertos será la medida de evaluación sobre la partición. La evaluación de la partición test, o la función objetivo en sí, se realizará aplicando este mismo procedimiento usando la partición aprendida como el conjunto sobre el que se busca el vecino más cercano, en este caso ya sin *Leave One Out*.
+La tasa de clasificación de una solución sobre una partición de entrenamiento, se realizará aplicando el clasificador sobre cada dato de la partición y viendo si la clase obtenida por el clasificador coincide con la clase del dato. Para evitar que el vecino más cercano proporcionado por el clasificador sea el mismo dato, el dato a clasificar se aparta de la muestra, siguiendo el procedimiento *Leave One Out*. El porcentaje de aciertos será la medida de evaluación sobre la partición. 
 
 
 
@@ -188,7 +187,7 @@ $\text{   }$
 
 ~~~ruby
 
-def f_objetivo(particion, solucion)
+def tasa_clas(particion, solucion)
     aciertos = 0
     
     for dato in particion
@@ -206,7 +205,7 @@ end
 $\text{   }$
 
 
-Finalmente, se describe el pseudocódigo del clasificador 1NN (para un dato en la partición con *Leave One Out*)
+Finalmente, se describe el pseudocódigo del clasificador 1NN (para un dato en la partición de entrenamiento con *Leave One Out*).
 
 
 $\text{   }$
@@ -234,11 +233,37 @@ end
 
 # Función distancia euclidea al cuadrado ponderada con los pesos de la solución
 def sqDist(dato1, dato2, solucion)
-    return sum(solucion[i]*(dato1[i]-dato2[i])^2) for i from 1 to solucion.size
+    suma = 0
+    for i from 1 to solucion.size
+        if solucion[i] >= 0.1  # Considerando la reducción
+            suma = suma + solucion[i]*(dato1[i]-dato2[i])^2
+        end
+    end
 end
 ~~~
 
 $\text{   }$
+
+La tasa de reducción consistirá en contar simplemente los pesos en la solución que valgan menos que 0.1:
+
+$\text{   }$
+
+~~~ruby
+
+def tasa_red(solucion)
+    num_reds = 0
+    for peso in solucion
+        if peso < 0.1 then num_reds++
+    end
+    return 100 * (num_reds)/solucion.size
+end
+~~~
+
+$\text{   }$
+
+Finalmente, como ya se ha comentado, el valor final de la función objetivo se obtiene combinando ambas tasas: $f = \alpha\ tasa\_clas + (1-\alpha)tasa\_red$. En este caso las ponderamos igual, es decir, $\alpha = 0,5$.
+
+La evaluación de la partición test se realizará aplicando este mismo procedimiento usando la partición aprendida como el conjunto sobre el que se busca el vecino más cercano. En este caso, la tasa de clasificación se obtendrá sin *Leave One Out*, mientras que evidentemente la tasa de reducción coincidirá con la obtenida durante el aprendizaje.
 
 
 Un aspecto importante a destacar en la función objetivo que se ha tenido en cuenta durante la implementación es que el orden de eficiencia es de $O(P\times P\times S)$, donde $P$ es el tamaño de la partición y $S$ el tamaño de la solución. Es un orden considerable y la función se llamará gran cantidad de veces a lo largo de los distintos algoritmos, por lo que es bueno considerar cualquier posible mejora de esta. Para ello, en la implementación se ha optado por modificar ligeramente la estructura del algoritmo, sin modificar el resultado. Se ha tenido en cuenta que la función distancia ponderada es simétrica respecto de los datos para una solución prefijada. De esta forma, la modificación considerada para la implementación consiste en la inicialización al principio del algoritmo de una matriz triangular con las distancias entre todos los datos de la partición, y la obtención de las distancias durante la clasificación se reduce a acceder a una posición de la matriz ya creada. Aunque la clase de complejidad sigue siendo la misma, el uso de una matriz solamente triangular para calcular las distancias permite reducir las iteraciones a la mitad.
@@ -277,76 +302,9 @@ end
 
 $\text{   }$
 
-
-## Mecanismos de selección
-
-El mecanismo de selección de padres para los algoritmos genéticos dependerá de si es generacional o estacionario, aunque solo variará el número de torneos binarios, y por tanto de padres, a escoger. En los AGG haremos tantos torneos binarios como individuos haya en la población. En los AGE, haremos cuatro torneos binarios. Surgirán cuatro candidatos a padres, pero solo los dos primeros tendrán asegurado serlo. Los dos restantes lo serán solo cuando el operador de cruce no proporcione los suficientes hijos solo con dos padres. Es importante tener en cuenta que no debe hacerse un torneo binario de un individuo consigo mismo, pues si el individuo escogido es el peor de la población no estaríamos fomentando la competición y selección de soluciones de mayor calidad.
-
-
-
-$\text{   }$
-
-~~~ruby
-# Torneo binario
-def torneoBinario(indiv_1, indiv_2)
-    if indiv_1.solucion.fitness > indiv_2.solucion.fitness return indiv_1
-    else return indiv_2
-end
-
-# Selección AGG
-def seleccionAGG
-    for i in 1 to poblacion.size # En el caso de los AGE, tomamos solo 4
-        indiv_1 = poblacion.extraerAleatorio()
-        indiv_2 = poblacion.extraerAleatorio()
-        padres.añadir(torneoBinario(indiv_1, indiv_2))
-    end
-end
-~~~
-
-$\text{   }$
-
-
-## Operadores de cruce y mutación
-
-El operador de mutación utilizado es el mismo que el operador de generación de vecinos. En este caso, cada vez que se muta un gen, el gen se identifica con un atributo de una solución (individuo), al cual le corresponderá el índice sobre el que aplicaremos el operador de movimiento.
-
-En cuanto a los operadores de cruce, utilizaremos dos. El cruce aritmético de dos soluciones originará una nueva solución cuyas componentes son la media aritmética de las componentes de los padres. Por otra parte, el cruce BLX-0.3 generará dos soluciones en las que cada gen está distribuido uniformemente sobre el intervalo determinado por los genes de los padres ampliado una cantidad proporcional a la longitud de dicho intervalo (en este caso, la cantidad es 0.3). Esta ampliación incentiva la diversidad, aumentando la capacidad de exploración.
-
-
-
-
-$\text{   }$
-
-~~~ruby
-
-def cruceAritmetico(sol1, sol2)
-  hijo[i] = (sol1[i]+sol2[i])/2 for i from 1 to sol1.size
-  return hijo
-end
-
-def cruceBLX03(sol1,sol2)
-  for 1 from 1 to sol1.size
-      cmax = max(sol1[i],sol2[i])
-      cmin = min(sol1[i],sol2[i])
-      l = cmax - cmin
-      inf = cmin - 0.3*l
-      sup = cmax + 0.3*l
-      hijo1[i] = min(1,max(0,uniforme(inf,sup).nuevoNumero()))
-      hijo2[i] = min(1,max(0,uniforme(inf,sup).nuevoNumero()))
-  end
-  
-  return [hijo1, hijo2]
-end
-~~~
-
-
-\clearpage
-
-# Métodos de búsqueda
-
 ## Búsqueda local
 
-El algoritmo de búsqueda local utilizado sigue el modelo del primer mejor. Con el operador de generación de vecinos indicado previamente se generan nuevas soluciones, y en cuanto una mejora a la solución actual, se actualiza como nueva solución. El procedimiento se repite mientras no se verifique ninguna de las condiciones de parada. En este caso, las condiciones de parada vienen dadas por un número máximo de evaluaciones de la función objetivo, o bien, por un número máximo de vecinos generados sin obtener mejora.
+Se mantiene el mismo algoritmo de búsqueda local implementado en la práctica anterior. El algoritmo de búsqueda local utilizado sigue el modelo del primer mejor. Con el operador de generación de vecinos indicado previamente se generan nuevas soluciones, y en cuanto una mejora a la solución actual, se actualiza como nueva solución. El procedimiento se repite mientras no se verifique ninguna de las condiciones de parada. En este caso, las condiciones de parada vienen dadas por un número máximo de evaluaciones de la función objetivo, o bien, por un número máximo de vecinos generados sin obtener mejora.
 
 En cuanto a aspectos de implementación, se considera durante todo el proceso una única solución que va siendo modificada, y en caso de que no haya mejora, se devuelve la componente modificada a su estado anterior. Esto mejora la eficiencia al evitar copiar soluciones, aunque el cuello de botella está en la llamada a la función objetivo.
 
@@ -393,9 +351,147 @@ $\text{   }$
 
 \clearpage
 
-## Algoritmos genéticos
 
-Tanto para los algoritmos generacionales como estacionarios, la estrategia de resolución es la misma, y se resume en el siguiente pseudocódigo:
+
+# Métodos de búsqueda
+
+## Enfriamiento simulado
+
+El algoritmo de enfriamiento simulado se inspira en los procesos de calentamiento de algunos materiales. En este caso, la aceptación de soluciones depende en gran medida de una variable temperatura. La variable temperatura determinará una probabilidad con la que el algoritmo de exploración podrá aceptar soluciones peores a la actual. Análogamente a su inspiración física, a mayor temperatura, habrá más movimiento y se explorará el espacio de búsqueda con una mayor amplitud. Cuando la temperatura vaya disminuyendo, se intensificará la explotación de las soluciones obtenidas. La generación de nuevas soluciones seguirá el esquema de vecinos habitual, con la novedad del criterio de aceptación basado en la temperatura. El esquema de búsqueda se resume en el siguiente pseudocódigo:
+
+
+$\text{   }$
+
+~~~ruby
+
+def SimulatedAnnealing(particion)
+
+    inicializarTemperaturas()
+    
+    best_sol = s = solucionAleatoria()
+    fit = best_fit = fitness(particion,s)
+    
+    while not condicionesParada()
+        
+        num_neighbours = 0
+        num_success = 0
+        permutacion = generarPermutacion(s.size())
+        
+        while num_neighbours < max_neighbours and num_success < max_success 
+            
+            # Para ir mutando todas las componentes
+            if(permutacion.empty()) permutacion = generarPermutacion(s.size())
+            rnd = permutacion.extraer()
+            
+            s_i = s[rnd] # Para deshacer la mutación después sin copiar
+            
+            s.mov(rnd,0.3) # Generamos vecino
+            newfit = fitness(particion,s)
+            num_neighbours++
+            
+            diff = (fit - newfit)/100.0 # Diferencia de costes
+            
+            # Criterio de aceptación
+            # Aceptamos si es mejor, o si es peor según la probabilidad siguiente
+            if diff != 0 and (diff < 0 or AleatorioUniforme(0,1) <= exp(-diff/temp))
+            
+                # Actualizamos
+                fit = newfit
+                if fit > best_fit # Actualizamos mejor solución si es necesario
+                    best_sol = s
+                    bestfit = fit
+                end
+                
+                num_success++
+            else
+              s[rnd] = s_i # Deshacemos mutación
+              
+            end
+        end
+        
+        enfriar()
+    end
+    
+    return best_sol
+
+~~~
+
+$\text{   }$
+
+El criterio de parada utilizado viene dado por un máximo de evaluaciones de la función objetivo, por una parte, o por otra, que en alguno de los bucles internos (los de temperatura fija) no se haya aceptado ninguna solución, es decir, se llega a una temperatura a la que el algoritmo no se presta a aceptar peores soluciones y tampoco a mejorar por generación de vecinos.
+
+En cuanto a la inicialización de temperaturas, el procedimiento seguido para determinar la temperatura inicial es el siguiente:
+
+\[T_0 = \frac{\mu C(S_0)}{\log(\phi)}\]
+
+Donde se han tomado $\mu = \phi = 0,3$ y $C(S_0)$ es el coste de la solución inicial.
+
+Finalmente, se utiliza el esquema de enfriamiento de Cauchy:
+
+\[T_{k+1} = \frac{T_k}{1+\beta T_k}\]
+
+Donde $\beta = \frac{T_0-T_f}{M T_0 T_f}$ y $M = \frac{max\_evaluaciones}{max\_vecinos}$. El criterio para la llamada al esquema de enfriamiento se basa en un número máximo de vecinos generados $max\_vecinos$ y un número máximo de éxitos (soluciones que son aceptadas por el criterio de la temperatura) $max\_success$, como se mostraba en el pseudocódigo anterior.
+
+## Búsqueda Local Reiterada
+
+El esquema de búsqueda empleado en la búsqueda local reiterada es el siguiente: partimos de una solución inicial optimizada con búsqueda local, y durante repetidas veces a la solución que tenemos le aplicamos una mutación brusca, y a dicha mutación le aplicamos búsqueda local. Nos quedamos con la que tenga un mayor valor de la función objetivo y repetimos el proceso.
+
+$\text{   }$
+
+~~~ruby
+
+def ILS(particion)
+    # Solución inicial+BL
+    s = solucionAleatoria()
+    busquedaLocal(s,particion)
+    fit = f_objetivo(particion,s)
+    
+    while not condicionesParada()
+        s' = mutacionBrusca(s)
+        busquedaLocal(s',particion)
+        newfit = f_objetivo(particion,s')
+        
+        if newfit > fit
+            s = s'
+            fit = newfit
+        end
+    end
+    
+end
+~~~
+
+$\text{   }$
+
+Finalmente, el operador de mutación brusca de la solución consiste en un conjunto de mutaciones simples (la generación de vecinos usual) con una mayor desviación (0.4 en lugar del usual 0.3). El número de mutaciones simples realizado ha sido un 10 \% del total de atributos. A la hora de mutar, se puede optar tanto por seleccionar los atributos completamente al azar como por controlar que no mute siempre el mismo atributo. En la implementación se ha optado por esta segunda opción, utilizando vectores de permutaciones de los atributos.
+
+$\text{   }$
+
+~~~ruby
+
+def mutacionBrusca(solucion)
+    s = solucion.copia()
+
+    num_mutaciones = 0.1 * solucion.size
+    # Obtenemos los índices a mutar (por cualquiera de los 
+    # procedimientos aleatorios indicados previamente)
+    indices_mutacion = obtenerAleatorios(min = 0, max = solucion.size - 1,
+                        num = num_mutations)
+    
+    for i in indices_mutacion
+        s.mov(i,0.4) # Operador de mutación simple
+    end
+    
+    return s
+end
+
+~~~
+
+$\text{   }$
+
+
+## Evolución Diferencial
+
+La evolución diferencial es un algoritmo evolutivo en el que la población de soluciones avanza de acuerdo a las reglas de combinación que se muestran más adelante. Como algoritmo evolutivo, la estrategia de resolución se puede resumir en el siguiente pseudocódigo:
 
 $\text{   }$
 
@@ -414,264 +510,124 @@ return poblacion.mejorSolucion()
 
 $\text{   }$
 
-Las condiciones de parada serán, en general, el número de evaluaciones de la función objetivo, aunque también podrían considerarse otras posibilidades, como el número de generaciones desarrolladas. El esquema de desarrollo de nuevas generaciones también es común a ambos tipos de algoritmos, y se descompone en cuatro grandes bloques, como se muestra en las siguientes líneas:
+Las condiciones de parada serán, en general, el número de evaluaciones de la función objetivo, aunque también podrían considerarse otras posibilidades, como el número de generaciones desarrolladas. El esquema de desarrollo de nuevas generaciones, para los distintos algoritmos de evolución diferencial, puede descomponerse en las siguientes fases:
 
 $\text{   }$
 
 ~~~ruby
 
 def nuevaGeneracion()
-    seleccion() # Selección de padres
-    cruce()     # Generación de hijos
-    mutacion()  # Mutación de hijos
-    reemplazo() # Sustitución de la población
+    seleccion()     # Selección de padres
+    recombinacion() # Obtención de hijos
+    reemplazo()     # Sustitución de la población
 end
 ~~~
 
 $\text{   }$
 
-El mecanismo de selección ya se comentó en la sección anterior y solo se diferencia en el número de torneos binarios, y por tanto de padres, que se escogen. El mecanismo de cruce presenta más variaciones entre generacional y estacionario, y además dependerá del operador de cruce seleccionado.
-
-Si el algoritmo es generacional, teniendo en cuenta que la lista de padres ya tiene una componente aleatoria dada por la selección, para ahorrar en cómputo de números aleatorios, se eligirán para realizar el cruce los $M$ primeros individuos de la población, donde $M$ es el valor esperado de individuos dado por la probabilidad de cruce. Los emparejamientos serán entre cromosomas consecutivos (primero con segundo, tercero con cuarto, ...). Si hicieran falta más hijos (es decir, si el operador de cruce fuera el aritmético), para favorecer la diversidad se harán nuevos tipos de cruces, emparejando el cromosoma i-ésimo con el cromosoma i-ésimo empezando desde el final. Finalmente, los hijos se rellenan con los padres que no han participado en el cruce, para completar la población, ya que estos intervienen en la mutación también.
+El proceso de selección consiste en extraer grupos de padres de la población. Se extraerán tres padres por cada individuo de la población, que serán los que intervengan posteriormente en las recombinaciones para cada hijo (el tercer padre podría no intervenir según el operador de cruce utilizado, pero por simplicidad se extrae siempre).
 
 $\text{   }$
 
 ~~~ruby
 
-def AGG.cruce()
-    num_cruces = ceil(prob_cruce * padres.size / 2)
-    indice_ultimo_hijo = 2*num_cruces -1
-    
-    for i from 0 to num_cruces-1
-        # Indices de los padres a cruzar
-        # Consecutivos
-        i1 = 2*i
-        i2 = 2*i+1
-        # Para el cruce aritmético
-        i3 = i
-        i4 = indice_ultimo_hijo - i
-        
-        if operador_cruce.tipo = ARITMETICO
-            hijos.añadir(operador_cruce(padres[i1],padres[i2]))
-            hijos.añadir(operador_cruce(padres[i3],padres[i4]))
-        else if operador_cruce.tipo = BLX
-            hijos.añadir(operador_cruce(padres[i1],padres[i2]))
-        end
-            
-    end
-    
-    # Completar población
-    hijos.añadir(padres[i]) for i > indice_ultimo_hijo
-end
-
-~~~
-
-$\text{   }$
-
-En cuanto al cruce estacionario, puesto que partimos de la selección de dos únicos padres, o cuatro si el operador solo proporciona un hijo, simplemente tendremos que añadir a los hijos los cromosomas resultantes de aplicar las operaciones de cruce. En este caso, no se completa la población, y solo los dos hijos generados interverdrán en las mutaciones.
-
-$\text{   }$
-
-~~~ruby
-
-def AGE.cruce()
-    if operador_cruce.tipo = ARITMETICO
-        hijos.añadir(operador_cruce(padres.primero,padres.segundo))
-        hijos.añadir(operador_cruce(padres.tercero,padres.cuarto))
-    else if operador_cruce.tipo = BLX
-        hijos.añadir(operador_cruce(padres.primero,padres.segundo))
+def seleccion()
+    for i from 1 to poblacion.size()
+        [r1,r2,r3] = aleatoriosDistintosEntre(0,poblacion.size()-1)
+        padres.añadir([poblacion[r1],poblacion[r2],poblacion[r3]])
     end
 end
-
 ~~~
 
 $\text{   }$
 
-El procedimiento de mutación es análogo en ambos tipos de algoritmos, y de nuevo para reducir el cómputo de números aleatorios elegimos en cada generación tantos genes a mutar como indique el valor esperado para la probabilidad de mutación. En este caso, si la esperanza es menor que 1, tendremos que mutar cada cierto número de generaciones una vez, mientras que si es mayor que 1, mutaremos tantas veces como indique la esperanza en cada generación. Una vez decidido el número de mutaciones, para cada mutación escogemos al azar un cromosoma y un gen a mutar dentro de ese cromosoma, y aplicamos el operador de mutación indicado en la sección anterior.
+Para la recombinación, utilizaremos el operador de cruce correspondiente según el modelo de evolución diferencial escogido. En cada recombinación pueden intervenir hasta tres padres escogidos al azar en la población, además de la mejor solución de cada generación. La aleatoriedad con la que se escogieron los padres en el proceso de selección nos permite ahora recorrer la lista de padres e ir pasándoselos de tres en tres al operador de cruce.
 
 $\text{   }$
 
 ~~~ruby
-
-def mutacion()
-    esperanza = prob_mutacion * hijos.size * num_genes
-    gen_muts = ceil(1.0/esperanza) # Periodo de mutaciones (en generaciones)
-    
-    # Determinación de mutaciones 
-    # (mutamos solo si estamos en el periodo de mutación)
-    if gen_muts != 0 and generacion_actual mod gen_muts = 0
-        num_mutaciones = ceil(esperanza)
-    else num_mutaciones = 0
-    
-    #Realizar mutaciones
-    for i from 1 to num_mutaciones
-        hijo_mut = hijos.escogerAleatorio()
-        indice_gen = aleatorioEntre(1,num_genes)
-        hijo_mut.mov(indice_gen,0.3)
+def cruce()
+    for i from 0 to poblacion..size()-1
+        hijos.añadir(operadorCruce(padres[3*i],padres[3*i+1],
+                   padres[3*i+2],poblacion[i],mejor_solucion))
     end
 end
-
 ~~~
 
 $\text{   }$
 
-Finalmente, los esquemas de reemplazamiento son diferentes para cada modelo. En el modelo generacional con elitismo, hay que mantener la mejor solución de la población anterior y sustituirla por la peor de la nueva generación, y volver a actualizar la mejor solución para que pueda ser utilizada en la próxima generación. En cuanto al modelo estacionario, se comparan las dos peores soluciones de la generación anterior con los hijos obtenidos, y pasan a la nueva generación los mejores.
-
-El pseudocódigo del remplazamiento en los AGG es el siguiente:
+A continuación, describimos ambos operadores de cruce. El cruce aleatorio obtiene como nueva solución a uno de los padres trasladado en la dirección de los otros dos un factor $F$, bajo la recombinación binomial, es decir, dicha recombinación tendrá lugar solo bajo cierta probabilidad $CR$ (por gen). Se han tomado $F=CR=0,5$. También hay que tener en cuenta que la recombinación podría exceder el intervalo $[0,1]$, por lo que puede ser necesario truncar.
 
 $\text{   }$
 
 ~~~ruby
-# Suponemos que la mejor solución está guardada en mejor_solucion
-# mejor_solucion se calcula en el propio método y en el algoritmo
-# de inicialización de la población
-def AGG.reemplazo()
-    # Para reemplazar peor solución y recalcular mejor solución
-    peor_val = 101.0
-    mejor_val = -1.0
-    indice_peor = -1
-    indice_peor = -1
+#pi: Padre i-ésimo
+#x: Individuo i-ésimo de la población
+#best: Mejor solución
+def DE_Rand(p1,p2,p3,x,best)
+    s=solucion(tam = p1.size())
     
-    for i from 1 to poblacion.size
-        poblacion[i] = hijos[i] # Reemplazamiento
-        
-        # Actualización del peor valor
-        if poblacion[i].fitness < peor_val
-            peor_val = poblacion[i].fitness
-            indice_peor = i
-        end
-        # Actualización del mejor valor
-        if poblacion[i].fitness > mejor_val
-            mejor_val = poblacion[i].fitness
-            indice_mejor = i
+    for k from 1 to solucion.size()
+        if aleatorioUniforme(0,1) < CR  # Recombinación
+            s[k] = p1[k] + F * (p2[k] - p3[k])
+            if s[k] < 0.0 then s[k] = 0.0
+            if s[k] > 0.0 then s[k] = 1.0
+        else  # Mantenemos atributo
+            s[k] = x[k]
         end
     end
+end
+~~~
+
+$\text{   }$
+
+EL cruce *Current-to-best* se obtiene de trasladar el individuo de la población, primero en la dirección hacia la mejor solución, y luego en la dirección entre los dos padres que intervienen en este caso, ambas una cantidad $F$. De nuevo consideramos recombinación binomial, con $F=CR=0,5$, y la necesidad de truncar si un atributo excede los límites.
+
+$\text{   }$
+
+~~~ruby
+#pi: Padre i-ésimo
+#x: Individuo i-ésimo de la población
+#best: Mejor solución
+def DE_Rand(p1,p2,p3,x,best)
+    s=solucion(tam = p1.size())
     
-    #Elitismo
-    poblacion[indice_peor] = mejor_solucion
-    
-    #Actualización de la mejor solución
-    if poblacion[indice_mejor].fitness > mejor_solucion.fitness
-        mejor_solucion = poblacion[indice_mejor]
+    for k from 1 to solucion.size()
+        if aleatorioUniforme(0,1) < CR  # Recombinación
+            s[k] = x[k] + F * (best[k] - x[k]) + F*(p1[k]-p2[k])
+            if s[k] < 0.0 then s[k] = 0.0
+            if s[k] > 0.0 then s[k] = 1.0
+        else  # Mantenemos atributo
+            s[k] = x[k]
+        end
     end
 end
 ~~~
 
 $\text{   }$
 
-Y a continuación se muestra el pseudocódigo del reemplazamiento para los AGE:
+Finalmente, el esquema de reemplazamiento utilizado es uno a uno, es decir, para cada individuo de la población, se compara con el hijo obtenido en esa misma posición y en la siguiente generación se queda el mejor de los dos. En este momento también nos aseguramos de que se actualiza la mejor solución de la población.
 
 $\text{   }$
 
 ~~~ruby
 
-def AGE.reemplazo()
-    # Hijos mejor y peor de los dos generados
-    mejor_hijo = hijos.mejor()
-    peor_hijo = hijos.peor()
-    
-    indice_peor = -1
-    indice_2do_peor = -1
-    peor_valor = 101.0
-    peor_valor_2 = 102.0
-
-    # Recorremos la población en busca de los peores
-    for i from 1 to poblacion.size
-        # Nuevo peor valor, el actual pasa a ser el segundo peor valor
-        if poblacion[i].fitness < peor_valor
-            peor_valor_2 = peor_valor
-            indice_2do_peor = indice_peor
-            peor_valor = poblacion[i].fitness
-            indice_peor = i
-        # Nuevo segundo peor valor    
-        else if poblacion[i].fitness < peor_valor_2
-            peor_valor_2 = poblacion[i].fitness
-            indice_2do_peor = i
-        end
-    end
-    
-    # Si los dos hijos son peores no reemplazamos
-    if mejor_hijo < poblacion[indice_peor]
-        hijos.borrar()
-    
-    # El mejor hijo es mejor que el peor, pero no que el 2º peor
-    # o el mejor hijo es mejor que los dos peores, y el segundo
-    # hijo no es mejor que ninguno (1 reemplazo)
-    else if mejor_hijo < poblacion[indice_2do_peor]
-         or peor_hijo < poblacion[indice_peor]
-             poblacion[indice_peor] = mejor_hijo
-    
-    # Los dos hijos son mejores (2 reemplazos)
-    else
-        poblacion[indice_peor] = mejor_hijo
-        poblacion[indice_2do_peor] = peor_hijo
-    end
-end
-
-~~~
-
-$\text{   }$
-
-Un último detalle a comentar en los algoritmos genéticos es las llamadas a la función objetivo. En principio, tenemos que llamar a la función objetivo tanto en las fases de cruce como de mutación, ya que en ambas se generan individuos. En la práctica, hay hijos que no van a llegar a intervenir en el reemplazamiento de la población, ya que van a pasar antes por la mutación, por lo que es posible reducir el número de llamadas y aprovecharlo en futuras generaciones. En los algoritmos estacionarios, como solo intervienen dos hijos en las mutaciones basta utilizar dos llamadas a la función objetivo en cada generación, siempre después de las mutaciones. En los algoritmos generacionales el número de llamadas en cada generación dependerá, además del número de hijos generado, de si los individuos que mutan han sido hijos o padres que han pasado de la generación anterior. Utilizando un vector que nos indique qué individuos han sido los que ha mutado podemos evaluar fácilmente los fitness de los hijos y añadir si es necesario los de las mutaciones, evitando hacer llamadas de más a la función objetiv. Estas llamadas evitadas podrán ser aprovechadas en futuras generaciones.
-
-\clearpage
-
-## Algoritmos meméticos
-
-Los algoritmos meméticos utilizados combinan los algoritmos genéticos y la búsqueda local en función de tres factores:  el periodo de generaciones para el que se aplica la búsqueda local, el porcentaje de individuos a los que se aplica la búsqueda local y el modo de selección de dichos individuos (al azar o a los mejores). Se aplicarán tantas generaciones del algoritmo genético consecutivas según indique el primer parámetro, y luego según el modo de selección, se reordena la población: por orden de fitness, si el modo de selección es seleccionar los mejores, o al azar, en caso contrario. Finalmente, se escogen los primeros individuos en ese vector, según el porcentaje especificado. El procedimiento se repite mientras no se verifiquen las condiciones de parada, que en este caso vienen dadas por el número de evaluaciones de la función objetivo. A continuación se muestra el pseudocódigo:
-
-$\text{   }$
-
-~~~ruby
-# gens_ls: Periodo de generaciones para el que se aplica la BL
-# porc_ls: Porcentaje de individuos a escoger para la BL
-# mejores: Modo de selección
-# max_evals: Criterio de parada
-def AlgMemetico(gens_ls, porc_ls, mejores, max_evals)
-    num_evals = 0
-    AG.inicializarPoblacion()
-    #Número de individuos a los que se aplicará BL:
-    num_indiv_ls = porc_ls * AG.tamañoPoblacion()
-    
-    
-    #Condición de parada
-    while num_evals < max_evals
-        # Realizamos tantas generaciones como se
-        # hayan especificado como argumento
-        for i from 1 to gens_ls
-            AG.nuevaGeneracion()
-        end
-        
-        # Obtenemos población para aplicar BL
-        soluciones = AG.obtenerPoblacion()
-        
-        if porc_ls != 1.0 # Para evitar cómputos si la
-                          # probabilidad es 1
-            if mejores
-                sort(soluciones) # Ordenar por fitness
-            else
-                shuffle(soluciones)
+def reemplazo()
+    for i from 1 to poblacion.size()
+        if hijo[i].fitness > poblacion[i].fitness
+            poblacion[i] = hijo[i]
+            if hijo[i].fitness > mejorSolucion.fitness
+                mejorSolucion = hijo[i]
             end
         end
-        
-        # Aplicamos búsqueda local
-        for sol in soluciones.obtenerPrimeras(num_indiv_ls)
-            LS.busquedaLocal(sol,criterio_parada)
-        end
-        
-        AG.actualizarPoblacion(soluciones)
-        num_evals=AG.evaluaciones + LS.evaluaciones
-        
-    end 
+    end
 end
-
 ~~~
 
 $\text{   }$
 
-Una consideración que se ha hecho en la implementación, y que se refleja en el pseudocódigo, es la de terminar siempre el algoritmo en una generación con búsqueda local, aunque el criterio de parada se hay podido cumplir en alguna generación intermedia. Esto nos va a proporcionar una última mejora sobre la población final obtenida (al menos, sobre la muestra de entrenamiento) y el hacer estas generaciones de más no supone un coste adicional demasiado elevado puesto que el número de evaluaciones en generaciones sin búsqueda local es bajo, y hacer solo una búsqueda local más también es asequible.
+Por último, sobre las llamadas a la función objetivo, se realizan durante la fase de recombinación, tantas como hijos se hayan creado.
 
-Finalmente, el criterio de parada utilizado para la búsqueda local en todas las versiones del algoritmo memético es el de haber hecho $2n$ evaluaciones, con $n$ el número de características.
 
 \clearpage
 
@@ -765,6 +721,15 @@ Para ejecutar el programa desde la línea de comandos se utiliza la sintaxis `./
 >- `AM-10-1.0`: Algoritmo memético que aplica BL a todos los individuos cada 10 generaciones.
 >- `AM-10-0.1`: Algoritmo memético que aplica BL a un 10 % de la población al azar cada 10 generaciones.
 >- `AM-10-0.1mej`: Algoritmo memético que aplica BL al 10 % mejor de la población cada 10 generaciones.
+>- `SA`: Enfriamiento simulado con esquema de Cauchy,
+>- `ILS`: Obtiene soluciones con Búsqueda Local Reiterada.
+>- `DE-RAND`: Algoritmo de evolución diferencial con cruce `Rand`.
+>- `DE-CURRENTTOBEST`: Algoritmo de evolución diferencial con cruce `Current-To-Best`.
+
+- `-m <modo>`: Modo de evaluación y particionado. Por defecto, `5FOLD`. Los modos disponibles son:
+
+>- `5x2`: Evaluación con `1NN` y validación cruzada `5x2` (práctica 1).
+>- `5FOLD`: Evaluación media de `1NN` y reducción, con validación cruzada 5-Fold (práctica 2).
 
 - `-o <nombre salida>`: Especifica un nombre para los ficheros de salida con resultados que se crearán. Es necesario para utilizar las opciones `-p` y `-t`. Dependiendo de estas opciones, se crearán distintos ficheros con el nombre indicado y distintas extensiones añadidas por el programa.
 
@@ -802,15 +767,15 @@ Finalmente, se proporcionan los siguientes scripts de bash:
 Todas las ejecuciones que se muestran de ahora en adelante se han realizado sobre un ordenador HP con las siguientes características:
 
 - Procesador Intel(R) Core(TM) i7
-- Frecuencia del procesador: 1.6 GHz
+- Frecuencia del procesador: 2.8 GHz
 - 4 procesadores principales, 8 procesadores lógicos
-- 4 GB de RAM.
+- 16 GB de RAM.
 
 Las ejecuciones se han realizado sobre el sistema operativo Windows 7, a través de la herramienta `Cygwin` [@cygwin], que proporciona funcionalidades para Windows similares a las de las distribuciones de Linux. Finamente, el código `C++` utilizado ha sido compilado con optimización `-O2`.
 
 Para la toma de resultados se ha utilizado el script `start.sh` mencionado en la sección anterior, y la semilla utilizada ha sido $3141592$.
 
-Para cada problema y cada algoritmo se han tomado los siguientes datos: fitness sobre la muestra de entrenamiento, fitness sobre los datos test, y tiempo de ejecución. Los resultados obtenidos son:
+Para cada problema y cada algoritmo se han tomado los siguientes datos: fitness sobre la muestra de entrenamiento, fitness sobre los datos test, tasas de clasificación y reducción sobre el test y tiempo de ejecución. Los resultados obtenidos son:
 
 \begin{figure}[H]
 \centering
@@ -900,6 +865,176 @@ En cuanto a los conjuntos de datos, se observa que el conjunto que mejores resul
 En lo relativo a los tiempos, vemos que, como era de esperar, el greedy es el más rápido. El tiempo que nos proporciona el `1NN` nos da una medida del tiempo que tarda en evaluarse cada llamada a la función objetivo. Hay que destacar también que cuando los tiempos son pequeños, la máquina que ha realizado las ejecuciones solo ha podido proporcionar precisión en milisegundos. En los algoritmos genéticos y meméticos, vemos que aumenta el tiempo bastante y que la desviación es muy pequeña. Esto último puede deberse a que las ejecuciones se realizaron con prioridad alta, reduciendo así los cambios de contexto que pueden producir más variaciones de tiempos. También con respecto al tiempo de algoritmos genéticos y meméticos, vemos que hay muy poca variación entre los tiempos medios de los distintos algoritmos, y teniendo en cuenta los tiempos obtenidos de la función objetivo, vemos que, fijadas las 15000 evaluaciones que se realizan en todos algoritmos, el tiempo es casi igual a 15000 veces el tiempo medio de la la función objetivo, lo que nos indica que casi todo el tiempo que consumen estos algoritmos se emplea en evaluar la función objetivo. Finalmente vemos que, aunque las búsquedas locales también están limitadas a 15000 evaluaciones, tardan bastante menos tiempo. Esto se debe a que finalizan siempre por el criterio del vecindario recorrido sin mejora, y mucho antes de las 15000 evaluaciones.
 
 Finalmente, en cuanto a la capacidad de aprendizaje de cada algoritmo en la muestra de entrenamiento, vemos que los que mejores resultados proporcionan son los algoritmos genéticos con el operador de cruce BLX, con muy poca variación entre el modelo generacional y estacionario, al menos con la semilla utilizada. Probando con otras semillas se puede ver que el modelo generacional es ligeramente mejor. El cruce BLX mejora notablemente al aritmético, y esto puede deberse, como veremos más adelante, a que proporciona bastante más diversidad. En cuanto a los meméticos, vemos que en general no superan a los genéticos BLX. Esto puede deberse en parte a que alcanzan un número bastante menor de generaciones, debido a que muchas evaluaciones se pierden en la búsqueda local, y en parte a que es posible que la búsqueda local no tenga tiempo suficiente de generar un buen vecindario sobre el que mejorar. Por último, hay que destacar que la búsqueda local partiendo de soluciones greedy proporciona unos resultados sorprendentemente buenos, llegando a superar en ocasiones a los genéticos. El inconviente que tiene es que, salvo la pequeña componente aleatoria que tiene el orden de búsqueda de vecinos en la búsqueda local, el algoritmo `RELIEF+LS` apenas admite mejoras. En cambio, los algoritmos genéticos, variando la semilla o ejecutándolo durante más generaciones, puede continuar mejorando su solución.
+
+
+
+
+```{r, echo=F,warning=F}
+# Gráfica fitness / iteraciones SA
+
+fit_SA <- read.table("./data/evol_SA.apc")
+
+plot(fit_SA[,1],fit_SA[,4],type="l",col="purple",xlab = "Iteraciones",ylab = "Fitness",ylim = c(10,100))
+points(fit_SA[,1],fit_SA[,2],type="l",col="red")
+points(fit_SA[,1],fit_SA[,3],type="l",col="blue")
+#points(fit_SA[,1],fit_SA[,5],type="l",col="gold")
+
+
+```
+
+\begin{figure}[H]
+\centering
+\caption{Evolución de la función objetivo en función del número de iteraciones en enfriamiento simulado.\label{fig:evosa}}
+\end{figure}
+
+```{r, echo=F,warning=F}
+# Gráfica fitness / iteraciones SA
+
+fit_ILS <- read.table("./data/evol_ILS.apc")
+
+maxs_ILS <- c()
+for(i in 1:nrow(fit_ILS)){
+  maxs_ILS <- c(maxs_ILS,max(fit_ILS[1:i,4]))
+}
+
+plot(fit_ILS[,1],maxs_ILS,type="l",col="gold",xlab = "Iteraciones",ylab = "Fitness",ylim = c(10,100))
+points(fit_ILS[,1],fit_ILS[,2],type="l",col="red")
+points(fit_ILS[,1],fit_ILS[,3],type="l",col="blue")
+points(fit_ILS[,1],fit_ILS[,4],type="l",col="purple")
+
+
+```
+
+\begin{figure}[H]
+\centering
+\caption{Evolución de la función objetivo en función del número de iteraciones en ILS\label{fig:evoils}}
+\end{figure}
+
+```{r, echo=F,warning=F}
+# Gráfica fitness / Generación DE-RAND
+
+fit_DERAND <- read.table("./data/evol_DERAND.apc")
+
+plot(fit_DERAND[,1],fit_DERAND[,4],type="l",col="purple",xlab = "Generaciones",ylab = "Fitness",ylim = c(10,100))
+points(fit_DERAND[,1],fit_DERAND[,2],type="l",col="red")
+points(fit_DERAND[,1],fit_DERAND[,3],type="l",col="blue")
+
+```
+
+\begin{figure}[H]
+\centering
+\caption{Evolución de la función objetivo en función del número de generaciones en DE-RAND\label{fig:evoderand}}
+\end{figure}
+
+```{r, echo=F,warning=F}
+
+# Gráfica fitness / generación DE-CTB
+
+fit_DECTB <- read.table("./data/evol_DECTB.apc")
+
+plot(fit_DECTB[,1],fit_DECTB[,4],type="l",col="purple",xlab = "Generaciones",ylab = "Fitness",ylim = c(10,100))
+points(fit_DECTB[,1],fit_DECTB[,2],type="l",col="red")
+points(fit_DECTB[,1],fit_DECTB[,3],type="l",col="blue")
+
+```
+
+\begin{figure}[H]
+\centering
+\caption{Evolución de la función objetivo en función del número de generaciones en DE-CurrentToBest\label{fig:evodectb}}
+\end{figure}
+
+```{r, echo=F,warning=F}
+
+# Cruce RAND superposición
+
+sols <- read.table("./data/evosols_DERAND.sol")
+sols_mat_derand <- as.vector(sols[,1:60])
+sols_mat_derand [sols_mat_derand<0.1] = 0
+colors <- heat.colors(nrow(sols_mat_derand))
+colors <- colors[length(colors):1]
+
+inds <- seq(ncol(sols_mat_derand))
+inds_prev <- seq(ncol(sols_mat_derand)-1)
+inds_next <- inds_prev + 1
+
+plot(-100, xlab = "Características", ylab = "Peso", xlim = c(1,60), ylim = c(0,1))
+for(i in seq(from = 1, to = nrow(sols_mat_derand),length.out = 8)){
+  w <- as.numeric(sols_mat_derand[i,])
+  segments(x0 = inds[inds_prev], y0 = w[inds_prev], x1 = inds[inds_next], y1 = w[inds_next], col = colors[i])
+  points( x = inds, y = w, col = colors[i])
+}
+
+```
+
+\begin{figure}[H]
+\centering
+\caption{Evolución superpuesta de las mejores soluciones con el operador de cruce RAND en evolución diferencial (los colores más cálidos representan soluciones más evolucionadas).\label{fig:randevo1}}
+\end{figure}
+
+```{r, echo=F,warning=F}
+# Cruce RAND por separado
+par(mfrow = c(1,2))
+for(i in seq(from = 1, to = nrow(sols_mat_derand),length.out = 8)){
+  barplot(as.numeric(sols_mat_derand[i,]), col = colors[i])
+}
+par(mfrow = c(1,1))
+
+```
+
+\begin{figure}[H]
+\centering
+\caption{Evolución de las mejores soluciones con el operador de cruce RAND en evolución diferencial.\label{fig:randevo2}}
+\end{figure}
+
+```{r, echo=F,warning=F}
+
+# Cruce CTB superposición
+sols <- read.table("./data/evosols_DECTB.sol")
+sols_mat_dectb <- as.vector(sols[,1:60])
+sols_mat_dectb [sols_mat_dectb<0.1] = 0
+colors <- heat.colors(nrow(sols_mat_dectb))
+colors <- colors[length(colors):1]
+
+inds <- seq(ncol(sols_mat_dectb))
+inds_prev <- seq(ncol(sols_mat_dectb)-1)
+inds_next <- inds_prev + 1
+
+plot(-100, xlab = "Características", ylab = "Peso", xlim = c(1,60), ylim = c(0,1))
+for(i in seq(from = 1, to = nrow(sols_mat_dectb),length.out = 8 )){
+  w <- as.numeric(sols_mat_dectb[i,])
+  segments(x0 = inds[inds_prev], y0 = w[inds_prev], x1 = inds[inds_next], y1 = w[inds_next], col = colors[i])
+  points( x = inds, y = w, col = colors[i])
+}
+
+```
+
+\begin{figure}[H]
+\centering
+\caption{Evolución de las mejores soluciones superpuestas con el operador de cruce CurrentToBest en evolución diferencial (los colores más cálidos representan soluciones más evolucionadas)\label{fig:ctbevo1}}
+\end{figure}
+
+```{r, echo=F,warning=F}
+
+# Cruce CTB separado
+par(mfrow = c(1,2))
+for(i in seq(from = 1, to = nrow(sols_mat_dectb),length.out = 8)){
+  barplot(as.numeric(sols_mat_derand[i,]), col = colors[i])
+}
+par(mfrow = c(1,1))
+
+```
+\begin{figure}[H]
+\centering
+\caption{Evolución de las mejores soluciones superpuestas con el operador de cruce CurrentToBest en evolución diferencial\label{fig:ctbevo2}}
+\end{figure}
+
+```{r, echo=F,warning=F}
+
+for( i in 1:10){
+    
+}
+
+```
 
 ## Análisis del aprendizaje
 
@@ -1066,41 +1201,36 @@ En esta sección, analizaremos gráficamente cómo evolucionan las poblaciones e
 Para el AGE-BLX, consideraremos una población de 6 individuos. En cada generación dos hijos podrán sustituir a los peores individuos si los mejoran. Se realiza la ejecución utilizando el criterio de parada de las 15000 evaluaciones de la función objetivo. En la siguiente gráfica se muestra cómo van evolucionando los 6 individuos.
 
 ```{r, echo = F, warning = F}
-sols <- read.table("./data/AGE_prueba.sol")
-gens <- as.numeric(sols$V1)
-cr <- matrix(data = c(sols$V2,sols$V3,sols$V4,sols$V5,sols$V6,sols$V7), nrow = length(gens), ncol = 6)
+
+cr <- matrix( nrow = 1500, ncol = 31)
 
 colors <- c("red","blue","yellow","green","purple","cyan","black","pink","brown","gray")
-inds <- 1:length(gens)
-inds_prev <- seq(length(inds)-1)
-inds_next <- seq(length(inds)-1)+1
 
-par(mfrow = c(1,2))
-plot(-100,xlab = "Generaciones", ylab = "Fitness", xlim = c(0,25), ylim = c(80,95))
-for(i in 1:6){
-    points(x = gens, y = cr[,i], col = colors[i], pch = 16)
-    segments(x0 = gens[inds_prev], y0 = cr[inds_prev,i], x1 = gens[inds_next], y1 = cr[inds_next,i], col = colors[i])
+cr[,1] <- seq(nrow(cr))
+for(i in 1:10){
+    sols <- read.table(paste("./data/DE_sol",sep = "",i-1,".sol"))
+    cr[,-1+c(3*i,3*i+1,3*i+2)] <- as.matrix(sols[,c(2,3,4)])
 }
 
-plot(-100,xlab = "Generaciones", ylab = "Fitness", xlim = c(1255,1285), ylim = c(80,95))
-for(i in 1:6){
-    points(x = gens, y = cr[,i], col = colors[i], pch = 16)
-    segments(x0 = gens[inds_prev], y0 = cr[inds_prev,i], x1 = gens[inds_next], y1 = cr[inds_next,i], col = colors[i])
+plot(-100,xlab = "Generaciones", ylab = "Fitness", xlim = c(0,100), ylim = c(40,90))
+for(i in 1:10){
+    points(x = cr[,1], y = cr[,3*i+1], col = colors[i], pch = 16,type="l")
+    #segments(x0 = gens[inds_prev], y0 = cr[inds_prev,i], x1 = gens[inds_next], y1 = cr[inds_next,i], col = colors[i])
 }
 
-plot(-100,xlab = "Generaciones", ylab = "Fitness", xlim = c(4410,4430), ylim = c(80,95))
-for(i in 1:6){
-    points(x = gens, y = cr[,i], col = colors[i], pch = 16)
-    segments(x0 = gens[inds_prev], y0 = cr[inds_prev,i], x1 = gens[inds_next], y1 = cr[inds_next,i], col = colors[i])
+plot(-100,xlab = "Generaciones", ylab = "Tasa Reducción", xlim = c(0,100), ylim = c(20,80))
+for(i in 1:10){
+    points(x = cr[,1], y = cr[,3*i], col = colors[i], pch = 16,type="l")
+    #segments(x0 = gens[inds_prev], y0 = cr[inds_prev,i], x1 = gens[inds_next], y1 = cr[inds_next,i], col = colors[i])
 }
 
-plot(-100,xlab = "Generaciones", ylab = "Fitness", xlim = c(5000,5020), ylim = c(80,95))
-for(i in 1:6){
-    points(x = gens, y = cr[,i], col = colors[i], pch = 16)
-    segments(x0 = gens[inds_prev], y0 = cr[inds_prev,i], x1 = gens[inds_next], y1 = cr[inds_next,i], col = colors[i])
+plot(-100,xlab = "Generaciones", ylab = "Tasa Clasificación", xlim = c(0,100), ylim = c(70,100))
+for(i in 1:10){
+    points(x = cr[,1], y = cr[,3*i-1], col = colors[i], pch = 16,type="l")
+    #segments(x0 = gens[inds_prev], y0 = cr[inds_prev,i], x1 = gens[inds_next], y1 = cr[inds_next,i], col = colors[i])
 }
 
-par(mfrow = c(1,1))
+
 ```
 
 \begin{figure}[H]

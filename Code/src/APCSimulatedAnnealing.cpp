@@ -24,8 +24,9 @@ void APCSimulatedAnnealing::initialize(const APCPartition &p, targetFunction fit
 }
 
 void APCSimulatedAnnealing::coolingScheme(){
-    //temp = temp/(1+beta*temp);
-    temp = 0.95*temp;
+    temp = temp/(1+beta*temp);
+    //temp = 0.95*temp;
+    if(temp < T_f) temp = T_f;
 }
 
 //Parámetros: initial_solution, phi, mu, Tf, max_evals, max_neighbours, max_success
@@ -45,6 +46,7 @@ APCSolution * APCSimulatedAnnealing::solve(const APCPartition & p, targetFunctio
     int rnd_i = 0;
     int p_size = problem->getNumNonClassAttributes();
 
+    int curr_anneal = 0;
 
 
     do{
@@ -107,15 +109,14 @@ APCSolution * APCSimulatedAnnealing::solve(const APCPartition & p, targetFunctio
         coolingScheme();
 
         //cout << "ACEPTADOS MEJORES: " << num_acc_mej << " ACEPTADOS PEORES: " << num_acc_temp << " TOTAL: " << num_evals << endl;
-
+        curr_anneal++;
         //- Preguntas:
         //- Muto una componente al azar?
         //- Constante K?
         //- Mismo sigma?
         //¡comprobando siempre que sea menor que la inicial! (?)
         //- Condicion de parada num_success > 0 necesaria? se queda muy lejos de las 15000 evaluaciones
-
-    }while(num_evals < max_evals && num_success > 0);
+    }while(curr_anneal < num_annealings && num_evals < max_evals && num_success > 0);
 
     timer.stop();
 

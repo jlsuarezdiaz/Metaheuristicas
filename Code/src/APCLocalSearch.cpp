@@ -42,6 +42,11 @@ APCSolution * APCLocalSearch::solve(const APCPartition & train, APCSolution *s, 
     int no_improves = 0;
     int improves = 0;    //Para depurar
 
+    //static int iii = 1;
+    //vector <float> all_fit = APCTargetCR::fitness(train,*sol);
+    //cout << iii << " " << all_fit[0] << " " << all_fit[1] << " " << all_fit[2] << endl;
+    //iii++;
+
 
     //cout << num_evals << " " << fit << " " << APC_1NN::fitness(*p_test,*sol) << endl; //!!!
     while(num_evals < max_evaluations && no_improves < neigh_stop){
@@ -57,6 +62,7 @@ APCSolution * APCLocalSearch::solve(const APCPartition & train, APCSolution *s, 
                 fit = newfit;
                 improves ++;
                 no_improves = 0;
+
             }
             //Si no, deshacemos e incrementamos no_improves para el criterio de parada.
             else{
@@ -64,6 +70,9 @@ APCSolution * APCLocalSearch::solve(const APCPartition & train, APCSolution *s, 
                 no_improves++;
             }
             //cout << num_evals << " " << fit << " " << APC_1NN::fitness(*p_test,*sol) << endl; //!!!
+            //vector <float> allfit = APCTargetCR::fitness(train,*sol);
+            //cout << iii << " " << allfit[0] << " " << allfit[1] << " " << allfit[2] << endl;
+            //iii++;
         }
     }
 

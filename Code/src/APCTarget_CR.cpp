@@ -21,6 +21,7 @@ vector <float> APCTargetCR::fitness(const APCPartition & p, const APCSolution & 
     fits.push_back(classification_rate(p,w,red_ceil));
     fits.push_back(reduction_rate(w,red_ceil));
     fits.push_back((alpha)*fits[0]+(1-alpha)*fits[1]);
+    //cout << fits[0] << " " << fits[1] << " " << fits[2] << endl;
     return fits;
 }
 

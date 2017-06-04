@@ -11,8 +11,18 @@ APCSolution * APCDifferentialEvolution::solve(const APCPartition & p, targetFunc
 
     generatePopulation(p,fitness,population_size);
 
+    static ofstream fout[10];
+    for(int i = 0; i < 10; i++){
+        fout[i].open("./sol/pruebas/DE_sol"+std::to_string(i)+".sol");
+    }
+
     while(num_evaluations < max_evaluations){
         nextGeneration(p,fitness,c,cr,f);
+
+        for(int i = 0; i < 10; i++){
+            vector <float> allfit = APCTargetCR::fitness(p,*population[i]->s);
+            fout[i] << generation << " " << allfit[0] << " " << allfit[1] << " " << allfit[2] << endl;
+        }
     }
 
     timer.stop();
@@ -22,7 +32,7 @@ APCSolution * APCDifferentialEvolution::solve(const APCPartition & p, targetFunc
     train_fits.push_back(best_solution->val);
 
     best_solution = NULL;
-
+    //cout << "END" << endl;
     return solutions.back();
 }
 
@@ -38,6 +48,11 @@ void APCDifferentialEvolution::nextGeneration(const APCPartition & p, targetFunc
     parents_population.clear();
     children_population.clear();
     generation++;
+
+    
+    
+    //vector <float> all_fit = APCTargetCR::fitness(p,*best_solution->s);
+    //cout << generation << " " << all_fit[0] << " " << all_fit[1] << " " << all_fit[2] << endl;
 
     //cout << num_evaluations << " " << best_solution->val << endl;
 }
@@ -82,6 +97,7 @@ void APCDifferentialEvolution::replacement(){
                 //Deberia funcionar sin copiar, pero da un error, averiguar por qué si hay tiempo.
                 //delete best_solution;
                 best_solution = new Individual(new APCSolution(*children_population[i]->s),children_population[i]->val);
+                //cout << *best_solution->s << endl;
             }
             delete population[i];
             population[i] = children_population[i];

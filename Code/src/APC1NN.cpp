@@ -80,7 +80,7 @@ float APC_1NN::testFitness(const APCPartition & test, const APCPartition & train
 
 bool APC_1NN::classifyTest(const APCPartition & test, const APCPartition & train, const APCSolution & w, int i, const float red_ceil){
     bool c_min = train.getClass(0); //Supongo que al menos hay dos datos xD
-    float d_min = w_sqDistanceTrainTest(train,test,w,0,i,red_ceil);
+    float d_min = w_sqDistanceTrainTest(test,train,w,0,i,red_ceil);
     float d = 0.0;
 
     //Recorremos los datos

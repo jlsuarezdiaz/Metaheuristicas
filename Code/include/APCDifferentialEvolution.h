@@ -69,7 +69,7 @@ public:
      * @pos getClassRates() will return a 10 elements vector with the classification rates.
      * @pos getRedRates() will return a 10 elements vector with the reduction rates.
      */
-    void solve5Fold(const APC5FoldPartition & partition, differentialCross c, int population_size = 50, float cr = 0.5, float f = 0.5, int max_evaluations = 15000);
+    void solve5Fold(const APC5FoldPartition & partition, differentialCross c, int population_size = 10, float cr = 0.5, float f = 0.5, int max_evaluations = 15000);
     
 
 };

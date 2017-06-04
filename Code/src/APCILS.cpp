@@ -13,15 +13,15 @@ APCILS::APCILS(const APCProblem *p)
 APCSolution * APCILS::solve(const APCPartition & p, targetFunction fitness, int num_mutations, float sigma_mutation, int max_evals_ls, float sigma_ls, int num_its, APCSolution *s0){
     timer.start();
 
-    float fit, best_cost;
+    float fit;//, best_cost;
 
     APCSolution *s;
     if(s0 == NULL) s = new APCSolution(APCSolution::randomSolution(problem));
     else s = new APCSolution(*s0);
     ls.solve(p,s,fitness,max_evals_ls,max_evals_ls,sigma_ls); //Debería modificar s (comprobar)
 
-    APCSolution *best_solution = new APCSolution(*s);
-    fit = best_cost = fitness(p,*best_solution);
+    //APCSolution *best_solution = new APCSolution(*s);
+    fit = fitness(p,*s);
 
     int rnd_i = 0;
     int p_size = problem->getNumNonClassAttributes();
@@ -39,15 +39,16 @@ APCSolution * APCILS::solve(const APCPartition & p, targetFunction fitness, int 
         ls.solve(p,s_,fitness,max_evals_ls,max_evals_ls,sigma_ls);
         float newfit = fitness(p,*s_);
 
+
         if(newfit > fit){
             delete s;
             s = s_;
             fit = newfit;
-            if(fit > best_cost){
-                delete best_solution;
-                best_solution = new APCSolution(*s);
-                best_cost = fit;
-            }
+            //if(fit > best_cost){
+            //    delete best_solution;
+            //    best_solution = new APCSolution(*s);
+            //    best_cost = fit;
+            //}
         }
         else{
             delete s_;
@@ -59,13 +60,13 @@ APCSolution * APCILS::solve(const APCPartition & p, targetFunction fitness, int 
        
     timer.stop();
 
-    solutions.push_back(new APCSolution(*best_solution));
+    solutions.push_back(new APCSolution(*s));
 
     times.push_back(timer.get_time());
-    train_fits.push_back(best_cost);
+    train_fits.push_back(fit);
 
-    delete best_solution;
-    best_solution = NULL;
+    //delete best_solution;
+    //best_solution = NULL;
 
     return solutions.back();
 }
