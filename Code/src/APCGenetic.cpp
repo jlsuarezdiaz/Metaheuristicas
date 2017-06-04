@@ -117,6 +117,10 @@ void APCGenetic::nextGeneration(const APCPartition &p, crossOperator c, targetFu
 
        generation++;
 
+
+       //vector <float> allfit = APCTargetCR::fitness(p,*best_solution->s);
+       //cout << generation << " " << allfit[0] << " " << allfit[1] << " " << allfit[2] << endl;
+
        
 
        //cout << "EVALS = " << num_evaluations << endl;
@@ -140,7 +144,7 @@ APCSolution * APCGenetic::solve(const APCPartition &p, targetFunction fitness, c
 
     while(num_evaluations < max_evaluations){
         nextGeneration(p,c,fitness);
-        
+
     }
 
     for(int i = 0; i < population_size; i++){

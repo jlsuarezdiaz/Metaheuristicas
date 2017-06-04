@@ -11,18 +11,18 @@ APCSolution * APCDifferentialEvolution::solve(const APCPartition & p, targetFunc
 
     generatePopulation(p,fitness,population_size);
 
-    static ofstream fout[10];
-    for(int i = 0; i < 10; i++){
-        fout[i].open("./sol/pruebas/DE_sol"+std::to_string(i)+".sol");
-    }
+    //static ofstream fout[10];
+    //for(int i = 0; i < 10; i++){
+    //    fout[i].open("./sol/pruebas/DE_sol"+std::to_string(i)+".sol");
+    //}
 
     while(num_evaluations < max_evaluations){
         nextGeneration(p,fitness,c,cr,f);
 
-        for(int i = 0; i < 10; i++){
-            vector <float> allfit = APCTargetCR::fitness(p,*population[i]->s);
-            fout[i] << generation << " " << allfit[0] << " " << allfit[1] << " " << allfit[2] << endl;
-        }
+        //for(int i = 0; i < 10; i++){
+        //    vector <float> allfit = APCTargetCR::fitness(p,*population[i]->s);
+        //    fout[i] << generation << " " << allfit[0] << " " << allfit[1] << " " << allfit[2] << endl;
+        //}
     }
 
     timer.stop();

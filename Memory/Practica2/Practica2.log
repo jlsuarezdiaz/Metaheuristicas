@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6300 64-bit) (preloaded format=pdflatex 2017.5.26)  4 JUN 2017 17:51
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6300 64-bit) (preloaded format=pdflatex 2017.5.26)  4 JUN 2017 23:11
 entering extended mode
 **./Practica2.tex
 (Practica2.tex
@@ -957,10 +957,10 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 LaTeX Info: Redefining \. on input line 21.
 LaTeX Info: Redefining \% on input line 21.
 
-LaTeX Warning: Label `fig:compevoaggca' multiply defined.
+LaTeX Warning: Label `fig:evoderand' multiply defined.
 
 
-LaTeX Warning: Label `fig:evoage' multiply defined.
+LaTeX Warning: Label `fig:evoderand' multiply defined.
 
 )
 \openout1 = `Practica2.aux'.
@@ -1130,7 +1130,7 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <8> on input line 202.
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <6> on input line 202.
-<./images/logo.jpg, id=84, 180.675pt x 179.67125pt>
+<./images/logo.jpg, id=92, 180.675pt x 179.67125pt>
 File: ./images/logo.jpg Graphic file (type jpg)
 <use ./images/logo.jpg>
 Package pdftex.def Info: ./images/logo.jpg used on input line 221.
@@ -1182,17 +1182,17 @@ Overfull \hbox (0.77196pt too wide) in paragraph at lines 1078--1080
 
 [14
 
-] [15] <./images/1NN.png, id=195, 635.37375pt x 219.82124pt>
+] [15] <./images/1NN.png, id=205, 635.37375pt x 219.82124pt>
 File: ./images/1NN.png Graphic file (type png)
 <use ./images/1NN.png>
 Package pdftex.def Info: ./images/1NN.png used on input line 1217.
 (pdftex.def)             Requested size: 426.80344pt x 147.66183pt.
-<./images/RANDOM.png, id=197, 635.37375pt x 220.57407pt>
+<./images/RANDOM.png, id=207, 635.37375pt x 220.57407pt>
 File: ./images/RANDOM.png Graphic file (type png)
 <use ./images/RANDOM.png>
 Package pdftex.def Info: ./images/RANDOM.png used on input line 1223.
 (pdftex.def)             Requested size: 426.80344pt x 148.16753pt.
-<./images/RANDOM+LS.png, id=198, 636.87938pt x 220.57407pt>
+<./images/RANDOM+LS.png, id=208, 636.87938pt x 220.57407pt>
 File: ./images/RANDOM+LS.png Graphic file (type png)
 <use ./images/RANDOM+LS.png>
 Package pdftex.def Info: ./images/RANDOM+LS.png used on input line 1229.
@@ -1211,18 +1211,18 @@ l.1232
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
 l.1232 
-        <./images/1NN.png> <./images/RANDOM.png>] <./images/RELIEF.png, id=208,
+        <./images/1NN.png> <./images/RANDOM.png>] <./images/RELIEF.png, id=218,
  636.87938pt x 222.07968pt>
 File: ./images/RELIEF.png Graphic file (type png)
 <use ./images/RELIEF.png>
 Package pdftex.def Info: ./images/RELIEF.png used on input line 1235.
 (pdftex.def)             Requested size: 426.78471pt x 148.81972pt.
-<./images/RELIEF+LS.png, id=209, 636.12656pt x 220.57407pt>
+<./images/RELIEF+LS.png, id=219, 636.12656pt x 220.57407pt>
 File: ./images/RELIEF+LS.png Graphic file (type png)
 <use ./images/RELIEF+LS.png>
 Package pdftex.def Info: ./images/RELIEF+LS.png used on input line 1241.
 (pdftex.def)             Requested size: 426.78497pt x 147.98578pt.
-<./images/AGG-BLX.png, id=210, 636.87938pt x 219.82124pt>
+<./images/AGG-BLX.png, id=220, 636.87938pt x 219.82124pt>
 File: ./images/AGG-BLX.png Graphic file (type png)
 <use ./images/AGG-BLX.png>
 Package pdftex.def Info: ./images/AGG-BLX.png used on input line 1247.
@@ -1246,17 +1246,17 @@ l.1250
                                                   \fi \fi 
 l.1250 
         <./images/RANDOM+LS.png> <./images/RELIEF.png> <./images/RELIEF+LS.png>
-] <./images/AGG-CA.png, id=221, 635.37375pt x 219.06844pt>
+] <./images/AGG-CA.png, id=231, 635.37375pt x 219.06844pt>
 File: ./images/AGG-CA.png Graphic file (type png)
 <use ./images/AGG-CA.png>
 Package pdftex.def Info: ./images/AGG-CA.png used on input line 1253.
 (pdftex.def)             Requested size: 426.80344pt x 147.15614pt.
-<./images/AGE-BLX.png, id=222, 636.12656pt x 219.82124pt>
+<./images/AGE-BLX.png, id=232, 636.12656pt x 219.82124pt>
 File: ./images/AGE-BLX.png Graphic file (type png)
 <use ./images/AGE-BLX.png>
 Package pdftex.def Info: ./images/AGE-BLX.png used on input line 1259.
 (pdftex.def)             Requested size: 426.78497pt x 147.48071pt.
-<./images/AGE-CA.png, id=223, 635.37375pt x 219.82124pt>
+<./images/AGE-CA.png, id=233, 635.37375pt x 219.82124pt>
 File: ./images/AGE-CA.png Graphic file (type png)
 <use ./images/AGE-CA.png>
 Package pdftex.def Info: ./images/AGE-CA.png used on input line 1265.
@@ -1280,17 +1280,17 @@ l.1268
                                                   \fi \fi 
 l.1268 
         <./images/AGG-BLX.png> <./images/AGG-CA.png> <./images/AGE-BLX.png>] <.
-/images/AM-10-1.png, id=235, 636.12656pt x 221.32687pt>
+/images/AM-10-1.png, id=245, 636.12656pt x 221.32687pt>
 File: ./images/AM-10-1.png Graphic file (type png)
 <use ./images/AM-10-1.png>
 Package pdftex.def Info: ./images/AM-10-1.png used on input line 1271.
 (pdftex.def)             Requested size: 426.78497pt x 148.49084pt.
-<./images/AM-10-01.png, id=236, 634.62094pt x 220.57407pt>
+<./images/AM-10-01.png, id=246, 634.62094pt x 220.57407pt>
 File: ./images/AM-10-01.png Graphic file (type png)
 <use ./images/AM-10-01.png>
 Package pdftex.def Info: ./images/AM-10-01.png used on input line 1277.
 (pdftex.def)             Requested size: 426.80128pt x 148.34254pt.
-<./images/AM-10-01mej.png, id=237, 634.62094pt x 218.31563pt>
+<./images/AM-10-01mej.png, id=247, 634.62094pt x 218.31563pt>
 File: ./images/AM-10-01mej.png Graphic file (type png)
 <use ./images/AM-10-01mej.png>
 Package pdftex.def Info: ./images/AM-10-01mej.png used on input line 1283.
@@ -1314,7 +1314,7 @@ l.1286
                                                   \fi \fi 
 l.1286 
         <./images/AGE-CA.png> <./images/AM-10-1.png> <./images/AM-10-01.png>] <
-./images/global_table.png, id=248, 635.37375pt x 219.06844pt>
+./images/global_table.png, id=258, 635.37375pt x 219.06844pt>
 File: ./images/global_table.png Graphic file (type png)
 <use ./images/global_table.png>
 Package pdftex.def Info: ./images/global_table.png used on input line 1289.
@@ -1324,555 +1324,327 @@ Package pdftex.def Info: ./images/global_table.png used on input line 1289.
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.1344 
+l.1338 
        pdfTeX warning (ext4): destination with the same identifier (name{figure
 .13}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.1344 
+l.1338 
         <./images/AM-10-01mej.png> <./images/global_table.png>]
-<Practica2_files/figure-latex/unnamed-chunk-1-1.pdf, id=257, 469.755pt x 325.21
+<Practica2_files/figure-latex/unnamed-chunk-1-1.pdf, id=267, 469.755pt x 325.21
 5pt>
 File: Practica2_files/figure-latex/unnamed-chunk-1-1.pdf Graphic file (type pdf
 )
 <use Practica2_files/figure-latex/unnamed-chunk-1-1.pdf>
 Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-1-1.pdf use
-d on input line 1367.
+d on input line 1398.
 (pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
-
-<Practica2_files/figure-latex/unnamed-chunk-2-1.pdf, id=258, 469.755pt x 325.21
+[21]
+<Practica2_files/figure-latex/unnamed-chunk-2-1.pdf, id=272, 469.755pt x 325.21
 5pt>
 File: Practica2_files/figure-latex/unnamed-chunk-2-1.pdf Graphic file (type pdf
 )
 <use Practica2_files/figure-latex/unnamed-chunk-2-1.pdf>
 Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-2-1.pdf use
-d on input line 1374.
+d on input line 1436.
 (pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
-[21pdfTeX warning (ext4): destination with the same identifier (name{figure.14}
+[22pdfTeX warning (ext4): destination with the same identifier (name{figure.14}
 ) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.1379 \end{figure}
+l.1441 \end{figure}
                     <./Practica2_files/figure-latex/unnamed-chunk-1-1.pdf>]
-<Practica2_files/figure-latex/unnamed-chunk-3-1.pdf, id=269, 469.755pt x 325.21
+<Practica2_files/figure-latex/unnamed-chunk-3-1.pdf, id=283, 469.755pt x 325.21
 5pt>
 File: Practica2_files/figure-latex/unnamed-chunk-3-1.pdf Graphic file (type pdf
 )
 <use Practica2_files/figure-latex/unnamed-chunk-3-1.pdf>
 Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-3-1.pdf use
-d on input line 1381.
+d on input line 1462.
 (pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
+[23pdfTeX warning (ext4): destination with the same identifier (name{figure.15}
+) has been already used, duplicate ignored
 
-<Practica2_files/figure-latex/unnamed-chunk-4-1.pdf, id=270, 469.755pt x 325.21
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.1467 \end{figure}
+                    <./Practica2_files/figure-latex/unnamed-chunk-2-1.pdf>]
+<Practica2_files/figure-latex/unnamed-chunk-4-1.pdf, id=294, 469.755pt x 325.21
 5pt>
 File: Practica2_files/figure-latex/unnamed-chunk-4-1.pdf Graphic file (type pdf
 )
 <use Practica2_files/figure-latex/unnamed-chunk-4-1.pdf>
 Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-4-1.pdf use
-d on input line 1388.
+d on input line 1469.
 (pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
-[22pdfTeX warning (ext4): destination with the same identifier (name{figure.15}
+[24pdfTeX warning (ext4): destination with the same identifier (name{figure.16}
 ) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.1393 \end{figure}
-                   pdfTeX warning (ext4): destination with the same identifier 
-(name{figure.16}) has been already used, duplicate ignored
+l.1487 
+       pdfTeX warning (ext4): destination with the same identifier (name{figure
+.17}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.1393 \end{figure}
-                    <./Practica2_files/figure-latex/unnamed-chunk-2-1.pdf> <./P
-ractica2_files/figure-latex/unnamed-chunk-3-1.pdf>]
-<Practica2_files/figure-latex/unnamed-chunk-5-1.pdf, id=287, 469.755pt x 325.21
+l.1487 
+        <./Practica2_files/figure-latex/unnamed-chunk-3-1.pdf> <./Practica2_fil
+es/figure-latex/unnamed-chunk-4-1.pdf>]
+<Practica2_files/figure-latex/unnamed-chunk-5-1.pdf, id=312, 469.755pt x 325.21
 5pt>
 File: Practica2_files/figure-latex/unnamed-chunk-5-1.pdf Graphic file (type pdf
 )
 <use Practica2_files/figure-latex/unnamed-chunk-5-1.pdf>
 Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-5-1.pdf use
-d on input line 1395.
+d on input line 1488.
 (pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
 
-<Practica2_files/figure-latex/unnamed-chunk-6-1.pdf, id=288, 469.755pt x 325.21
+<Practica2_files/figure-latex/unnamed-chunk-6-1.pdf, id=313, 469.755pt x 325.21
 5pt>
 File: Practica2_files/figure-latex/unnamed-chunk-6-1.pdf Graphic file (type pdf
 )
 <use Practica2_files/figure-latex/unnamed-chunk-6-1.pdf>
 Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-6-1.pdf use
-d on input line 1402.
+d on input line 1495.
 (pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
 
-<Practica2_files/figure-latex/unnamed-chunk-6-2.pdf, id=289, 469.755pt x 325.21
+<Practica2_files/figure-latex/unnamed-chunk-6-2.pdf, id=314, 469.755pt x 325.21
 5pt>
 File: Practica2_files/figure-latex/unnamed-chunk-6-2.pdf Graphic file (type pdf
 )
 <use Practica2_files/figure-latex/unnamed-chunk-6-2.pdf>
 Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-6-2.pdf use
-d on input line 1403.
+d on input line 1496.
 (pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
 
-<Practica2_files/figure-latex/unnamed-chunk-6-3.pdf, id=290, 469.755pt x 325.21
+<Practica2_files/figure-latex/unnamed-chunk-6-3.pdf, id=315, 469.755pt x 325.21
 5pt>
 File: Practica2_files/figure-latex/unnamed-chunk-6-3.pdf Graphic file (type pdf
 )
 <use Practica2_files/figure-latex/unnamed-chunk-6-3.pdf>
 Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-6-3.pdf use
-d on input line 1404.
+d on input line 1497.
 (pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
 
-<Practica2_files/figure-latex/unnamed-chunk-6-4.pdf, id=291, 469.755pt x 325.21
+<Practica2_files/figure-latex/unnamed-chunk-6-4.pdf, id=316, 469.755pt x 325.21
 5pt>
 File: Practica2_files/figure-latex/unnamed-chunk-6-4.pdf Graphic file (type pdf
 )
 <use Practica2_files/figure-latex/unnamed-chunk-6-4.pdf>
 Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-6-4.pdf use
-d on input line 1405.
+d on input line 1498.
 (pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 1402--1406
+Underfull \hbox (badness 10000) in paragraph at lines 1495--1499
 [][]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1402--1406
+Underfull \hbox (badness 10000) in paragraph at lines 1495--1499
 []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1402--1406
+Underfull \hbox (badness 10000) in paragraph at lines 1495--1499
 []
  []
 
-[23pdfTeX warning (ext4): destination with the same identifier (name{figure.17}
+[25pdfTeX warning (ext4): destination with the same identifier (name{figure.18}
 ) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.1406 
-       pdfTeX warning (ext4): destination with the same identifier (name{figure
-.18}) has been already used, duplicate ignored
+l.1499 
+        <./Practica2_files/figure-latex/unnamed-chunk-5-1.pdf>] [26 <./Practica
+2_files/figure-latex/unnamed-chunk-6-1.pdf> <./Practica2_files/figure-latex/unn
+amed-chunk-6-2.pdf>] [27pdfTeX warning (ext4): destination with the same identi
+fier (name{figure.19}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.1406 
-        <./Practica2_files/figure-latex/unnamed-chunk-4-1.pdf> <./Practica2_fil
-es/figure-latex/unnamed-chunk-5-1.pdf>] [24 <./Practica2_files/figure-latex/unn
-amed-chunk-6-1.pdf> <./Practica2_files/figure-latex/unnamed-chunk-6-2.pdf>]
-<Practica2_files/figure-latex/unnamed-chunk-7-1.pdf, id=323, 469.755pt x 325.21
+l.1513 
+        <./Practica2_files/figure-latex/unnamed-chunk-6-3.pdf> <./Practica2_fil
+es/figure-latex/unnamed-chunk-6-4.pdf>]
+<Practica2_files/figure-latex/unnamed-chunk-7-1.pdf, id=356, 469.755pt x 325.21
 5pt>
 File: Practica2_files/figure-latex/unnamed-chunk-7-1.pdf Graphic file (type pdf
 )
 <use Practica2_files/figure-latex/unnamed-chunk-7-1.pdf>
 Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-7-1.pdf use
-d on input line 1412.
+d on input line 1517.
 (pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
-[25pdfTeX warning (ext4): destination with the same identifier (name{figure.19}
-) has been already used, duplicate ignored
 
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.1417 \end{figure}
-                    <./Practica2_files/figure-latex/unnamed-chunk-6-3.pdf> <./P
-ractica2_files/figure-latex/unnamed-chunk-6-4.pdf>]
-<Practica2_files/figure-latex/unnamed-chunk-8-1.pdf, id=339, 469.755pt x 325.21
+<Practica2_files/figure-latex/unnamed-chunk-8-1.pdf, id=357, 469.755pt x 325.21
 5pt>
 File: Practica2_files/figure-latex/unnamed-chunk-8-1.pdf Graphic file (type pdf
 )
 <use Practica2_files/figure-latex/unnamed-chunk-8-1.pdf>
 Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-8-1.pdf use
-d on input line 1419.
+d on input line 1524.
 (pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
 
-<Practica2_files/figure-latex/unnamed-chunk-8-2.pdf, id=340, 469.755pt x 325.21
+<Practica2_files/figure-latex/unnamed-chunk-8-2.pdf, id=358, 469.755pt x 325.21
 5pt>
 File: Practica2_files/figure-latex/unnamed-chunk-8-2.pdf Graphic file (type pdf
 )
 <use Practica2_files/figure-latex/unnamed-chunk-8-2.pdf>
 Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-8-2.pdf use
-d on input line 1420.
+d on input line 1525.
 (pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
 
-<Practica2_files/figure-latex/unnamed-chunk-8-3.pdf, id=341, 469.755pt x 325.21
+<Practica2_files/figure-latex/unnamed-chunk-8-3.pdf, id=359, 469.755pt x 325.21
 5pt>
 File: Practica2_files/figure-latex/unnamed-chunk-8-3.pdf Graphic file (type pdf
 )
 <use Practica2_files/figure-latex/unnamed-chunk-8-3.pdf>
 Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-8-3.pdf use
-d on input line 1421.
+d on input line 1526.
 (pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
 
-<Practica2_files/figure-latex/unnamed-chunk-8-4.pdf, id=342, 469.755pt x 325.21
+<Practica2_files/figure-latex/unnamed-chunk-8-4.pdf, id=360, 469.755pt x 325.21
 5pt>
 File: Practica2_files/figure-latex/unnamed-chunk-8-4.pdf Graphic file (type pdf
 )
 <use Practica2_files/figure-latex/unnamed-chunk-8-4.pdf>
 Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-8-4.pdf use
-d on input line 1422.
+d on input line 1527.
 (pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 1419--1423
+Underfull \hbox (badness 10000) in paragraph at lines 1524--1528
 [][]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1419--1423
+Underfull \hbox (badness 10000) in paragraph at lines 1524--1528
 []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1419--1423
+Underfull \hbox (badness 10000) in paragraph at lines 1524--1528
 []
  []
 
-[26pdfTeX warning (ext4): destination with the same identifier (name{figure.20}
+[28pdfTeX warning (ext4): destination with the same identifier (name{figure.20}
 ) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.1423 
+l.1528 
         <./Practica2_files/figure-latex/unnamed-chunk-7-1.pdf> <./Practica2_fil
-es/figure-latex/unnamed-chunk-8-1.pdf>] [27 <./Practica2_files/figure-latex/unn
+es/figure-latex/unnamed-chunk-8-1.pdf>] [29 <./Practica2_files/figure-latex/unn
 amed-chunk-8-2.pdf> <./Practica2_files/figure-latex/unnamed-chunk-8-3.pdf>]
-<Practica2_files/figure-latex/unnamed-chunk-10-1.pdf, id=372, 469.755pt x 325.2
+<Practica2_files/figure-latex/unnamed-chunk-9-1.pdf, id=390, 469.755pt x 325.21
+5pt>
+File: Practica2_files/figure-latex/unnamed-chunk-9-1.pdf Graphic file (type pdf
+)
+<use Practica2_files/figure-latex/unnamed-chunk-9-1.pdf>
+Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-9-1.pdf use
+d on input line 1554.
+(pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
+
+<Practica2_files/figure-latex/unnamed-chunk-9-2.pdf, id=391, 469.755pt x 325.21
+5pt>
+File: Practica2_files/figure-latex/unnamed-chunk-9-2.pdf Graphic file (type pdf
+)
+<use Practica2_files/figure-latex/unnamed-chunk-9-2.pdf>
+Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-9-2.pdf use
+d on input line 1555.
+(pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
+
+<Practica2_files/figure-latex/unnamed-chunk-9-3.pdf, id=392, 469.755pt x 325.21
+5pt>
+File: Practica2_files/figure-latex/unnamed-chunk-9-3.pdf Graphic file (type pdf
+)
+<use Practica2_files/figure-latex/unnamed-chunk-9-3.pdf>
+Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-9-3.pdf use
+d on input line 1556.
+(pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 1554--1557
+[][]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1554--1557
+[]
+ []
+
+[30pdfTeX warning (ext4): destination with the same identifier (name{figure.21}
+) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.1557 
+        <./Practica2_files/figure-latex/unnamed-chunk-8-4.pdf>] [31 <./Practica
+2_files/figure-latex/unnamed-chunk-9-1.pdf> <./Practica2_files/figure-latex/unn
+amed-chunk-9-2.pdf>]
+<Practica2_files/figure-latex/unnamed-chunk-10-1.pdf, id=418, 469.755pt x 325.2
 15pt>
 File: Practica2_files/figure-latex/unnamed-chunk-10-1.pdf Graphic file (type pd
 f)
 <use Practica2_files/figure-latex/unnamed-chunk-10-1.pdf>
 Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-10-1.pdf us
-ed on input line 1464.
+ed on input line 1586.
 (pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
-[28pdfTeX warning (ext4): destination with the same identifier (name{figure.21}
+[32pdfTeX warning (ext4): destination with the same identifier (name{figure.22}
 ) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.1469 \end{figure}
-                    <./Practica2_files/figure-latex/unnamed-chunk-8-4.pdf>]
-<Practica2_files/figure-latex/unnamed-chunk-11-1.pdf, id=383, 469.755pt x 325.2
+l.1591 \end{figure}
+                    <./Practica2_files/figure-latex/unnamed-chunk-9-3.pdf>]
+<Practica2_files/figure-latex/unnamed-chunk-11-1.pdf, id=429, 469.755pt x 325.2
 15pt>
 File: Practica2_files/figure-latex/unnamed-chunk-11-1.pdf Graphic file (type pd
 f)
 <use Practica2_files/figure-latex/unnamed-chunk-11-1.pdf>
 Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-11-1.pdf us
-ed on input line 1492.
+ed on input line 1593.
 (pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
-
-<Practica2_files/figure-latex/unnamed-chunk-11-2.pdf, id=384, 469.755pt x 325.2
-15pt>
-File: Practica2_files/figure-latex/unnamed-chunk-11-2.pdf Graphic file (type pd
-f)
-<use Practica2_files/figure-latex/unnamed-chunk-11-2.pdf>
-Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-11-2.pdf us
-ed on input line 1493.
-(pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
-
-<Practica2_files/figure-latex/unnamed-chunk-11-3.pdf, id=385, 469.755pt x 325.2
-15pt>
-File: Practica2_files/figure-latex/unnamed-chunk-11-3.pdf Graphic file (type pd
-f)
-<use Practica2_files/figure-latex/unnamed-chunk-11-3.pdf>
-Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-11-3.pdf us
-ed on input line 1494.
-(pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
-
-<Practica2_files/figure-latex/unnamed-chunk-11-4.pdf, id=386, 469.755pt x 325.2
-15pt>
-File: Practica2_files/figure-latex/unnamed-chunk-11-4.pdf Graphic file (type pd
-f)
-<use Practica2_files/figure-latex/unnamed-chunk-11-4.pdf>
-Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-11-4.pdf us
-ed on input line 1495.
-(pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
-
-<Practica2_files/figure-latex/unnamed-chunk-11-5.pdf, id=387, 469.755pt x 325.2
-15pt>
-File: Practica2_files/figure-latex/unnamed-chunk-11-5.pdf Graphic file (type pd
-f)
-<use Practica2_files/figure-latex/unnamed-chunk-11-5.pdf>
-Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-11-5.pdf us
-ed on input line 1496.
-(pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 1492--1497
-[][]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1492--1497
-[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1492--1497
-[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1492--1497
-[]
- []
-
-[29pdfTeX warning (ext4): destination with the same identifier (name{figure.22}
+[33pdfTeX warning (ext4): destination with the same identifier (name{figure.23}
 ) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.1497 
-        <./Practica2_files/figure-latex/unnamed-chunk-10-1.pdf>] [30 <./Practic
-a2_files/figure-latex/unnamed-chunk-11-1.pdf> <./Practica2_files/figure-latex/u
-nnamed-chunk-11-2.pdf>] [31 <./Practica2_files/figure-latex/unnamed-chunk-11-3.
-pdf> <./Practica2_files/figure-latex/unnamed-chunk-11-4.pdf>]
-<Practica2_files/figure-latex/unnamed-chunk-12-1.pdf, id=427, 469.755pt x 325.2
-15pt>
-File: Practica2_files/figure-latex/unnamed-chunk-12-1.pdf Graphic file (type pd
-f)
-<use Practica2_files/figure-latex/unnamed-chunk-12-1.pdf>
-Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-12-1.pdf us
-ed on input line 1503.
-(pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
-[32pdfTeX warning (ext4): destination with the same identifier (name{figure.23}
-) has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.1518 
+l.1605 
        pdfTeX warning (ext4): destination with the same identifier (name{figure
 .24}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.1518 
-        <./Practica2_files/figure-latex/unnamed-chunk-11-5.pdf> <./Practica2_fi
-les/figure-latex/unnamed-chunk-12-1.pdf>]
-<Practica2_files/figure-latex/unnamed-chunk-13-1.pdf, id=444, 469.755pt x 325.2
-15pt>
-File: Practica2_files/figure-latex/unnamed-chunk-13-1.pdf Graphic file (type pd
-f)
-<use Practica2_files/figure-latex/unnamed-chunk-13-1.pdf>
-Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-13-1.pdf us
-ed on input line 1522.
-(pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
-
-<Practica2_files/figure-latex/unnamed-chunk-13-2.pdf, id=445, 469.755pt x 325.2
-15pt>
-File: Practica2_files/figure-latex/unnamed-chunk-13-2.pdf Graphic file (type pd
-f)
-<use Practica2_files/figure-latex/unnamed-chunk-13-2.pdf>
-Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-13-2.pdf us
-ed on input line 1523.
-(pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
-
-<Practica2_files/figure-latex/unnamed-chunk-13-3.pdf, id=446, 469.755pt x 325.2
-15pt>
-File: Practica2_files/figure-latex/unnamed-chunk-13-3.pdf Graphic file (type pd
-f)
-<use Practica2_files/figure-latex/unnamed-chunk-13-3.pdf>
-Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-13-3.pdf us
-ed on input line 1524.
-(pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 1522--1525
-[][]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1522--1525
-[]
- []
-
-[33 <./Practica2_files/figure-latex/unnamed-chunk-13-1.pdf> <./Practica2_files/
-figure-latex/unnamed-chunk-13-2.pdf>]
-<Practica2_files/figure-latex/unnamed-chunk-14-1.pdf, id=461, 469.755pt x 325.2
-15pt>
-File: Practica2_files/figure-latex/unnamed-chunk-14-1.pdf Graphic file (type pd
-f)
-<use Practica2_files/figure-latex/unnamed-chunk-14-1.pdf>
-Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-14-1.pdf us
-ed on input line 1531.
-(pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
-[34pdfTeX warning (ext4): destination with the same identifier (name{figure.25}
-) has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.1548 
-       pdfTeX warning (ext4): destination with the same identifier (name{figure
-.26}) has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.1548 
-        <./Practica2_files/figure-latex/unnamed-chunk-13-3.pdf> <./Practica2_fi
-les/figure-latex/unnamed-chunk-14-1.pdf>]
-<Practica2_files/figure-latex/unnamed-chunk-15-1.pdf, id=478, 469.755pt x 325.2
-15pt>
-File: Practica2_files/figure-latex/unnamed-chunk-15-1.pdf Graphic file (type pd
-f)
-<use Practica2_files/figure-latex/unnamed-chunk-15-1.pdf>
-Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-15-1.pdf us
-ed on input line 1552.
-(pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
-
-<Practica2_files/figure-latex/unnamed-chunk-16-1.pdf, id=479, 469.755pt x 325.2
-15pt>
-File: Practica2_files/figure-latex/unnamed-chunk-16-1.pdf Graphic file (type pd
-f)
-<use Practica2_files/figure-latex/unnamed-chunk-16-1.pdf>
-Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-16-1.pdf us
-ed on input line 1585.
-(pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
-
-<Practica2_files/figure-latex/unnamed-chunk-16-2.pdf, id=480, 469.755pt x 325.2
-15pt>
-File: Practica2_files/figure-latex/unnamed-chunk-16-2.pdf Graphic file (type pd
-f)
-<use Practica2_files/figure-latex/unnamed-chunk-16-2.pdf>
-Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-16-2.pdf us
-ed on input line 1586.
-(pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
-
-<Practica2_files/figure-latex/unnamed-chunk-16-3.pdf, id=481, 469.755pt x 325.2
-15pt>
-File: Practica2_files/figure-latex/unnamed-chunk-16-3.pdf Graphic file (type pd
-f)
-<use Practica2_files/figure-latex/unnamed-chunk-16-3.pdf>
-Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-16-3.pdf us
-ed on input line 1587.
-(pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 1585--1588
-[][]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1585--1588
-[]
- []
-
-[35pdfTeX warning (ext4): destination with the same identifier (name{figure.27}
-) has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.1588 
-        <./Practica2_files/figure-latex/unnamed-chunk-15-1.pdf>] [36 <./Practic
-a2_files/figure-latex/unnamed-chunk-16-1.pdf> <./Practica2_files/figure-latex/u
-nnamed-chunk-16-2.pdf>]
-<Practica2_files/figure-latex/unnamed-chunk-17-1.pdf, id=507, 469.755pt x 325.2
-15pt>
-File: Practica2_files/figure-latex/unnamed-chunk-17-1.pdf Graphic file (type pd
-f)
-<use Practica2_files/figure-latex/unnamed-chunk-17-1.pdf>
-Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-17-1.pdf us
-ed on input line 1630.
-(pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
-
-<Practica2_files/figure-latex/unnamed-chunk-17-2.pdf, id=508, 469.755pt x 325.2
-15pt>
-File: Practica2_files/figure-latex/unnamed-chunk-17-2.pdf Graphic file (type pd
-f)
-<use Practica2_files/figure-latex/unnamed-chunk-17-2.pdf>
-Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-17-2.pdf us
-ed on input line 1631.
-(pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 1630--1632
-[][]
- []
-
-[37pdfTeX warning (ext4): destination with the same identifier (name{figure.28}
-) has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.1632 
-        <./Practica2_files/figure-latex/unnamed-chunk-16-3.pdf>] [38pdfTeX warn
-ing (ext4): destination with the same identifier (name{figure.29}) has been alr
-eady used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.1649 
-        <./Practica2_files/figure-latex/unnamed-chunk-17-1.pdf> <./Practica2_fi
-les/figure-latex/unnamed-chunk-17-2.pdf>]
-<Practica2_files/figure-latex/unnamed-chunk-18-1.pdf, id=534, 469.755pt x 325.2
-15pt>
-File: Practica2_files/figure-latex/unnamed-chunk-18-1.pdf Graphic file (type pd
-f)
-<use Practica2_files/figure-latex/unnamed-chunk-18-1.pdf>
-Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-18-1.pdf us
-ed on input line 1682.
-(pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
-
-<Practica2_files/figure-latex/unnamed-chunk-19-1.pdf, id=535, 469.755pt x 325.2
-15pt>
-File: Practica2_files/figure-latex/unnamed-chunk-19-1.pdf Graphic file (type pd
-f)
-<use Practica2_files/figure-latex/unnamed-chunk-19-1.pdf>
-Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-19-1.pdf us
-ed on input line 1689.
-(pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
-[39pdfTeX warning (ext4): destination with the same identifier (name{figure.30}
-) has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.1694 \end{figure}
-                    <./Practica2_files/figure-latex/unnamed-chunk-18-1.pdf>]
-<Practica2_files/figure-latex/unnamed-chunk-20-1.pdf, id=546, 469.755pt x 325.2
-15pt>
-File: Practica2_files/figure-latex/unnamed-chunk-20-1.pdf Graphic file (type pd
-f)
-<use Practica2_files/figure-latex/unnamed-chunk-20-1.pdf>
-Package pdftex.def Info: Practica2_files/figure-latex/unnamed-chunk-20-1.pdf us
-ed on input line 1696.
-(pdftex.def)             Requested size: 426.78961pt x 295.46973pt.
-[40pdfTeX warning (ext4): destination with the same identifier (name{figure.31}
-) has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.1710 
-       pdfTeX warning (ext4): destination with the same identifier (name{figure
-.32}) has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.1710 
-        <./Practica2_files/figure-latex/unnamed-chunk-19-1.pdf> <./Practica2_fi
-les/figure-latex/unnamed-chunk-20-1.pdf>] [41] (Practica2.bbl)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1716.
-[42
-
-]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1716.
+l.1605 
+        <./Practica2_files/figure-latex/unnamed-chunk-10-1.pdf> <./Practica2_fi
+les/figure-latex/unnamed-chunk-11-1.pdf>] (Practica2.bbl)
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1615.
+[34]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1615.
 (Practica2.aux
 LaTeX Info: Redefining \. on input line 21.
 LaTeX Info: Redefining \% on input line 21.
 )
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1716.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1716.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1615.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1615.
 
 Package rerunfilecheck Info: File `Practica2.out' has not changed.
-(rerunfilecheck)             Checksum: 18AB9182A1F4F5BDA39199556054D623;4184.
+(rerunfilecheck)             Checksum: 6B8827BDC883CD09897459504455234B;4867.
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1716.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1615.
  )
 (\end occurred inside a group at level 1)
 
 ### simple group (level 1) entered at line 1061 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 17398 strings out of 493319
- 269723 string characters out of 3138935
- 407483 words of memory out of 3000000
- 20449 multiletter control sequences out of 15000+200000
- 81886 words of font info for 123 fonts, out of 3000000 for 9000
+ 17316 strings out of 493319
+ 266180 string characters out of 3138935
+ 406261 words of memory out of 3000000
+ 20385 multiletter control sequences out of 15000+200000
+ 81720 words of font info for 121 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  40i,6n,46p,911b,3775s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/lm/lm-ts1.enc}{C:/
@@ -1893,9 +1665,9 @@ y10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmsy7.pfb><C:/Progra
 m Files/MiKTeX 2.9/fonts/type1/public/lm/lmtk10.pfb><C:/Program Files/MiKTeX 2.
 9/fonts/type1/public/lm/lmtt10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/pub
 lic/lm/lmtti10.pfb>
-Output written on Practica2.pdf (43 pages, 1139287 bytes).
+Output written on Practica2.pdf (35 pages, 1001064 bytes).
 PDF statistics:
- 661 PDF objects out of 1000 (max. 8388607)
- 99 named destinations out of 1000 (max. 500000)
- 16785 words of extra memory for PDF output out of 17280 (max. 10000000)
+ 535 PDF objects out of 1000 (max. 8388607)
+ 85 named destinations out of 1000 (max. 500000)
+ 16726 words of extra memory for PDF output out of 17280 (max. 10000000)
 

@@ -858,14 +858,19 @@ Para cada problema y cada algoritmo se han tomado los siguientes datos: fitness 
 
 ## Valoración general de los resultados.
 
-El primer hecho que debemos destacar de los resultados obtenidos es que, en media, los fitness obtenidos apenas varían un 3 % entre todos los algoritmos considerados, independientemente de lo que hayan conseguido aprender en la muestra de entrenamiento Dentro de las particiones de los distintos algoritmos, los fitness presentan bastantes variaciones. De hecho, salvo en el greedy y en el algoritmo aleatorio, la desviación de los fitness sobre la partición test supera en una cantidad notable a la desviación de los fitness sobre la partición de entrenamiento. Esto nos muestra que cuando los algoritmos tienen una capacidad alta de aprendizaje, el comportamiento sobre la partición test es difícil de predecir. Como se discutirá en la siguiente sección, los algoritmos están sobreaprendiendo.
+En primer lugar discutimos las diferencias en lo respectivo al aprendizaje con el modelo de validación de la práctica anterior. En esta ocasión si se aprecian variaciones mayores entre los distintos modelos en lo que respecta a las tasas sobre los datos test. Además, estas tasas, en general, son parecidas a las obtenidas sobre los datos de entrenamiento. Podemos concluir que se ha conseguido reducir el sobreaprendizaje. Esto se debe en parte a que el modelo de validación 5-Fold presenta menos varianza que las particiones al 50 % realizadas con 5x2, y en parte también a que la tasa de reducción influye bastante y permite eliminar muchas características, en general, haciendo que el clasificador aprenda con menos características y en consecuencia reduciendo la capacidad de ajuste a los datos. Aun así, en los algoritmos que consiguen alcanzar valores por encima del 85-90 \% sobre la muestra de entrenamiento, se aprecia (sobre todo en `sonar`) que las evaluaciones de los datos test no consiguen subir tanto, quedándose estancadas en torno al 80-83 \%. Es decir, se sigue produciendo algo de sobreaprendizaje, especialmente en `sonar`, que tienen menor número de datos que los otros dos problemas. De hecho, comparando las diferencias en las tasas de clasificación las diferencias son aún mayores (las tasas de clasificación sobre train no se muestran por espacio, pero como la tasa de reducción es fija, se puede deducir como $clas\_train = 2\cdot train\_fit - tasa\_red$). En este caso, en sonar vemos que, por ejemplo, en enfriamiento simulado, la tasa de clasificación en train supera el 94 \%, quedándose en 80 \% en test. Con ILS y evolución diferencial ocurre igual. En `spambase` estos mismos algoritmos también reducen la tasa de clasificación sobre test, pero las diferencias no son tan abultadas.
 
-En cuanto a los conjuntos de datos, se observa que el conjunto que mejores resultados da es `wdbc`. Los otros dos proporcionan resultados similares, y bastante inferiores. Esto puede deberse al menor número de características en `wdbc` en parte, y también a que el origen de los distitntos conjuntos de datos puede producir más o menos ruidos. Por ejemplo, en `sonar` los datos clasificados se obtienen mediante señales obtenidas sobre distintos materiales, y estos pueden verse afectados por numerosas condiciones externas. En `spambase` puede introducirse un ruido similar, ya que un mismo correo podría considerarse spam o no según el destinatario. En `wdbc` puede haber menos ruido debido a que los datos se toman de imágenes de células, en las que en principio puede ser menos conflicitvo medir sus características.
+En cuanto a los conjuntos de datos, podemos sacar las mismas conclusiones que en la práctica anterior. Se observa que el conjunto que mejores resultados da es `wdbc`. Los otros dos proporcionan resultados similares, y bastante inferiores. Esto puede deberse al menor número de características en `wdbc` en parte, y también a que el origen de los distitntos conjuntos de datos puede producir más o menos ruidos. Por ejemplo, en `sonar` los datos clasificados se obtienen mediante señales obtenidas sobre distintos materiales, y estos pueden verse afectados por numerosas condiciones externas. En `spambase` puede introducirse un ruido similar, ya que un mismo correo podría considerarse spam o no según el destinatario. En `wdbc` puede haber menos ruido debido a que los datos se toman de imágenes de células, en las que en principio puede ser menos conflicitvo medir sus características.
 
-En lo relativo a los tiempos, vemos que, como era de esperar, el greedy es el más rápido. El tiempo que nos proporciona el `1NN` nos da una medida del tiempo que tarda en evaluarse cada llamada a la función objetivo. Hay que destacar también que cuando los tiempos son pequeños, la máquina que ha realizado las ejecuciones solo ha podido proporcionar precisión en milisegundos. En los algoritmos genéticos y meméticos, vemos que aumenta el tiempo bastante y que la desviación es muy pequeña. Esto último puede deberse a que las ejecuciones se realizaron con prioridad alta, reduciendo así los cambios de contexto que pueden producir más variaciones de tiempos. También con respecto al tiempo de algoritmos genéticos y meméticos, vemos que hay muy poca variación entre los tiempos medios de los distintos algoritmos, y teniendo en cuenta los tiempos obtenidos de la función objetivo, vemos que, fijadas las 15000 evaluaciones que se realizan en todos algoritmos, el tiempo es casi igual a 15000 veces el tiempo medio de la la función objetivo, lo que nos indica que casi todo el tiempo que consumen estos algoritmos se emplea en evaluar la función objetivo. Finalmente vemos que, aunque las búsquedas locales también están limitadas a 15000 evaluaciones, tardan bastante menos tiempo. Esto se debe a que finalizan siempre por el criterio del vecindario recorrido sin mejora, y mucho antes de las 15000 evaluaciones.
+En lo relativo a los tiempos, el algoritmo greedy sigue siendo el más rápido, como era de esperar, y el tiempo obtenido por el clasificador greedy nos da una medida del tiempo que tarda en evaluarse cada llamada a la función objetivo. Fijadas las 15000 iteraciones que utilizan los distintos algoritmos, vemos que, salvo búsqueda local y enfriamiento simulado, el resto requieren de tiempos parecidos para evaluarse, y esto es debido a que prácticamente todo el tiempo de estos algoritmos es consumido evaluando la función objetivo. La búsqueda local tarda menos tiempo porque termina antes de las 15000 iteraciones por el criterio de vecinos encontrados sin éxito. En cambio, el enfriamiento simulado termina antes porque el criterio de enfriamiento acepta muchas soluciones, y el algoritmo termina alcanzando la temperatura final algo antes de las 15000 iteraciones, con el esquema de Cauchy. Por otra parte, al añadir al criterio de aceptación la condición de ignorar soluciones que no han variado su coste, el número de evaluaciones realizadas no es en ninguno de los problemas menor que la mitad del esperado. Sin esta condición se aceptan muchas más soluciones, haciendo que en `sonar, por ejemplo, apenas se tarden 2 segundos.
 
-Finalmente, en cuanto a la capacidad de aprendizaje de cada algoritmo en la muestra de entrenamiento, vemos que los que mejores resultados proporcionan son los algoritmos genéticos con el operador de cruce BLX, con muy poca variación entre el modelo generacional y estacionario, al menos con la semilla utilizada. Probando con otras semillas se puede ver que el modelo generacional es ligeramente mejor. El cruce BLX mejora notablemente al aritmético, y esto puede deberse, como veremos más adelante, a que proporciona bastante más diversidad. En cuanto a los meméticos, vemos que en general no superan a los genéticos BLX. Esto puede deberse en parte a que alcanzan un número bastante menor de generaciones, debido a que muchas evaluaciones se pierden en la búsqueda local, y en parte a que es posible que la búsqueda local no tenga tiempo suficiente de generar un buen vecindario sobre el que mejorar. Por último, hay que destacar que la búsqueda local partiendo de soluciones greedy proporciona unos resultados sorprendentemente buenos, llegando a superar en ocasiones a los genéticos. El inconviente que tiene es que, salvo la pequeña componente aleatoria que tiene el orden de búsqueda de vecinos en la búsqueda local, el algoritmo `RELIEF+LS` apenas admite mejoras. En cambio, los algoritmos genéticos, variando la semilla o ejecutándolo durante más generaciones, puede continuar mejorando su solución.
+Finalmente, en cuanto a la capacidad de aprendizaje de cada algoritmo, vemos que, en general, las tasas de clasificación del RELIEF y el 1NN ya son elevadas de por sí, y solo algunos algoritmos la superan ligeramente, según el problema. Sin embargo, apenas consiguen reducción. Esto es obvio para el 1NN y, en el caso del RELIEF, es un algoritmo determinista y que no está ideado para reducir, luego su tasa de reducción es muy baja. La poca diferencia entre estos dos algoritmos y los demás en cuanto a clasificación nos indica que los algoritmos heurísticos se centran sobre todo en aumentar la tasa de reducción. Vemos que, salvo `DE-RAND`, los algoritmos no evolutivos `ILS` y `SA` son los que consiguen mayores reducciones. Esto puede deberse a que implícitamente tienen una componente de búsqueda local, luego los resultados que consiguen son al menos los de la búsqueda local, y estos resultados superan en reducción a los evolutivos salvo `DE-RAND`. El memético se encuentra en esta misma situación, aunque sin llegar a los resultados de `ILS` y `SA`. Finalmente, el que claramente consigue reducir más es la evolución diferencial con cruce aleatorio, aunque también suele clasificar ligeramente peor a los demás sobre el test. Aunque en tasas de clasificación hay pocas diferencias y los resultados varían con el problema. En agregado, `DE-RAND` proporciona mejores resultados en todos los problemas gracias a su reducción.
 
+En los siguientes análisis, si no se indica lo contrario, todas las ejecuciones realizadas han sido sobre el problema `sonar` con la semilla `3141592`.
+
+## Análisis de la evolución del enfriamiento simulado.
+
+Lo que distingue al enfriamieno simulado de los demás algoritmos es su capacidad de poder ir aceptando soluciones peores a la actual sobre las que seguir trabajando. También este número de aceptaciones disminuye conforme se avanza en el algoritmo (va disminuyendo la temperatura). Esto se puede observar gráficamente. En la siguiente gráfica se muestra la evolución de las tasas de la solución que va modificando el algoritmo (en esta gráfica y en las sucesivas, en rojo se muestra la tasa de clasificación, en azul la de reducción y en morado el agregado durante el aprendizaje, es decir, sobre el train).
 
 
 
@@ -887,8 +892,16 @@ points(fit_SA[,1],fit_SA[,3],type="l",col="blue")
 \caption{Evolución de la función objetivo en función del número de iteraciones en enfriamiento simulado.\label{fig:evosa}}
 \end{figure}
 
+Vemos como, durante las primeras iteraciones, se aprecian muchas subidas y bajadas en el agregado. La diferencia en estas subidas y bajadas se va suavizando conforma avanzan las iteraciones, hasta que se acaba estabilizando en las iteraciones finales, cuando ya la temperatura es muy baja. También vemos que bajadas grandes luego permiten subir una mayor cantidad, lo que justifica el uso de este algoritmo: aceptar soluciones peores para poder explorar distintas zonas del espacion de búsqueda y evitar óptimos locales. También se observa que, aunque se estabilice el agregado por el final, las otras tasas sí que presentan alguna variación importante, pero lo que se está optimizando es el agregado, así que es algo razonable.
+
+También podemos ver que, mientras que la tasa de clasificación apenas varía en un pequeño intervalo, la tasa de reducción sube una gran cantidad a lo largo del algoritmo. Esto se puede apreciar en todas las gráficas que se verán más adelante, lo que nos confirma que los algoritmos heurísticos se centran en aumentar la reducción.
+
+## Análisis de la evolución en ILS
+
+La principal característica del ILS es que, cada cierto número de iteraciones, la solución con la que se trabaja es mutada con un cambio brusco. Mientras, el resto del tiempo se está haciendo búsqueda local. El cambio brusco es el que nos permite explorar nuevas zonas en el espacio de búsqueda, y a priori no nos garantizan que mejoren la solución actual. De hecho, lo normal es que no ocurra, pero la búsqueda local sobre esta nueva solución nos puede conducir a mejores soluciones en zonas distintas del espacio de búsqueda. En la siguiente gráfica se muestra la evolución del ILS a lo largo del número de iteraciones.
+
 ```{r, echo=F,warning=F}
-# Gráfica fitness / iteraciones SA
+# Gráfica fitness / iteraciones ILS
 
 fit_ILS <- read.table("./data/evol_ILS.apc")
 
@@ -909,6 +922,12 @@ points(fit_ILS[,1],fit_ILS[,4],type="l",col="purple")
 \centering
 \caption{Evolución de la función objetivo en función del número de iteraciones en ILS\label{fig:evoils}}
 \end{figure}
+
+Se aprecia claramente el comportamiento que habíamos indicado. el algoritmo va aplicando búsqueda local, que va aumentando el valor de la función objetivo, pero cada cierto número de iteraciones hay una bajada. Esta se debe a la mutación brusca. En ocasiones, la búsqueda local sobre la mutación no consigue mejorar la solución actual, por lo que se vuelve a ella y se prueba con otra mutación, pero otras veces sí consigue superar el valor de la solución anterior (marcado en amarillo), y obteniendo así una nueva solución más prometedora sobre la que trabajar.
+
+## Análisis de la evolución diferencial.
+
+En las siguientes gráficas se muestra la evolución de las tasas en función de las generaciones en ambos algoritmos de evolución diferencial. Se observa que con la recombinación `RAND` hay una gran subida de reducción y se aprecia mucha variabilidad hasta casi el final del algoritmo, mientras que en `CurrentToBest` la solución se estabiliza enseguida.
 
 ```{r, echo=F,warning=F}
 # Gráfica fitness / Generación DE-RAND
@@ -942,6 +961,10 @@ points(fit_DECTB[,1],fit_DECTB[,3],type="l",col="blue")
 \centering
 \caption{Evolución de la función objetivo en función del número de generaciones en DE-CurrentToBest\label{fig:evodectb}}
 \end{figure}
+
+### Comparación de los operadores de recombinación
+
+Para estudiar las diferencias entre ambos algoritmos de evolución diferencial, estudiamos lo que realmente los distingue, el operador de recombinación. Para ello, ejecutamos el algoritmo de evolución diferencial y miramos cómo evoluciona la mejor solución en cada generación. En las siguientes gráficas se muestran, por superposición y por separado, la evolución de las mejores soluciones con el paso de las generaciones en `DE-RAND` (se muestra solo un número pequeño de mejoras, para que sea representable).
 
 ```{r, echo=F,warning=F}
 
@@ -986,6 +1009,10 @@ par(mfrow = c(1,1))
 \caption{Evolución de las mejores soluciones con el operador de cruce RAND en evolución diferencial.\label{fig:randevo2}}
 \end{figure}
 
+En la gráfica de soluciones superpuestas vemos cómo hay una gran variabilidad en las mejores soluciones que se van obteniendo. Esto se debe a que en este algoritmo el cruce se basa en padres escogidos completamente al azar entre la población, por lo que la componente aleatoria es importante. También el gran número de cambios muestra que esta forma de recombinación, a pesar de ser aleatoria es muy efectiva, y además reduce enormemente los pesos, como se observa en la segunda gráfica.
+
+A continuación realizamos el mismo proceso con `DE-CurrentToBest`.
+
 ```{r, echo=F,warning=F}
 
 # Cruce CTB superposición
@@ -1028,177 +1055,11 @@ par(mfrow = c(1,1))
 \caption{Evolución de las mejores soluciones superpuestas con el operador de cruce CurrentToBest en evolución diferencial\label{fig:ctbevo2}}
 \end{figure}
 
-```{r, echo=F,warning=F}
+En este caso vemos en la gráfica de soluciones superpuestas que los pesos se mueven mucho menos y tienden a estabilizarse en torno a una solución. Esto puede deberse a que en este caso, aunque también influye el movimiento de padres escogidoa al azar, el operador de cruce tiene una componente no aleatoria que tiende a mover las soluciones en la dirección de la mejor solución. De esta forma, la variabilidad es menor. Además, también disminuye bastante la reducción de pesos porque el acercamiento a la mejor solución, que inicialmente no suele tener pesos bajos, dificulta que los pesos en los hijos puedan bajar.
 
-for( i in 1:10){
-    
-}
+### Evolución de una población completa en DE-RAND
 
-```
-
-## Análisis del aprendizaje
-
-Como ya hemos comentado antes, en lo que respecta al fitness obtenido sobre los datos test apenas hay diferencias entre todos los algoritmos. Esto se debe que se está produciendo sobreaprendizaje, ya que los tamaños de las particiones utilizadas son bastante pequeños y los algoritmos llegan a aprender demasiado sobre la muestra de entrenamiento. Esto implica que los algoritmos consiguen aprender características muy concretas de los datos de la muestra de entrenamiento y estos rasgos no se presentan fuera de esta partición. La consecuencia final de esto es un aumento del error de generalización, independientemente de lo que el algoritmo haya conseguido minimizar el error dentro de la muestra.
-
-Observando los resultados obtenidos en media, vemos que el clasificador no se presta a mejorar independientemente de lo que se haya aprendido. Tampoco llega a empeorar en gran medida. De nuevo, esto se debe al tamaño de los datos y a que la elección de particiones es aleatoria. Según cómo se hayan distribuido los pocos datos que tenemos en las particiones podrá haber pequeñas mejoras o empeoramientos. En general, no podemos establecer en estos conjuntos de datos ninguna relación entre la mejora sobre los datos de entrenamiento y los datos en el test.
-
-Para ilustrar un caso en el que se produce sobreaprendizaje, consideramos el método de búsqueda local. La búsqueda local va generando soluciones vecinas y, en caso de mejorar a la solución actual sobre la muestra de entrenamiento, la sustituye. Esto va a permitir incrementar en gran medida la función objetivo sobre la muestra de entrenamiento, hasta alcanzar un óptimo local. Sin embargo, si a la vez vamos evaluando el fitness sobre los datos test, podemos apreciar que en muchas particiones disminuye conforme se actualiza la mejor solución de la búsqueda local. En la siguiente gráfica se muestra un ejemplo de una partición en la que esto ocurre, y en la que se aprecia claramente que hay sobreaprendizaje.
-
-```{r, echo = FALSE}
-sols <- read.table("./data/train_test_RANDOM_LS.sol")
-vevals <- as.numeric(sols$V1)
-vtrain <- as.numeric(sols$V2)
-vtest <- as.numeric(sols$V3)
-
-inds <- 1:length(vtrain)
-inds_prev <- seq(length(inds)-1)
-inds_next <- seq(length(inds)-1)+1
-
-plot (-100,xlim = c(0,2500), ylim = c(60,100), xlab = "Evaluaciones", ylab = "Fitness")
-
-#points(x = vevals, y = vtrain, col = "blue", pch = 16)
-#points(x = vevals, y = vtest, col = "red", pch = 16)
-segments(x0 = vevals[inds_prev], y0 = vtrain[inds_prev], x1 = vevals[inds_next], y1 = vtrain[inds_next], col = "blue")
-
-segments(x0 = vevals[inds_prev], y0 = vtest[inds_prev], x1 = vevals[inds_next], y1 = vtest[inds_next], col = "red")
-
-```
-
-\begin{figure}[H]
-\centering
-\caption{Evolución del fitness en sonar para una búsqueda local partiendo de una solución aleatora (semilla 5. cuarta partición en la validación cruzada). En azul, el fitness sobre la muestra de entrenamiento. En rojo, el fitness sobre la muestra test.\label{fig:overfit}}
-\end{figure}
-
-<!--
-\begin{center} \textbf{Figura.} Evolución del fitness en `sonar` para una búsqueda local partiendo de una solución aleatora (semilla 5. cuarta partición en la validación cruzada). En azul, el fitness sobre la muestra de entrenamiento. En rojo, el fitness sobre la muestra test. \end{center}
--->
-
-De ahora en adelante, visto el sobreaprendizaje (o simplemente la incapacidad de mejora o saturación) que se produce en los tres problemas estudiados, se centrarán los análisis en la capacidad que tienen los distintos algoritmos de aprender de la muestra de entrenamiento, y todas las consideraciones que se hagan sobre el fitness, salvo que se se indique lo contrario, serán sobre las muestras de entrenamiento.
-
-## Análisis de los operadores de cruce
-
-En esta sección vamos a analizar el comportamiento de las soluciones en los algoritmos genéticos según el operador de cruce utilizado. Utilizaremos en ambos casos el modelo generacional. El procedimiento realizado es el siguiente: se realiza una ejecución del `AGG` con cada operador de cruce, y para una de las particiones evaluadas, se comprueba gráficamente cómo va variando la estructura de la mejor solución conforme se avanza en las generaciones.
-
-A continuación se muestran gráficamente los resultados obtenidos para el operador de cruce `BLX`:
-
-```{r, echo=F, warning=F}
-sols <- read.table("./data/AGGBLX_evol.sol")
-sols_mat_blx <- as.vector(sols[,2:61])
-colors <- heat.colors(nrow(sols_mat_blx))
-colors <- colors[length(colors):1]
-
-par(mfrow = c(1,2))
-for(i in 1:nrow(sols_mat_blx)){
-  barplot(as.numeric(sols_mat_blx[i,]), col = colors[i])
-}
-par(mfrow = c(1,1))
-
-```
-
-\begin{figure}[H]
-\centering
-\caption{Evolución de las mejores soluciones en el AGG-BLX en sonar (semilla 3141592).\label{fig:evoaggblx}}
-\end{figure}
-
-
-
-
-```{r, echo=F, warning=F}
-inds <- seq(ncol(sols_mat_blx))
-inds_prev <- seq(ncol(sols_mat_blx)-1)
-inds_next <- inds_prev + 1
-
-plot(-100, xlab = "Características", ylab = "Peso", xlim = c(1,60), ylim = c(0,1))
-for(i in 1:nrow(sols_mat_blx)){
-  w <- as.numeric(sols_mat_blx[i,])
-  segments(x0 = inds[inds_prev], y0 = w[inds_prev], x1 = inds[inds_next], y1 = w[inds_next], col = colors[i])
-  points( x = inds, y = w, col = colors[i])
-}
-
-```
-
-\begin{figure}[H]
-\centering
-\caption{Comparación conjunta de la evolución de las mejores soluciones en el AGG-BLX en sonar (semilla 3141592). Los colores más cálidos representan las soluciones más evolucionadas.\label{fig:compevoaggblx}}
-\end{figure}
-
-
-Observando las figuras, podemos ver que las mejores soluciones han ido variando de forma considerable con el paso de las generaciones. También se puede comprobar que muchas de los pesos de las características se han ido extendiendo a los extremos del intervalo $[0,1]$, más hacia el extremo inferior que al superior. Estos dos detalles nos muestran que el operador de cruce `BLX` tiene una gran capacidad de exploración, y además es un buen mecanismo para anular las características que no tienen importancia a la hora de clasificar.
-
-A continuación realizamos el mismo procedimiento para el cruce aritmético, obteniendo los siguientes resultados:
-
-
-```{r, echo=F, warning=F}
-sols <- read.table("./data/AGGCA_evol.sol")
-sols_mat_ca <- as.vector(sols[,2:61])
-colors <- heat.colors(nrow(sols_mat_ca))
-colors <- colors[length(colors):1]
-
-par(mfrow = c(1,2))
-for(i in 1:nrow(sols_mat_ca)){
-  barplot(as.numeric(sols_mat_ca[i,]), col = colors[i])
-}
-par(mfrow = c(1,1))
-
-```
-
-\begin{figure}[H]
-\centering
-\caption{Evolución de las mejores soluciones en el AGG-CA en sonar (semilla 3141592). \label{fig:evoaggca}}
-\end{figure}
-
-
-
-```{r, echo=F, warning=F}
-inds <- seq(ncol(sols_mat_ca))
-inds_prev <- seq(ncol(sols_mat_ca)-1)
-inds_next <- inds_prev + 1
-
-plot(-100, xlab = "Características", ylab = "Peso", xlim = c(1,60), ylim = c(0,1))
-for(i in 1:nrow(sols_mat_ca)){
-  w <- as.numeric(sols_mat_ca[i,])
-  segments(x0 = inds[inds_prev], y0 = w[inds_prev], x1 = inds[inds_next], y1 = w[inds_next], col = colors[i])
-  points( x = inds, y = w, col = colors[i])
-}
-
-```
-
-\begin{figure}[H]
-\centering
-\caption{Comparación conjunta de la evolución de las mejores soluciones en el AGG-CA en sonar (semilla 3141592). Los colores más cálidos representan las soluciones más evolucionadas. \label{fig:compevoaggca}}
-\end{figure}
-
-
-En este caso, en primer lugar vemos que se obtienen menos mejoras (un total de 5) que con el cruce BLX (9). Esto en general suele ocurrir, independientemente de las particiones escogidas. Por otra parte, observando la comparación conjunta de las soluciones vemos que apenas han variado unos pocos pesos desde la primera solución hasta la obtenida al final. Esto nos muestra que el cruce aritmético, en general, no nos produce soluciones que permitan mejorar el fitness. De hecho, muchos de los pocos cambios que se muestran en las figuras anteriores es posible que se hayan debido a mutaciones en vez de a la generación de nuevos hijos, restando aún más capacidad al operador de cruce.
-
-Finalmente, comparamos de forma conjunta las soluciones obtenidas por ambos operadores:
-
-```{r, echo=F, warning=F}
-par(mfrow = c(1,2))
-wblx <- as.numeric(sols_mat_blx[nrow(sols_mat_blx),])
-wca <- as.numeric(sols_mat_ca[nrow(sols_mat_ca),])
-
-barplot(wblx, col = "blue")
-barplot(wca, col = "green")
-
-par(mfrow = c(1,1))
-```
-
-\begin{figure}[H]
-\centering
-\caption{Comparación conjunta de las mejores soluciones obtenidas por el cruce BLX (izquierda) y aritmético (derecha). \label{fig:compevoaggca}}
-\end{figure}
-
-
-Además de lo ya comentado sobre las distintas capacidades de exploración de ambos cruces, esta última figura nos permite apreciar ligeramente que el operador `BLX` origina pesos más dispersos en $[0,1]$ (tiene más valores extremos), mientras que los pesos que origina el cruce aritmético tienden a estar concentrados la mayor cantidad entre el primer y el tercer cuartil.
-
-## Análisis de la evolución de algoritmos genéticos y meméticos
-
-\decimalpoint
-
-En esta sección, analizaremos gráficamente cómo evolucionan las poblaciones en los algoritmos genéticos. Estudiaremos dos casos distintos: el algoritmo genético estacionario y el algoritmo memético `(10,1.0)`. Dentro de este último también podremos analizar el algoritmo genético generacional que lleva incorporado. En ambos casos el operador de cruce utilizado será el `BLX`, que ya hemos visto que proporciona mejores resultados.
-
-Para el AGE-BLX, consideraremos una población de 6 individuos. En cada generación dos hijos podrán sustituir a los peores individuos si los mejoran. Se realiza la ejecución utilizando el criterio de parada de las 15000 evaluaciones de la función objetivo. En la siguiente gráfica se muestra cómo van evolucionando los 6 individuos.
+A continuación vamos a ver cómo evoluciona una población de individuos mediante la evolución diferencial con el cruce `RAND`. Para ello, ejecutamos el algoritmo con una población de 10 individuos y vemos cómo evolucionan sus tasas con el número de generaciones. El menor número de individuos impide que se alcancen las mismas tasas que con 50, pero aun así se puede apreciar la tendencia evolutiva de la población.
 
 ```{r, echo = F, warning = F}
 
@@ -1235,126 +1096,51 @@ for(i in 1:10){
 
 \begin{figure}[H]
 \centering
-\caption{Evolución del fitness de una población de 6 individuos sobre `sonar` para el algoritmo genético estacionario `AGE-BLX`. Cada color representa un cromosoma. \label{fig:evoage}}
+\caption{Evolución de fitness, tasa de clasificación y tasa de reducción en DE-RAND para una población de 10 individuos. Cada color representa a un individuo.\label{fig:derandpoblacion}}
 \end{figure}
 
+Podemos apreciar claramente en primer lugar, en la gráfica de fitness, el elitismo del algoritmo y el reemplazamiento uno a uno. Como consecuencia del reeemplazamiento uno a uno, cada individuo nunca va a empeorar su solución, luego todos los fitness son funciones crecientes. Además, esto nos asegura el elitismo, ya que la mejor solución siempre se va a mantener, salvo que sea reemplazada por una solución mejor.
 
-En las gráficas podemos apreciar varias cosas. En primer lugar, comprobamos que el algoritmo es elitista, ya que siempre que se alcanza un nuevo fitness máximo siempre va a haber un individuo que mantenga ese fitness. También vemos que el esquema de reemplazamiento hace que los individuos no desciendan en fitness, ya que los hijos solo se sustituyen si superan a las peores soluciones. En cuanto al reemplazamiento, también observamos que en cada generación se modifican, a lo sumo, los fitness de dos individuos a la vez, pues es el número de hijos que se crean en cada generación.
+En las tasas de clasificación y reducción no se puede decir lo mismo, y es que a veces las soluciones bajan su valor en estas gráficas o incluso se pierde el mejor valor para una de las tasas. Pero como lo que el algoritmo optimiza el agregado de las tasas, estas bajadas implican una subida en la tasa complementaria, y esto permite conservar el crecimiento constante de la función objetivo. También vemos que las tasas de clasificación oscilan en torno a los mismos valores a lo largo del algoritmo, mientras que las de reducción suben bastante rápido, como ha estado ocurriendo a lo largo de los distintos algoritmos heurísticos. 
 
-El no empeoramiento de las soluciones, hace que tras una primera fase de evolución medianamente rápida de la población, todas las soluciones converjan a un mismo nivel de fitness, donde permanecen bastante tiempo, posiblemente debido al estancamiento en un óptimo local. Más adelante (1200 generaciones después), volvemos a ver una mejora en la población, posiblemente debida a una mutación, que permite a las soluciones abandonar el óptimo local y explorar un nuevo camino exitosamente. De nuevo la población permanece estancada durante muchas generaciones y acaba consiguiendo dos nuevas mejoras. 
+## Evolución de los algoritmos de la práctica 1
 
-Un último detalle es que, como veremos en comparación con el memético (y que también ocurre con los AGG), fijado un número máximo de llamadas a la función objetivo (o fijado un tiempo máximo, ya que la mayoría del tiempo se emplea en la función objetivo), el número de generaciones que alcanza el algoritmo estacionario es mucho mayor que las que alcanzan meméticos y generacionales, ya que solo se evalúan dos nuevos hijos por generación. De esta forma, aunque el número de hijos generados pueda hacer creer que la población va a cambiar poco, el algoritmo lo compensa con un mayor número de generaciones computadas.
+Finalmente analizamos los dos algoritmos genéticos incorporados de la práctica 1.
 
-A continuación analizamos gráficamente el `AM-(10,1.0)`. Para ello consideramos también una población de 6 individuos, que evolucionarán con el esquema generacional, y a los que se aplicará una búsqueda local cada 10 generaciones. A continuación se muestran gráficamente los resultados para una partición:
+```{r, echo=F,warning=F}
 
-```{r, echo=F}
-#par(mfrow=c(2,1))
-plot(-100,xlim = c(0,30), ylim = c(75,95), xlab = "Generaciones", ylab = "Fitness")
-colors <- c("red","blue","yellow","green","purple","cyan","black","pink","brown","gray")
-for(i in 1:6){
-    colors_i <- rep(colors[i],130)
-    cc10 <- seq(from = 10, to = 130, by = 10)
-    colors_i[cc10] <- "orange"
-    sols <- read.table(paste("./data/AM_evol3_9_",i-1,".sol", sep = ""))
-    solsv_am1 <- as.numeric(sols$V2)
-    inds <- 1:length(solsv_am1)
-    inds_prev <- seq(length(inds)-1)
-    inds_next <- seq(length(inds)-1)+1
-    #.plot(-100,xlim = c(0,125), ylim = c(75,100), xlab = "Generaciones", ylab = "Fitness")
+# Gráfica fitness / generación AM
 
-    points(inds,solsv_am1, col = colors_i, pch = 16)
-    segments(x0 = inds[inds_prev], y0 = solsv_am1[inds_prev], x1 = inds[inds_next], y1 = solsv_am1[inds_next], col = colors_i)
-}
+fit_DECTB <- read.table("./data/evol_AGG.apc")
 
-plot(-100,xlim = c(160,190), ylim = c(75,95), xlab = "Generaciones", ylab = "Fitness")
-for(i in 1:6){
-    colors_i <- rep(colors[i],130)
-    cc10 <- seq(from = 10, to = 130, by = 10)
-    colors_i[cc10] <- "orange"
-    sols <- read.table(paste("./data/AM_evol3_9_",i-1,".sol", sep = ""))
-    solsv_am1 <- as.numeric(sols$V2)
-    inds <- 1:length(solsv_am1)
-    inds_prev <- seq(length(inds)-1)
-    inds_next <- seq(length(inds)-1)+1
-    #.plot(-100,xlim = c(0,125), ylim = c(75,100), xlab = "Generaciones", ylab = "Fitness")
+plot(fit_DECTB[,1],fit_DECTB[,4],type="l",col="purple",xlab = "Generaciones",ylab = "Fitness",ylim = c(10,100))
+points(fit_DECTB[,1],fit_DECTB[,2],type="l",col="red")
+points(fit_DECTB[,1],fit_DECTB[,3],type="l",col="blue")
 
-    points(inds,solsv_am1, col = colors_i, pch = 16)
-    segments(x0 = inds[inds_prev], y0 = solsv_am1[inds_prev], x1 = inds[inds_next], y1 = solsv_am1[inds_next], col = colors_i)
-}
-par(mfrow=c(1,1))
 ```
 
 \begin{figure}[H]
 \centering
-\caption{Evolución del fitness de una población de 6 individuos sobre `sonar` para el algoritmo memético `AM-(10,1.0)`. Cada color representa distinto del naranja un cromosoma. Las líneas naranjas representan el cambio en las generaciones en las que se aplica búsqueda local. \label{fig:evoage}}
+\caption{Evolución de la función objetivo en función del número de generaciones en AGG-BLX\label{fig:evoderand}}
 \end{figure}
 
+```{r, echo=F,warning=F}
 
-Podemos realizar también varias observaciones sobre la gráfica. En primer lugar, comprobamos también  el elitismo implementado para la variante generacional, ya que , aunque en este caso se admiten soluciones peores al reemplazar, la peor obtenida siempre es reemplazada por la mejor de la generación anterior. En la gráfica, en las primeras generaciones, vemos que, aunque la mejor solución disminuye, sube otra a ocupar su lugar conservandose así la mejor solución. También vemos que se producen muchos más movimientos que en el algoritmo estacionario, sobre todo en las primeras generaciones, antes de que se estabilice la población, ya que la población entera es reemplazada en cada generación (y el 70 % al menos son nuevos individuos, sin contar mutaciones).
+# Gráfica fitness / generación AM
 
-También vemos que, aunque se aprecia más movimiento, la población tiende a estabilizarse. En cuanto a la búsqueda local vemos que, en las primeras generaciones permite hacer avanzar a la población una cantidad considerable. Cuando la población  está estabilizada vemos que apenas tiene efecto, puesto que posiblemente la población está atrapada en un óptimo local. Un hecho destacable es lo que se observa en torno a la generación 170. La población lleva bastante tiempo estabilizada, y de repente, un individuo consigue subir, posiblemente debido a una mutación. En la siguiente generación se aplica búsqueda local, y se produce un salto de calidad considerable. Hay que destacar que el individuo que había subido desciende tras la búsqueda local, es decir, es sustituido por un hijo de mala calidad, pero seguramente el otro hijo que ha producido (y que habrá sustituido al otro padre) es que ha dado el salto al nuevo fitness, gracias posiblemente a la búsqueda local. De nuevo la población vuelve a estabilizarse pendiente de nuevas mutaciones que le ayuden a explorar nuevas soluciones mejores.
+fit_DECTB <- read.table("./data/evol_AM.apc")
 
-Finalmente, observamos, como se comentó con los estacionarios, que el número de generaciones que se alcanzan fijado el número de evaluaciones es mucho menor, puesto que en este caso hay que evaluar al 70 % de los individuos, además de las evaluaciones resultantes de aplicar búsqueda local a todos los individuos.
+plot(fit_DECTB[,1],fit_DECTB[,4],type="l",col="purple",xlab = "Generaciones",ylab = "Fitness",ylim = c(10,100))
+points(fit_DECTB[,1],fit_DECTB[,2],type="l",col="red")
+points(fit_DECTB[,1],fit_DECTB[,3],type="l",col="blue")
 
-
-## Análisis de las mejores soluciones
-
-En esta sección nos planteamos analizar cómo son las mejores soluciones obtenidas para cada problema. Para ello escogemos como algoritmo el AGG-BLX, que es el que mejores resultados proporciona en general, y nos quedamos con las tres mejores soluciones que mejor han aprendido los datos de su partición.
-
-```{r, echo=F, warning = F}
-
-sols <- read.table("./data/sonar_AGG-BLX_3141592.sol")
-best_inds <- c(2,3,7)
-
-par(mfrow = c(1,3))
-for (i in 1:length(best_inds)){
-  w <- as.numeric(sols[i,])
-  barplot(w, col = "blue")
-}
-par(mfrow = c(1,1))
 ```
 
 \begin{figure}[H]
 \centering
-\caption{Representación de las tres mejores soluciones obtenidas en las particiones del algoritmo AGG-BLX para sonar(semilla 3141592).\label{fig:solsonar}}
+\caption{Evolución de la función objetivo en función del número de generaciones en AM-10-0.1mej\label{fig:evoderand}}
 \end{figure}
 
-```{r, echo=F, warning = F}
+En el caso del AGG-BLX podemos observar un crecimiento lento pero constante, principalmente debido a la reducción. El operador de cruce BLX favorece la diversificación y en consecuencia va permitiendo el aumento de reducciones siempre que sigan manteniendo una buena tasa de clasificación, lo que permite este crecimiento pausado.
 
-sols <- read.table("./data/wdbc_AGG-BLX_3141592.sol")
-best_inds <- c(3,7,9)
-
-par(mfrow = c(1,3))
-for (i in 1:length(best_inds)){
-  w <- as.numeric(sols[i,])
-  barplot(w, col = "red")
-}
-par(mfrow = c(1,1))
-```
-
-\begin{figure}[H]
-\centering
-\caption{Representación de las tres mejores soluciones obtenidas en las particiones del algoritmo AGG-BLX para wdbc (semilla 3141592).\label{fig:solwdbc}}
-\end{figure}
-
-```{r, echo=F, warning = F}
-
-sols <- read.table("./data/spambase-460_AGG-BLX_3141592.sol")
-best_inds <- c(3,7,9)
-
-par(mfrow = c(1,3))
-for (i in 1:length(best_inds)){
-  w <- as.numeric(sols[i,])
-  barplot(w, col = "green")
-}
-par(mfrow = c(1,1))
-```
-
-\begin{figure}[H]
-\centering
-\caption{Representación de las tres mejores soluciones obtenidas en las particiones del algoritmo AGG-BLX para spambase (semilla 3141592).\label{fig:solspam}}
-\end{figure}
-
-Observando las imágenes, la conclusión es que, en general, las soluciones no comparten apenas parecidos. Esto vuelve a ser de nuevo una muestra del sobreaprendizaje que se produce. Las soluciones se adaptan demasiado bien a su partición y luego no funcionan bien sobre la partición de prueba. No se llegan a obtener soluciones similares, lo que sería un buen indicador de que el algoritmo se acerca a una solución general que aproxima bien a todo el conjunto.
-
-\clearpage
+En cuanto al algoritmo memético, se aprecia un comportamiento similar al del AGG, pero con algunos saltos más marcados, sobre todo al principio, debidos posiblemente a que en las generaciones de búsqueda local la solución a la que se le ha aplicado dicha búsqueda ha conseguido dar un salto de calidad.
