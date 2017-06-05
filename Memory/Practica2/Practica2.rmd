@@ -58,7 +58,7 @@ Añadir imagenes:
 %----------------------------------------------------------------------------------------
 
 \textsc{\LARGE METAHEURíSTICAS }\\[0.3cm] % Name of your university/college
-\textsc{\LARGE Práctica 1 }\\[0.3cm]
+\textsc{\LARGE Práctica 2 }\\[0.3cm]
 \textsc{\Large Universidad de Granada }\\[0.3cm]
 \textsc{\Large CURSO 2016/2017}\\[0.5cm] % Major heading such as course name
  % Minor heading such as course title
@@ -263,7 +263,7 @@ $\text{   }$
 
 Finalmente, como ya se ha comentado, el valor final de la función objetivo se obtiene combinando ambas tasas: $f = \alpha\ tasa\_clas + (1-\alpha)tasa\_red$. En este caso las ponderamos igual, es decir, $\alpha = 0,5$.
 
-La evaluación de la partición test se realizará aplicando este mismo procedimiento usando la partición aprendida como el conjunto sobre el que se busca el vecino más cercano. En este caso, la tasa de clasificación se obtendrá sin *Leave One Out*, mientras que evidentemente la tasa de reducción coincidirá con la obtenida durante el aprendizaje.
+La evaluación de la partición test se realizará aplicando este mismo procedimiento usando la partición aprendida en el entrenamiento. En este caso, la tasa de clasificación se obtendrá buscando el dato más cercano en la partición de entrenamiento, mientras que evidentemente la tasa de reducción coincidirá con la obtenida durante el aprendizaje.
 
 
 Un aspecto importante a destacar en la función objetivo que se ha tenido en cuenta durante la implementación es que el orden de eficiencia es de $O(P\times P\times S)$, donde $P$ es el tamaño de la partición y $S$ el tamaño de la solución. Es un orden considerable y la función se llamará gran cantidad de veces a lo largo de los distintos algoritmos, por lo que es bueno considerar cualquier posible mejora de esta. Para ello, en la implementación se ha optado por modificar ligeramente la estructura del algoritmo, sin modificar el resultado. Se ha tenido en cuenta que la función distancia ponderada es simétrica respecto de los datos para una solución prefijada. De esta forma, la modificación considerada para la implementación consiste en la inicialización al principio del algoritmo de una matriz triangular con las distancias entre todos los datos de la partición, y la obtención de las distancias durante la clasificación se reduce a acceder a una posición de la matriz ya creada. Aunque la clase de complejidad sigue siendo la misma, el uso de una matriz solamente triangular para calcular las distancias permite reducir las iteraciones a la mitad.
@@ -392,8 +392,10 @@ def SimulatedAnnealing(particion)
             diff = (fit - newfit)/100.0 # Diferencia de costes
             
             # Criterio de aceptación
-            # Aceptamos si es mejor, o si es peor según la probabilidad siguiente
-            if diff != 0 and (diff < 0 or AleatorioUniforme(0,1) <= exp(-diff/temp))
+            # Aceptamos si es mejor, 
+            # o si es peor según la probabilidad siguiente
+            if diff != 0 and (diff < 0 or 
+                                AleatorioUniforme(0,1) <= exp(-diff/temp))
             
                 # Actualizamos
                 fit = newfit
@@ -447,12 +449,12 @@ def ILS(particion)
     fit = f_objetivo(particion,s)
     
     while not condicionesParada()
-        s' = mutacionBrusca(s)
-        busquedaLocal(s',particion)
-        newfit = f_objetivo(particion,s')
+        s2 = mutacionBrusca(s)
+        busquedaLocal(s2,particion)
+        newfit = f_objetivo(particion,s2)
         
         if newfit > fit
-            s = s'
+            s = s2
             fit = newfit
         end
     end

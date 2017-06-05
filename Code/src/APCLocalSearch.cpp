@@ -42,10 +42,7 @@ APCSolution * APCLocalSearch::solve(const APCPartition & train, APCSolution *s, 
     int no_improves = 0;
     int improves = 0;    //Para depurar
 
-    //static int iii = 1;
-    //vector <float> all_fit = APCTargetCR::fitness(train,*sol);
-    //cout << iii << " " << all_fit[0] << " " << all_fit[1] << " " << all_fit[2] << endl;
-    //iii++;
+    
 
 
     //cout << num_evals << " " << fit << " " << APC_1NN::fitness(*p_test,*sol) << endl; //!!!

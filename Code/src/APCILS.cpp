@@ -44,11 +44,7 @@ APCSolution * APCILS::solve(const APCPartition & p, targetFunction fitness, int 
             delete s;
             s = s_;
             fit = newfit;
-            //if(fit > best_cost){
-            //    delete best_solution;
-            //    best_solution = new APCSolution(*s);
-            //    best_cost = fit;
-            //}
+            
         }
         else{
             delete s_;
