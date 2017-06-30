@@ -20,7 +20,7 @@
 #include "APCSimulatedAnnealing.h"
 #include "APCILS.h"
 #include "APCDifferentialEvolution.h"
-
+#include "APCSCA.h"
 
 
 using namespace std;
@@ -46,6 +46,8 @@ void printHelp(){
          << "\tILS: Obtains a solution using Iterated Local Search." << endl
          << "\tDE-RAND: Obtains solutions using a Differential Evolution algoritm with the cross operator 'rand'." << endl
          << "\tDE-CURRENTTOBEST: Obtains solutions using a Differential Evolution algorithm with the cross operator 'current-to-best'." << endl
+         << "\tSCA: Sine-Cosine Algorithm." << endl
+         //<< "\tSCA+: Sine-Cosine Algorithm improved" << endl
          << "-m <mode>: Fitness evaluation mode. Default is 5-Fold. Allowed modes are:" << endl
          << "\t5x2: Evaluates 1NN classifier with a 5x2 Cross Validation." << endl
          << "\t5FOLD: Evaluates the mean of reduction rate and 1NN classification rate with a 5-Fold Cross Validation." << endl
@@ -113,22 +115,6 @@ void printOutput5Fold(APCAlgorithm & a, const string & table_format, ostream & f
 
 int main(int argc, char const *argv[])
 {
-//    Timer t;
-//    srand(time(NULL));
-//    float val[1000];
-//    string problem_nam(argv[1]);
-//    APCProblem proble(problem_nam);
-//    APC5x2Partition myPartitio(&proble);
-//    APCSolution s = APCSolution::weight1Solution(&proble);
-//    t.start();
-//    for(int i = 0; i < 1000; i++){
-//        s[i%s.size()]= ((float) rand() / (RAND_MAX));
-//        val[i] = APC_1NN::fitness(myPartitio[0][0],s);
-//    }
-//    t.stop();
-//    cout << val[0] << " " << val[999] << endl;
-//    cout << t.get_time()/1000 << endl;
-//    exit(0);
 
 
     vector <pair<char,string>> input = parseInput(argc,argv);
@@ -155,6 +141,7 @@ int main(int argc, char const *argv[])
     APCSimulatedAnnealing sa(&problem);
     APCILS ils(&problem);
     APCDifferentialEvolution de(&problem);
+    APCSCA sca(&problem);
 
     //Parse args
     for(unsigned i = 0; i < input.size(); i++){
@@ -490,6 +477,22 @@ int main(int argc, char const *argv[])
             cout << de.getAlgorithmName() << endl;
             printOutput5Fold(de, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
         
+        }
+    }
+
+    else if(algorithm == "SCA"){
+        if(mode=="5x2"){
+            sca.solve5x2(myPartition5x2);
+
+            cout << sca.getAlgorithmName() << endl;
+            printOutput5x2(sca, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
+        }
+
+        else if(mode == "5FOLD"){
+            sca.solve5Fold(myPartition5F);
+
+            cout << sca.getAlgorithmName() << endl;
+            printOutput5Fold(sca, table_format, fout_table, output_fits, fout_fits, output_trains, fout_trains, output_times, fout_times, output_sols, fout_sols);
         }
     }
 

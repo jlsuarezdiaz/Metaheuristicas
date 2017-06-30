@@ -53,3 +53,4 @@ Code/bin/
 apc.exe.stackdump
 Code/src/arff/libarff.a
 Entregas/
+*.o
